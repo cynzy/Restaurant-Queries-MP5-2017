@@ -1,18 +1,18 @@
 Datatype Design for MP5
 
-*****
+* * *
 Database (superclass): implements MP5DB (interface)
   -
 YelpDB: extends Database
-****
+* * *
 
 
 MP5 datatypes
-*****
+* * *
 Business: datatype to represent business
 Restaurant: extends Business
-  - Set<Review>
-*****
+  - Set <Review>
+* * *
 Person: datatype to represent person
 YelpUser: extends Person; creates specific fields according to given User.JSON file
 *****
