@@ -1,12 +1,12 @@
 **Datatype Design for MP5**
 ***
-Database: implements MP5DB (interface)
+Database: implements MP5DB (interface) \\
 YelpDB: extends Database
 
 
 
 **MP5 datatypes**
-Business: datatype to represent business
+Business: datatype to represent business \\
 Restaurant: extends Business
   - Set <Review>
   
