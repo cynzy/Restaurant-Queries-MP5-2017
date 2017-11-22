@@ -1,36 +1,53 @@
 **Datatype Design for MP5**
 
-Database: implements MP5DB (interface)  
+Database: implements MP5DB (interface)
+  - Map<Business, Set<Review>>
+
 YelpDB: extends Database  
-
-
+  - Map<Restaurant, Set<Review>>
+  - Map<User, Set<Review>>
 
 **MP5 datatypes**
-Business: datatype to represent business 
+Business: datatype to represent a business 
   - Boolean open
   - String url
   - Location location
-  - ID BudinessID
-  - 
-Restaurant: extends Business  
-  - Set /<Review/>  
+  - String BudinessID
+  - String name
+  - String photoUrl
+  - Set<String> categories
   
-Person: datatype to represent person  
+Restaurant: extends Business  
+  - int stars
+  - int reviewCount
+  - int price
+  
+Person: datatype to represent person 
+  - String name;
+
 YelpUser: extends Person; creates specific fields according to given User.JSON file  
+  - String url
+  - Map<Reaction, Integer> reactions
+  - int reviewCount
+  - String userID
+  - double averageStars
 
-Review: datatype to represent a review  
-YelpReview: extends Review  
-
+Review: datatype to represent a review    
+  - String businessID
+  - Map<Reaction, Integer> reactions
+  - String reviewID
+  - String userID
+  - String text
+  - String date
+  - int stars
 
 **Other datatypes**  
 Location: datatype to represent a location  
-AddressLocation: extends Location  
-GeographicalLocation: extends Location  
-
-ID: datatype to represent an Identification  
-BusinessID: extends ID  
-UserID: extends ID  
-ReviewID: extends ID  
+- point coordinates
+- String state
+- String neighbour
+- String school
+- String address
 
 Reaction (enum) : datatype to represent a reaction within a YelpReview  
   -- Cool  
