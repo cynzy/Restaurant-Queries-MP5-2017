@@ -7,34 +7,18 @@ public class Business {
 
 	protected boolean open;
 	protected String url;
-	protected String businessID;
-	protected String name;
+	protected final String businessID;
+	protected final String name;
 	protected String photoUrl;
 	protected Set<String> categories;
 
-	public Business(String businessID) {
+	public Business(String businessID, boolean open, String url, String name, String photoUrl, Set<String> categories) {
 		this.businessID = businessID;
-		this.url = new String();
-		this.open = true;
-		this.name = new String();
-		this.photoUrl = new String();
-		this.categories = new HashSet<String>();
-	}
-	
-	public void setOpen( boolean open ) {
-		this.open = open;
-	}
-	
-	public void setUrl( String url ) {
 		this.url = url;
-	}
-	
-	public void setName( String name ) {
+		this.open = open;
 		this.name = name;
-	}
-	
-	public void setPhotoUrl( String photoUrl ) {
 		this.photoUrl = photoUrl;
+		this.categories = categories;
 	}
 	
 	public void SetCategories( Set<String> categories ) {
