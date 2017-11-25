@@ -22,6 +22,10 @@ public class YelpReview extends Review {
 		reactionMap.put(reaction, reactionMap.get(reaction) + 1);
 	}
 	
+	public int getNumReactions( PossibleReactions reaction ) {
+		return this.reactionMap.get(reaction);
+	}
+	
 	public Map<PossibleReactions, Integer> getReactionMap(){
 		Map<PossibleReactions, Integer> copy = new HashMap<PossibleReactions, Integer>();
 		copy.putAll(this.reactionMap);

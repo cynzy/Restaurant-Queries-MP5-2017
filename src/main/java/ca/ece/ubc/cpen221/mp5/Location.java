@@ -70,5 +70,12 @@ public class Location {
 	public String getState() {
 		return this.state;
 	}
+	
+	public double getDistance (Location otherLocation ) {
+		double xDistance = Math.abs(this.coordinates.getX() - otherLocation.getCoordinates().getX());
+		double yDistance = Math.abs(this.coordinates.getY() - otherLocation.getCoordinates().getY());
+		
+		return Math.sqrt( Math.pow(xDistance, 2) + Math.pow( yDistance, 2));
+	}
 
 }
