@@ -7,14 +7,14 @@ public class YelpReview extends Review {
 
 	private Map<PossibleReactions, Integer> reactionMap;
 
-	public YelpReview(String reviewID, String businessID, String userID, String text, String date, int stars,
-			Map<PossibleReactions, Integer> reactionsMap) {
+
+	public YelpReview(String reviewID, String businessID, String userID, String text, String date, int stars, Map<PossibleReactions, Integer> reactionMap) {
 		super(reviewID, businessID, userID, text, date, stars);
 		
-		this.reactionMap = new HashMap<PossibleReactions, Integer>();
-		this.reactionMap.putAll(reactionsMap);
+		this.reactionMap = reactionMap;
+
 	}
-	
+
 	public void addReaction( PossibleReactions reaction ) {
 		reactionMap.put(reaction, reactionMap.get(reaction) + 1);
 	}
@@ -24,7 +24,7 @@ public class YelpReview extends Review {
 	}
 	
 	public Map<PossibleReactions, Integer> getReactionMap(){
-		Map<PossibleReactions, Integer> copy = new HashMap<PossibleReactions, Integer>();
+		Map<PossibleReactions, Integer> copy = new HashMap<>();
 		copy.putAll(this.reactionMap);
 		
 		return copy;

@@ -3,7 +3,9 @@ package ca.ece.ubc.cpen221.mp5.Query;
 import ca.ece.ubc.cpen221.mp5.Location;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Cynzy on 2017-11-25.
@@ -34,7 +36,9 @@ public class MP5QueryListenerGenerateList extends MP5QueryBaseListener{
     public void exitIn(MP5QueryParser.InContext ctx) {
         TerminalNode token = ctx.STR();
         Location l = new Location();
-        l.setNeighbourhood(token.getText());
+        Set<String> neighborhoods = new HashSet<>();
+        neighborhoods.add(token.getText());
+        l.setNeighbourhoods(neighborhoods);
         this.locations.add(l);
     }
 

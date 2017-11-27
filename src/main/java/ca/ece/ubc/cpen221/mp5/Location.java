@@ -1,6 +1,5 @@
 package ca.ece.ubc.cpen221.mp5;
 
-import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,27 +29,19 @@ public class Location {
 		this.state = state;
 	}
 	
-	public void addNeighbourhood( String neighbourhood ) {
-		this.neighbourhood.add(neighbourhood);
-	}
-	
 	public void removeNeighbourhood( String neighbourhood ) {
 		this.neighbourhood.remove(neighbourhood);
 	}
 	
-	public void addAllNeighbourhood( Set<String> neighbourhoods ) {
+	public void setNeighbourhoods( Set<String> neighbourhoods ) {
 		this.neighbourhood.addAll(neighbourhoods);
-	}
-	
-	public void addSchool( String school ) {
-		this.school.add(school);
 	}
 	
 	public void removeSchool( String school ) {
 		this.school.add(school);
 	}
 	
-	public void addAllSchool( Set<String> schools ) {
+	public void setSchools( Set<String> schools ) {
 		this.school.addAll(schools);
 	}
 	

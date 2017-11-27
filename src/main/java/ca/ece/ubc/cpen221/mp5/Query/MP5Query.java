@@ -56,9 +56,6 @@ public class MP5Query {
         MP5QueryBaseListener listener = new MP5QueryListenerGenerateList(this.categories,this.locations,this.names,this.rating,this.price);
         walker.walk(listener, tree);
 
-        System.out.println(this.categories);
-        System.out.println(this.price);
-        System.out.println(this.locations.get(0).getNeighbourhood());
 
     }
 

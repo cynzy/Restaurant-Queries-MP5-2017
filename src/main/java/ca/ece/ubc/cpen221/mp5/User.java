@@ -19,11 +19,7 @@ public class User {
 		this.userID = userID;
 		this.reviewCount = reviewCount;
 		this.averageRating = averageRating;
-		this.reviewSet = new HashSet<Review>();
-	}
-	
-	public void addAllReviews( Set<Review> reviewSet) {
-		this.reviewSet.addAll(reviewSet);
+		this.reviewSet = new HashSet<>();
 	}
 	
 	public void addReview( Review review ) {

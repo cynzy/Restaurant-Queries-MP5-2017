@@ -8,14 +8,13 @@ public class Restaurant extends Business {
 	private Set<YelpReview> reviewSet;
 	
 	public Restaurant(String businessID, Boolean open, String url, String name, String photoUrl, Set<String> categories,
-			Location location, int stars, int reviewCount, int price, Set<YelpReview> reviewSet) {
+			Location location, int stars, int reviewCount, int price) {
 		
 		super(businessID, open, url, name, photoUrl, categories, location, reviewCount, price, stars);
-		this.reviewSet = new HashSet<YelpReview>();
-		this.reviewSet.addAll(reviewSet);
+		this.reviewSet = new HashSet<>();
 	}
 
-	public void addReview( YelpReview review ) {
+	private void addReview( YelpReview review ) {
 		this.reviewSet.add(review);
 		this.reviewCount = this.reviewSet.size();
 		int sumRating = 0;
@@ -24,10 +23,9 @@ public class Restaurant extends Business {
 		}
 		this.rating = (int) Math.round(((double)sumRating)/this.reviewCount);
 	}
-	
-	
+
 	public Set<YelpReview> getReviewSet(){
-		Set<YelpReview> copy = new HashSet<YelpReview>();
+		Set<YelpReview> copy = new HashSet<>();
 		copy.addAll(this.reviewSet);
 		return copy;
 	}
