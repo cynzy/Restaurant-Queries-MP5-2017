@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
+import java.util.function.ToDoubleBiFunction;
 
 public class YelpDB extends Database {
 
@@ -17,17 +18,6 @@ public class YelpDB extends Database {
 	private Set<YelpUser> userSet;
 	private Set<YelpReview> reviewSet;
 
-	public Set<Restaurant> getRestaurantSet() {
-		return restaurantSet;
-	}
-
-	public Set<YelpUser> getUserSet() {
-		return userSet;
-	}
-
-	public Set<YelpReview> getReviewSet() {
-		return reviewSet;
-	}
 
 	public YelpDB(String restaurantsJson, String usersJson, String reviewsJson) throws IOException {
 
@@ -40,6 +30,24 @@ public class YelpDB extends Database {
 		parseReviews(reviewsJson);
 
 	}
+
+
+	@Override
+	public Set<Object> getMatches(String queryString) {
+		return super.getMatches(queryString);
+	}
+
+	@Override
+	public String kMeansClusters_json(int k) {
+		return super.kMeansClusters_json(k);
+	}
+
+	@Override
+	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
+		return super.getPredictorFunction(user);
+	}
+
+
 
 	private void parseRestaurants(String restaurantsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
@@ -145,7 +153,7 @@ public class YelpDB extends Database {
 			this.reviewSet.add(review);
 
 			//adds review to corresponding YelpUser and Restaurant
-			Iterator<Restaurant> iterator = this.getRestaurantSet().iterator();
+			Iterator<Restaurant> iterator = this.restaurantSet.iterator();
 			while (iterator.hasNext()){
 				Restaurant current = iterator.next();
 				if (current.getBusinessID().equals(review.getBusinessID())){
@@ -153,7 +161,7 @@ public class YelpDB extends Database {
 					break;
 				}
 			}
-			Iterator<YelpUser> iterator2 = this.getUserSet().iterator();
+			Iterator<YelpUser> iterator2 = this.userSet.iterator();
 			while (iterator2.hasNext()){
 				YelpUser current = iterator2.next();
 				if (current.getUserID().equals(review.getUserID())){
