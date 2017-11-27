@@ -1,13 +1,15 @@
 package ca.ece.ubc.cpen221.mp5;
 
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Location {
 	
 	private Coordinates coordinates;
 	private String state;
-	private String neighbourhood;
-	private String school;
+	private Set<String> neighbourhood;
+	private Set<String> school;
 	private String address;
 	private String city;
 	
@@ -15,8 +17,8 @@ public class Location {
 		this.city = new String();
 		this.coordinates = new Coordinates( 0,0);
 		this.address = new String();
-		this.neighbourhood = new String();
-		this.school = new String();
+		this.neighbourhood = new HashSet<String>();
+		this.school = new HashSet<String>();
 		this.state = new String();
 	}
 	
@@ -28,12 +30,28 @@ public class Location {
 		this.state = state;
 	}
 	
-	public void setNeighbourhood( String neighbourhood ) {
-		this.neighbourhood = neighbourhood;
+	public void addNeighbourhood( String neighbourhood ) {
+		this.neighbourhood.add(neighbourhood);
 	}
 	
-	public void setSchool( String school ) {
-		this.school = school;
+	public void removeNeighbourhood( String neighbourhood ) {
+		this.neighbourhood.remove(neighbourhood);
+	}
+	
+	public void addAllNeighbourhood( Set<String> neighbourhoods ) {
+		this.neighbourhood.addAll(neighbourhoods);
+	}
+	
+	public void addSchool( String school ) {
+		this.school.add(school);
+	}
+	
+	public void removeSchool( String school ) {
+		this.school.add(school);
+	}
+	
+	public void addAllSchool( Set<String> schools ) {
+		this.school.addAll(schools);
 	}
 	
 	public void setAddress( String address ) {
@@ -50,16 +68,22 @@ public class Location {
 		return copy;
 	}
 	
-	public String getNeighbourhood() {
-		return this.neighbourhood;
+	public Set<String> getNeighbourhoods() {
+		Set<String> copy = new HashSet<String>();
+		copy.addAll(this.neighbourhood);
+		
+		return copy;
 	}
 	
 	public String getCity() {
 		return this.city;
 	}
 	
-	public String getSchool() {
-		return this.school;
+	public Set<String> getSchool() {
+		Set<String> copy = new HashSet<String>();
+		copy.addAll(this.school);
+		
+		return copy;
 	}
 	
 	public String getAddress() {

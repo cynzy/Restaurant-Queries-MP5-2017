@@ -38,5 +38,7 @@ public class Coordinates {
 		
 		return c * EARTH_RADIUS;
 	}
+	
+	
 
 }
