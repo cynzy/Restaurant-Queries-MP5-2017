@@ -39,6 +39,16 @@ public class Coordinates {
 		return c * EARTH_RADIUS;
 	}
 	
+	@Override
+	public boolean equals( Object o ) {
+		if( o instanceof Coordinates ) {
+			Coordinates other = (Coordinates) o;
+			return this.latitude == other.getlatitude() && this.longitude == other.getlongitude();
+		}
+		
+		return false;
+	}
+	
 	
 
 }
