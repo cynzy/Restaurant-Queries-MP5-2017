@@ -12,8 +12,13 @@ public class Business {
 	protected String photoUrl;
 	protected Set<String> categories;
 	private Set<Review> reviewSet;
+	protected Location location;
+	protected int rating;
+	protected int reviewCount;
+	private final int price;
 
-	public Business(String businessID, boolean open, String url, String name, String photoUrl, Set<String> categories) {
+	public Business(String businessID, boolean open, String url, String name, String photoUrl, Set<String> categories,
+			Location location, int reviewCount, int price, int rating) {
 		this.businessID = businessID;
 		this.url = url;
 		this.open = open;
@@ -22,12 +27,28 @@ public class Business {
 		this.categories = new HashSet<String>();
 		this.categories.addAll(categories);
 		this.reviewSet = new HashSet<Review>();
+		this.location = location;
+		this.reviewCount = reviewCount;
+		this.price = price;
+		this.rating = rating;
 	}
 	
-	public void addAllReviews( Set<Review> reviewSet) {
+	public int getRating() {
+		return this.rating;
+	}
+	
+	public int getReviewCount() {
+		return this.reviewCount;
+	}
+	
+	public int getPrice() {
+		return this.price;
+	}
+
+	public void addAllReviews(Set<Review> reviewSet) {
 		this.reviewSet.addAll(reviewSet);
 	}
-	
+
 	public void addReview(Review review) {
 
 		if (!this.businessID.equals(review.getBusinessID())) {
@@ -35,8 +56,8 @@ public class Business {
 		}
 		this.reviewSet.add(review);
 	}
-	
-	public void removeReview( Review review ) {
+
+	public void removeReview(Review review) {
 		this.reviewSet.remove(review);
 	}
 
@@ -86,5 +107,17 @@ public class Business {
 		copy.addAll(this.categories);
 
 		return copy;
+	}
+
+	public void setLocation(Location newLocation) {
+		this.location = newLocation;
+	}
+
+	public Location getLocation() {
+		return this.location;
+	}
+
+	public boolean containsCategory(String category) {
+		return this.categories.contains(category);
 	}
 }

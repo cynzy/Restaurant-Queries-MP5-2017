@@ -7,13 +7,15 @@ public class Review {
 	protected final String userID;
 	protected final String text;
 	protected final String date;
+	protected final int rating;
 
-	public Review(String reviewID, String businessID, String userID, String text, String date) {
+	public Review(String reviewID, String businessID, String userID, String text, String date, int rating) {
 		this.businessID = businessID;
 		this.userID = userID;
 		this.reviewID = reviewID;
 		this.text = text;
 		this.date = date;
+		this.rating = rating;
 	}
 
 	public String getBusinessID() {
@@ -36,5 +38,8 @@ public class Review {
 		return this.date;
 	}
 	
+	public int getStars() {
+		return this.rating;
+	}
 	
 }

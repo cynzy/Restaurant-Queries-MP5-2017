@@ -6,13 +6,10 @@ import java.util.Map;
 public class YelpReview extends Review {
 
 	private Map<PossibleReactions, Integer> reactionMap;
-	private int rating;
 
 	public YelpReview(String reviewID, String businessID, String userID, String text, String date, int stars,
 			Map<PossibleReactions, Integer> reactionsMap) {
-		super(reviewID, businessID, userID, text, date);
-		
-		this.rating = stars;
+		super(reviewID, businessID, userID, text, date, stars);
 		
 		this.reactionMap = new HashMap<PossibleReactions, Integer>();
 		this.reactionMap.putAll(reactionsMap);
@@ -31,10 +28,6 @@ public class YelpReview extends Review {
 		copy.putAll(this.reactionMap);
 		
 		return copy;
-	}
-	
-	public int getStars() {
-		return this.rating;
 	}
 
 }

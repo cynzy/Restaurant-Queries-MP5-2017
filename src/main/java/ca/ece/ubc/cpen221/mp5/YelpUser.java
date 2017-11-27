@@ -7,18 +7,14 @@ import java.util.Set;
 
 public class YelpUser extends User {
 
-	Map<PossibleReactions, Integer> votes;
-	int reviewCount;
-	double averageRating;
-	Set<YelpReview> reviewSet;
+	private Map<PossibleReactions, Integer> votes;
+	private Set<YelpReview> reviewSet;
 	
 	public YelpUser(String name, String url, String userID, Map<PossibleReactions, Integer> votes, int reviewCount,
 			double averageRating, Set<YelpReview> reviewSet) {
-		super(name, url, userID);
+		super(name, url, userID, reviewCount, averageRating);
 		this.votes = new HashMap<PossibleReactions, Integer>();
 		this.votes.putAll(votes);
-		this.reviewCount = reviewCount;
-		this.averageRating = averageRating;
 		this.reviewSet = new HashSet<YelpReview>();
 		this.reviewSet.addAll(reviewSet);
 	}
@@ -46,14 +42,6 @@ public class YelpUser extends User {
 		Set<YelpReview> copy = new HashSet<YelpReview>();
 		copy.addAll(reviewSet);
 		return copy;
-	}
-	
-	public double getAverageRating() {
-		return this.averageRating;
-	}
-	
-	public int getReviewCount() {
-		return this.reviewCount;
 	}
 	
 	public void addVote( PossibleReactions reaction ) {
