@@ -1,5 +1,5 @@
-package ca.ece.ubc.cpen221.mp5.Query;
 // Generated from MP5Query.g4 by ANTLR 4.7
+package ca.ece.ubc.cpen221.mp5.Query;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
