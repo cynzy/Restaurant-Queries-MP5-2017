@@ -45,7 +45,7 @@ public class Location {
 	}
 	
 	public Coordinates getCoordinates() {
-		Coordinates copy = new Coordinates(this.coordinates.getX(), this.coordinates.getY());
+		Coordinates copy = new Coordinates(this.coordinates.getlongitude(), this.coordinates.getlatitude());
 		
 		return copy;
 	}

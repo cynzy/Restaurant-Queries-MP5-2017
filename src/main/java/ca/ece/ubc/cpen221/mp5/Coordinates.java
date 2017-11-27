@@ -2,35 +2,41 @@ package ca.ece.ubc.cpen221.mp5;
 
 public class Coordinates {
 
-	private double x;
-	private double y;
+	private double longitude;
+	private double latitude;
+	private static final int EARTH_RADIUS = 6371000;
 
-	public Coordinates(double x, double y) {
-		this.x = x;
-		this.y = y;
+	public Coordinates(double longitude, double latitude) {
+		this.longitude = longitude;
+		this.latitude = latitude;
 	}
 
-	public void setX(double newX) {
-		this.x = newX;
+	public void setlongitude(double newlongitude) {
+		this.longitude = newlongitude;
 	}
 
-	public void setY(double newY) {
-		this.y = newY;
+	public void setlatitude(double newlatitude) {
+		this.latitude = newlatitude;
 	}
 
-	public double getX() {
-		return this.x;
+	public double getlongitude() {
+		return this.longitude;
 	}
 
-	public double getY() {
-		return this.y;
+	public double getlatitude() {
+		return this.latitude;
 	}
 
 	public double getDistance(Coordinates other) {
-		double xDistance = this.x - other.getX();
-		double yDistance = this.y - other.getY();
+		double deltaLat = Math.toRadians(Math.abs(this.latitude - other.getlatitude()));
+		double deltaLong = Math.toRadians(Math.abs(this.longitude - other.getlongitude()));
 
-		return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+		double a = Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(Math.toRadians(this.latitude))
+				* Math.cos(Math.toRadians(other.getlatitude())) * Math.pow(Math.sin(deltaLong / 2), 2);
+		
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		
+		return c * EARTH_RADIUS;
 	}
 
 }
