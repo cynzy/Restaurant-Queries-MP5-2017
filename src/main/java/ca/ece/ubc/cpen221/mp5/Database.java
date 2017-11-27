@@ -22,6 +22,17 @@ public class Database implements MP5Db<Object> {
 
 	@Override
 	public String kMeansClusters_json(int k) {
+
+		return null;
+	}
+
+	@Override
+	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Set<Business>> kMeansClusters(int k) {
 		Map<Business, Cluster> clusteringMap = new HashMap<Business, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
 
@@ -46,32 +57,24 @@ public class Database implements MP5Db<Object> {
 				closestCluster.addBusiness(b);
 				clusteringMap.put(b, closestCluster);
 			}
-			
+
 			boolean centroidChange = false;
-			for( Cluster c: clusterSet ) {
+			for (Cluster c : clusterSet) {
 				centroidChange = c.adjustCentroid();
 			}
-			
-			if( !centroidChange ) {
+
+			if (!centroidChange) {
 				break;
 			}
 		}
-		
+
 		List<Set<Business>> kMeansClusters = new ArrayList<Set<Business>>();
-		
-		for( Cluster c: clusterSet) {
+
+		for (Cluster c : clusterSet) {
 			kMeansClusters.add(c.getBusinessSet());
 		}
-		
-		
 
-		return null;
-	}
-
-	@Override
-	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
-		// TODO Auto-generated method stub
-		return null;
+		return kMeansClusters;
 	}
 
 }
