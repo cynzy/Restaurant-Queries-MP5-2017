@@ -12,7 +12,9 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Cynzy on 2017-11-24.
@@ -25,7 +27,7 @@ public class MP5Query {
     private List<String> names;
     private List<Integer> rating;
     private List<Integer> price;
-    private List<Restaurant> restaurantsList;
+    private Set<Restaurant> restaurantsSet;
 
 
     public MP5Query(String queryString) throws IOException {
@@ -35,7 +37,7 @@ public class MP5Query {
         this.names = new ArrayList<>();
         this.rating = new ArrayList<>();
         this.price = new ArrayList<>();
-        this.restaurantsList = new ArrayList<>();
+        this.restaurantsSet = new HashSet<>();
 
         setLists();
         findRestaurants();
@@ -56,9 +58,6 @@ public class MP5Query {
         MP5QueryBaseListener listener = new MP5QueryListenerGenerateList(this.categories,this.locations,this.names,this.rating,this.price);
         walker.walk(listener, tree);
 
-        System.out.println(this.categories);
-        System.out.println(this.price);
-        System.out.println(this.locations.get(0).getNeighbourhood());
 
     }
 
@@ -68,5 +67,7 @@ public class MP5Query {
 
     }
 
-
+    public Set<Restaurant> getRestaurantsSet() {
+        return restaurantsSet;
+    }
 }

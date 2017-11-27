@@ -1,5 +1,8 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import ca.ece.ubc.cpen221.mp5.Query.MP5Query;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,7 +19,13 @@ public class Database implements MP5Db<Object> {
 
 	@Override
 	public Set<Object> getMatches(String queryString) {
-		// TODO Auto-generated method stub
+		try {
+			MP5Query query = new MP5Query(queryString);
+			Set<Object> set = new HashSet<>(query.getRestaurantsSet());
+			return set;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
