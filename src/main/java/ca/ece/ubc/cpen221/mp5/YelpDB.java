@@ -4,9 +4,9 @@ import java.util.Set;
 
 public class YelpDB extends Database {
 	
-	Set<Restaurant> restaurantSet;
-	Set<YelpUser> userSet;
-	Set<YelpReview> reviewSet;
+	private Set<Restaurant> restaurantSet;
+	private Set<YelpUser> userSet;
+	private Set<YelpReview> reviewSet;
 	
 	
 

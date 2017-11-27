@@ -13,12 +13,12 @@ public class Business {
 	protected Set<String> categories;
 	private Set<Review> reviewSet;
 	protected Location location;
-	protected int rating;
+	protected double rating;
 	protected int reviewCount;
 	private final int price;
 
 	public Business(String businessID, boolean open, String url, String name, String photoUrl, Set<String> categories,
-			Location location, int reviewCount, int price, int rating) {
+			Location location, int reviewCount, int price, double rating) {
 		this.businessID = businessID;
 		this.url = url;
 		this.open = open;
@@ -33,7 +33,7 @@ public class Business {
 		this.rating = rating;
 	}
 	
-	public int getRating() {
+	public double getRating() {
 		return this.rating;
 	}
 	

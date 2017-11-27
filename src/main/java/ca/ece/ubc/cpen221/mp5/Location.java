@@ -4,7 +4,7 @@ import java.awt.Point;
 
 public class Location {
 	
-	private Point coordinates;
+	private Coordinates coordinates;
 	private String state;
 	private String neighbourhood;
 	private String school;
@@ -13,7 +13,7 @@ public class Location {
 	
 	public Location() {
 		this.city = new String();
-		this.coordinates = new Point();
+		this.coordinates = new Coordinates( 0,0);
 		this.address = new String();
 		this.neighbourhood = new String();
 		this.school = new String();
@@ -21,7 +21,7 @@ public class Location {
 	}
 	
 	public void setCoordinates( double x, double y) {
-		this.coordinates.setLocation(x, y);
+		this.coordinates = new Coordinates(x, y);
 	}
 	
 	public void setState( String state ) {
@@ -44,9 +44,8 @@ public class Location {
 		this.city = city;
 	}
 	
-	public Point getCoordinates() {
-		Point copy = new Point();
-		copy.setLocation(this.coordinates.getX(), this.coordinates.getY());
+	public Coordinates getCoordinates() {
+		Coordinates copy = new Coordinates(this.coordinates.getX(), this.coordinates.getY());
 		
 		return copy;
 	}
@@ -69,13 +68,6 @@ public class Location {
 	
 	public String getState() {
 		return this.state;
-	}
-	
-	public double getDistance (Location otherLocation ) {
-		double xDistance = Math.abs(this.coordinates.getX() - otherLocation.getCoordinates().getX());
-		double yDistance = Math.abs(this.coordinates.getY() - otherLocation.getCoordinates().getY());
-		
-		return Math.sqrt( Math.pow(xDistance, 2) + Math.pow( yDistance, 2));
 	}
 
 }
