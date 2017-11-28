@@ -1,5 +1,7 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import javax.json.JsonObject;
+
 public class Review {
 
 	protected final String businessID;
@@ -9,13 +11,13 @@ public class Review {
 	protected final String date;
 	protected final int rating;
 
-	public Review(String reviewID, String businessID, String userID, String text, String date, int rating) {
-		this.businessID = businessID;
-		this.userID = userID;
-		this.reviewID = reviewID;
-		this.text = text;
-		this.date = date;
-		this.rating = rating;
+	public Review(JsonObject review) {
+		this.businessID = review.getString("business_id");
+		this.userID = review.getString("user_id");
+		this.reviewID = review.getString("review_id");
+		this.text = review.getString("text");
+		this.date = review.getString("date");
+		this.rating = review.getInt("stars");
 	}
 
 	public String getBusinessID() {

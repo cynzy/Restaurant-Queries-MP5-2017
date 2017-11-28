@@ -1,5 +1,6 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import javax.json.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,11 +8,18 @@ public class YelpReview extends Review {
 
 	private Map<PossibleReactions, Integer> reactionMap;
 
+	public YelpReview(JsonObject review){
+		super(review);
 
-	public YelpReview(String reviewID, String businessID, String userID, String text, String date, int stars, Map<PossibleReactions, Integer> reactionMap) {
-		super(reviewID, businessID, userID, text, date, stars);
-		
-		this.reactionMap = reactionMap;
+		//pasing votes
+		//convert JSON Object into map of reactions to integer
+		Map<PossibleReactions, Integer> votes = new HashMap<>();
+		JsonObject votesJson = review.get("votes").asJsonObject();
+		votes.put(PossibleReactions.FUNNY, votesJson.getInt("funny"));
+		votes.put(PossibleReactions.COOL, votesJson.getInt("cool"));
+		votes.put(PossibleReactions.USEFUL, votesJson.getInt("useful"));
+
+		this.reactionMap = votes;
 
 	}
 

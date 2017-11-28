@@ -1,5 +1,7 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,20 +19,54 @@ public class Business {
 	protected int reviewCount;
 	private final int price;
 
-	public Business(String businessID, boolean open, String url, String name, String photoUrl, Set<String> categories,
-			Location location, int reviewCount, int price, double rating) {
-		this.businessID = businessID;
-		this.url = url;
-		this.open = open;
-		this.name = name;
-		this.photoUrl = photoUrl;
-		this.categories = new HashSet<String>();
-		this.categories.addAll(categories);
+	public Business(JsonObject business) {
+
 		this.reviewSet = new HashSet<Review>();
+		this.businessID = business.getString("business_id");
+		this.url = business.getString("url");
+		this.open = business.getBoolean("open");
+		this.name = business.getString("name");
+		this.photoUrl = business.getString("photo_url");
+		this.reviewCount = business.getInt("review_count");
+		this.price = business.getInt("price");
+		this.rating = business.getInt("stars");
+
+
+		//parsing location
+		Location location = new Location();
+		//make a set of strings from JSON array of neighborhoods
+		JsonArray array = business.get("neighborhoods").asJsonArray();
+		Set<String> neighbourhoods = new HashSet<>();
+		for (int index = 0; index < array.size(); index++){
+			neighbourhoods.add(array.getString(index));
+		}
+		location.setNeighbourhoods(neighbourhoods);
+
+		//make a set of strings from JSON array of schools
+		array = business.get("schools").asJsonArray();
+		Set<String> schools = new HashSet<>();
+		for (int index = 0; index < array.size(); index++){
+			schools.add(array.getString(index));
+		}
+		location.setSchools(schools);
+
+		//set address, city and state
+		location.setAddress(business.getString("full_address"));
+		location.setCity(business.getString("city"));
+		location.setState(business.getString("state"));
+
 		this.location = location;
-		this.reviewCount = reviewCount;
-		this.price = price;
-		this.rating = rating;
+
+		//parsing categories
+		//make a set of strings from JSON array of categories
+		array = business.get("categories").asJsonArray();
+		Set<String> categories = new HashSet<>();
+		for (int index = 0; index < array.size(); index++){
+			categories.add(array.getString(index));
+		}
+
+		this.categories = categories;
+
 	}
 	
 	public double getRating() {
@@ -43,10 +79,6 @@ public class Business {
 	
 	public int getPrice() {
 		return this.price;
-	}
-
-	public void addAllReviews(Set<Review> reviewSet) {
-		this.reviewSet.addAll(reviewSet);
 	}
 
 	public void addReview(Review review) {
@@ -70,7 +102,6 @@ public class Business {
 	}
 
 	public void removeCategory(String category) {
-
 		this.categories.remove(category);
 	}
 

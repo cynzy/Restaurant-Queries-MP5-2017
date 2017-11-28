@@ -1,5 +1,6 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import javax.json.JsonObject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,13 +13,13 @@ public class User {
 	protected double averageRating;
 	private Set<Review> reviewSet;
 	
-	public User( String name, String url, String userID, int reviewCount, double averageRating ) {
+	public User(JsonObject user) {
 		
-		this.name = name;
-		this.url = url;
-		this.userID = userID;
-		this.reviewCount = reviewCount;
-		this.averageRating = averageRating;
+		this.name = user.getString("name");
+		this.url = user.getString("url");
+		this.userID = user.getString("user_id");
+		this.reviewCount = user.getInt("review_count");
+		this.averageRating = Double.parseDouble(user.get("average_stars").toString());
 		this.reviewSet = new HashSet<>();
 	}
 	

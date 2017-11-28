@@ -1,5 +1,6 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import javax.json.JsonObject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,14 +8,12 @@ public class Restaurant extends Business {
 	
 	private Set<YelpReview> reviewSet;
 	
-	public Restaurant(String businessID, Boolean open, String url, String name, String photoUrl, Set<String> categories,
-			Location location, int stars, int reviewCount, int price) {
-		
-		super(businessID, open, url, name, photoUrl, categories, location, reviewCount, price, stars);
+	public Restaurant(JsonObject restaurant) {
+		super(restaurant);
 		this.reviewSet = new HashSet<>();
 	}
 
-	private void addReview( YelpReview review ) {
+	public void addReview( YelpReview review ) {
 		this.reviewSet.add(review);
 		this.reviewCount = this.reviewSet.size();
 		int sumRating = 0;
