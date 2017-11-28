@@ -2,13 +2,11 @@ package ca.ece.ubc.cpen221.mp5;
 
 import ca.ece.ubc.cpen221.mp5.Query.MP5Query;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.ToDoubleBiFunction;
 
 public class Database implements MP5Db<Object> {
@@ -24,34 +22,67 @@ public class Database implements MP5Db<Object> {
 			Set<Object> set = new HashSet<>(query.getRestaurantsSet());
 			return set;
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+            e.printStackTrace();
+        }
+        return null;
 	}
 
 	@Override
 	public String kMeansClusters_json(int k) {
+        Map<Business, Cluster> clusteringMap = new HashMap<Business, Cluster>();
+        Set<Cluster> clusterSet = new HashSet<Cluster>();
 
-		return null;
+        for (int i = 0; i < k; i++) {
+            clusterSet.add(new Cluster(360 * Math.random() - 180, 180 * Math.random() - 90));
+        }
+
+        while (true) {
+            for (Business b : this.businessSet) {
+                double minDistance = Integer.MAX_VALUE;
+                Cluster closestCluster = new Cluster(0, 0);
+                for (Cluster c : clusterSet) {
+                    double currentDistance = b.getLocation().getCoordinates().getDistance(c.getCentroid());
+                    if (minDistance > currentDistance) {
+                        closestCluster = c;
+                        minDistance = currentDistance;
+                    }
+                }
+                if (clusteringMap.containsKey(b)) {
+                    clusteringMap.get(b).removeBusiness(b);
+                }
+                closestCluster.addBusiness(b);
+                clusteringMap.put(b, closestCluster);
+            }
+
+            boolean centroidChange = false;
+            for (Cluster c : clusterSet) {
+                centroidChange = c.adjustCentroid();
+            }
+
+            if (!centroidChange) {
+                break;
+            }
+        }
+
+        int index = 0;
+        JsonObjectBuilder j;
+        JsonArrayBuilder array = Json.createArrayBuilder();
+        for (Cluster c : clusterSet) {
+            for (Business b : c.getBusinessSet()) {
+                j = javax.json.Json.createObjectBuilder();
+                j.add("x", b.getLocation().getCoordinates().getlatitude());
+                j.add("y", b.getLocation().getCoordinates().getlongitude());
+                j.add("name", b.getName());
+                j.add("cluster", index);
+                j.add("weight", 1.0);
+                array.add(j.build());
+            }
+            index++;
+        }
+        String json = array.build().toString();
+        return json;
 	}
 
-	@Override
-	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
-
-		Map<String, Business> idMap = new HashMap<String, Business>();
-		for (Business b : this.businessSet) {
-			idMap.put(b.getBusinessID(), b);
-		}
-
-		User thisUser = this.userSet.stream().filter(listUser -> listUser.getUserID().equals(user)).reduce(null,
-				(x, y) -> y);
-
-		double sumPrice = thisUser.getReviewSet().stream().map(review -> review.getBusinessID())
-				.map(businessID -> idMap.get(businessID)).map(business -> business.getPrice())
-				.reduce(0, (x, y) -> x + y);
-		
-		return null;
-	}
 
 	public List<Set<Business>> kMeansClusters(int k) {
 		Map<Business, Cluster> clusteringMap = new HashMap<Business, Cluster>();
@@ -97,5 +128,24 @@ public class Database implements MP5Db<Object> {
 
 		return kMeansClusters;
 	}
+
+
+    @Override
+    public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
+
+        Map<String, Business> idMap = new HashMap<String, Business>();
+        for (Business b : this.businessSet) {
+            idMap.put(b.getBusinessID(), b);
+        }
+
+        User thisUser = this.userSet.stream().filter(listUser -> listUser.getUserID().equals(user)).reduce(null,
+                (x, y) -> y);
+
+        double sumPrice = thisUser.getReviewSet().stream().map(review -> review.getBusinessID())
+                .map(businessID -> idMap.get(businessID)).map(business -> business.getPrice())
+                .reduce(0, (x, y) -> x + y);
+
+        return null;
+    }
 
 }

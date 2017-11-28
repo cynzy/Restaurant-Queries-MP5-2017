@@ -1,10 +1,7 @@
 package ca.ece.ubc.cpen221.mp5;
 
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import javax.json.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -39,8 +36,63 @@ public class YelpDB extends Database {
 
 	@Override
 	public String kMeansClusters_json(int k) {
-		return super.kMeansClusters_json(k);
+		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
+		Set<Cluster> clusterSet = new HashSet<Cluster>();
+
+		for (int i = 0; i < k; i++) {
+			clusterSet.add(new Cluster(360 * Math.random() - 180, 180 * Math.random() - 90));
+		}
+
+		while (true) {
+			for (Restaurant b : this.restaurantSet) {
+				double minDistance = Integer.MAX_VALUE;
+				Cluster closestCluster = new Cluster(0, 0);
+				for (Cluster c : clusterSet) {
+					double currentDistance = b.getLocation().getCoordinates().getDistance(c.getCentroid());
+					if (minDistance > currentDistance) {
+						closestCluster = c;
+						minDistance = currentDistance;
+					}
+				}
+				if (clusteringMap.containsKey(b)) {
+					clusteringMap.get(b).removeBusiness(b);
+				}
+				closestCluster.addBusiness(b);
+				clusteringMap.put(b, closestCluster);
+			}
+
+			boolean centroidChange = false;
+			for (Cluster c : clusterSet) {
+				centroidChange = c.adjustCentroid();
+			}
+
+			if (!centroidChange) {
+				break;
+			}
+		}
+
+		int index = 0;
+		JsonObjectBuilder j;
+		JsonArrayBuilder array = Json.createArrayBuilder();
+		for (Cluster c : clusterSet) {
+			System.out.println("cluster: " + index);
+
+			for (Business b : c.getBusinessSet()) {
+				System.out.println(b.getName());
+				j = javax.json.Json.createObjectBuilder();
+				j.add("x", b.getLocation().getCoordinates().getlatitude());
+				j.add("y", b.getLocation().getCoordinates().getlongitude());
+				j.add("name", b.getName());
+				j.add("cluster", index);
+				j.add("weight", 1.0);
+				array.add(j.build());
+			}
+			index++;
+		}
+		String json = array.build().toString();
+		return json;
 	}
+
 
 	@Override
 	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
@@ -174,50 +226,5 @@ public class YelpDB extends Database {
 		bufferedReader.close();
 	}
 
-	@Override
-	public List<Set<Business>> kMeansClusters(int k) {
-		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
-		Set<Cluster> clusterSet = new HashSet<Cluster>();
-
-		for (int i = 0; i < k; i++) {
-			clusterSet.add(new Cluster(360 * Math.random() - 180, 180 * Math.random() - 90));
-		}
-
-		while (true) {
-			for (Restaurant r : this.restaurantSet) {
-				double minDistance = Integer.MAX_VALUE;
-				Cluster closestCluster = new Cluster(0, 0);
-				for (Cluster c : clusterSet) {
-					double currentDistance = r.getLocation().getCoordinates().getDistance(c.getCentroid());
-					if (minDistance > currentDistance) {
-						closestCluster = c;
-						minDistance = currentDistance;
-					}
-				}
-				if (clusteringMap.containsKey(r)) {
-					clusteringMap.get(r).removeBusiness(r);
-				}
-				closestCluster.addBusiness(r);
-				clusteringMap.put(r, closestCluster);
-			}
-
-			boolean centroidChange = false;
-			for (Cluster c : clusterSet) {
-				centroidChange = c.adjustCentroid();
-			}
-
-			if (!centroidChange) {
-				break;
-			}
-		}
-
-		List<Set<Business>> kMeansClusters = new ArrayList<Set<Business>>();
-
-		for (Cluster c : clusterSet) {
-			kMeansClusters.add(c.getBusinessSet());
-		}
-
-		return kMeansClusters;
-	}
 
 }
