@@ -37,6 +37,13 @@ public class User {
 		this.averageRating = ((double)ratingSum)/this.reviewCount;
 	}
 	
+	public Set<Review> getReviewSet(){
+		Set<Review> copy = new HashSet<Review>();
+		copy.addAll(this.reviewSet);
+		
+		return copy;
+	}
+	
 	public boolean wroteReview( Review review ) {
 		return this.reviewSet.contains(review);
 	}

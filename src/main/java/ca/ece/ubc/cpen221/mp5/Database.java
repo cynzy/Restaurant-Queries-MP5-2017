@@ -37,7 +37,19 @@ public class Database implements MP5Db<Object> {
 
 	@Override
 	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
-		// TODO Auto-generated method stub
+
+		Map<String, Business> idMap = new HashMap<String, Business>();
+		for (Business b : this.businessSet) {
+			idMap.put(b.getBusinessID(), b);
+		}
+
+		User thisUser = this.userSet.stream().filter(listUser -> listUser.getUserID().equals(user)).reduce(null,
+				(x, y) -> y);
+
+		double sumPrice = thisUser.getReviewSet().stream().map(review -> review.getBusinessID())
+				.map(businessID -> idMap.get(businessID)).map(business -> business.getPrice())
+				.reduce(0, (x, y) -> x + y);
+		
 		return null;
 	}
 

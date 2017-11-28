@@ -174,6 +174,50 @@ public class YelpDB extends Database {
 		bufferedReader.close();
 	}
 
-	
+	@Override
+	public List<Set<Business>> kMeansClusters(int k) {
+		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
+		Set<Cluster> clusterSet = new HashSet<Cluster>();
+
+		for (int i = 0; i < k; i++) {
+			clusterSet.add(new Cluster(360 * Math.random() - 180, 180 * Math.random() - 90));
+		}
+
+		while (true) {
+			for (Restaurant r : this.restaurantSet) {
+				double minDistance = Integer.MAX_VALUE;
+				Cluster closestCluster = new Cluster(0, 0);
+				for (Cluster c : clusterSet) {
+					double currentDistance = r.getLocation().getCoordinates().getDistance(c.getCentroid());
+					if (minDistance > currentDistance) {
+						closestCluster = c;
+						minDistance = currentDistance;
+					}
+				}
+				if (clusteringMap.containsKey(r)) {
+					clusteringMap.get(r).removeBusiness(r);
+				}
+				closestCluster.addBusiness(r);
+				clusteringMap.put(r, closestCluster);
+			}
+
+			boolean centroidChange = false;
+			for (Cluster c : clusterSet) {
+				centroidChange = c.adjustCentroid();
+			}
+
+			if (!centroidChange) {
+				break;
+			}
+		}
+
+		List<Set<Business>> kMeansClusters = new ArrayList<Set<Business>>();
+
+		for (Cluster c : clusterSet) {
+			kMeansClusters.add(c.getBusinessSet());
+		}
+
+		return kMeansClusters;
+	}
 
 }
