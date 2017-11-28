@@ -153,7 +153,7 @@ public class Database implements MP5Db<Object> {
 				.map(businessID -> idMap.get(businessID)).map(business -> (double) business.getPrice())
 				.reduce(0.0, (x, y) -> x + Math.pow(y - meanPrice, 2));
 
-		double s_yy = thisUser.getReviewSet().stream().map(review -> (double) review.getStars()).reduce(0,
+		double s_yy = thisUser.getReviewSet().stream().map(review -> (double) review.getStars()).reduce(0.0,
 				(x, y) -> x + Math.pow(y - meanRating, 2));
 		return null;
 	}
