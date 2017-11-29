@@ -1,6 +1,5 @@
 package ca.ece.ubc.cpen221.mp5;
 
-
 import javax.json.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,7 +14,6 @@ public class YelpDB extends Database {
 	private Set<Restaurant> restaurantSet;
 	private Set<YelpUser> userSet;
 	private Set<YelpReview> reviewSet;
-
 
 	public YelpDB(String restaurantsJson, String usersJson, String reviewsJson) throws IOException {
 
@@ -41,14 +39,19 @@ public class YelpDB extends Database {
 
 		List<Coordinates> coordinateList = this.restaurantSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toList());
-		
-		double maxLong = coordinateList.stream().map( coordinates -> coordinates.getlongitude()).reduce(Double.MIN_VALUE, (x,y) -> Double.max(x, y));
-		double maxLat = coordinateList.stream().map( coordinates -> coordinates.getlatitude()).reduce(Double.MIN_VALUE, (x,y) -> Double.max(x, y));
-		double minLong = coordinateList.stream().map( coordinates -> coordinates.getlongitude()).reduce(Double.MAX_VALUE, (x,y) -> Double.min(x, y));
-		double minLat = coordinateList.stream().map( coordinates -> coordinates.getlatitude()).reduce(Double.MAX_VALUE, (x,y) -> Double.min(x, y));
-		
+
+		double maxLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude()).reduce(Double.MIN_VALUE,
+				(x, y) -> Double.max(x, y));
+		double maxLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude()).reduce(Double.MIN_VALUE,
+				(x, y) -> Double.max(x, y));
+		double minLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude()).reduce(Double.MAX_VALUE,
+				(x, y) -> Double.min(x, y));
+		double minLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude()).reduce(Double.MAX_VALUE,
+				(x, y) -> Double.min(x, y));
+
 		for (int i = 0; i < k; i++) {
-			clusterSet.add(new Cluster(( maxLong - minLong )* Math.random() + minLong, (maxLat - minLat) * Math.random() + minLat));
+			clusterSet.add(new Cluster((maxLong - minLong) * Math.random() + minLong,
+					(maxLat - minLat) * Math.random() + minLat));
 		}
 
 		while (true) {
@@ -101,13 +104,45 @@ public class YelpDB extends Database {
 		return json;
 	}
 
-
 	@Override
 	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
-		return super.getPredictorFunction(user);
+		Map<String, Business> idMap = new HashMap<String, Business>();
+		for (Business b : this.restaurantSet) {
+			idMap.put(b.getBusinessID(), b);
+		}
+
+		User thisUser = this.userSet.stream().filter(listUser -> listUser.getUserID().equals(user)).reduce(null,
+				(x, y) -> y);
+
+		List<Double> priceList = thisUser.getReviewSet().stream().map(review -> review.getBusinessID())
+				.map(businessID -> idMap.get(businessID)).map(business -> (double) business.getPrice())
+				.collect(Collectors.toList());
+
+		double sumPrice = priceList.stream().reduce(0.0, (x, y) -> x + y);
+
+		double priceListSize = priceList.stream().reduce(0.0, (x, y) -> x + 1);
+
+		double meanPrice = sumPrice / priceListSize;
+
+		double meanRating = thisUser.getAverageRating();
+
+		double s_xx = priceList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanPrice, 2));
+
+		List<Double> ratingList = thisUser.getReviewSet().stream().map(review -> (double) review.getStars())
+				.collect(Collectors.toList());
+
+		double s_yy = ratingList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanRating, 2));
+
+		return null;
 	}
 
+	public Set<Business> getBusinessSet() {
 
+		Set<Business> copy = new HashSet<Business>();
+		copy.addAll(this.restaurantSet);
+
+		return copy;
+	}
 
 	private void parseRestaurants(String restaurantsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
@@ -121,7 +156,7 @@ public class YelpDB extends Database {
 		bufferedReader.close();
 	}
 
-	private void parseUsers (String userJson) throws IOException {
+	private void parseUsers(String userJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(userJson));
 		String line;
 		while ((line = bufferedReader.readLine()) != null) {
@@ -133,7 +168,7 @@ public class YelpDB extends Database {
 		bufferedReader.close();
 	}
 
-	private void parseReviews (String reviewsJson) throws IOException {
+	private void parseReviews(String reviewsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(reviewsJson));
 		String line;
 		Iterator<Restaurant> iterator;
@@ -144,19 +179,19 @@ public class YelpDB extends Database {
 			YelpReview review = new YelpReview(reviews);
 			this.reviewSet.add(review);
 
-			//adds review to corresponding YelpUser and Restaurant
+			// adds review to corresponding YelpUser and Restaurant
 			iterator = this.restaurantSet.iterator();
-			while (iterator.hasNext()){
+			while (iterator.hasNext()) {
 				Restaurant current = iterator.next();
-				if (current.getBusinessID().equals(review.getBusinessID())){
+				if (current.getBusinessID().equals(review.getBusinessID())) {
 					current.addReview(review);
 					break;
 				}
 			}
 			iterator2 = this.userSet.iterator();
-			while (iterator2.hasNext()){
+			while (iterator2.hasNext()) {
 				YelpUser current = iterator2.next();
-				if (current.getUserID().equals(review.getUserID())){
+				if (current.getUserID().equals(review.getUserID())) {
 					current.addReview(review);
 					break;
 				}
@@ -166,13 +201,12 @@ public class YelpDB extends Database {
 		System.out.println(reviewSet.size());
 		bufferedReader.close();
 	}
-	
-	public Set<Restaurant> getRestaurantSet(){
+
+	public Set<Restaurant> getRestaurantSet() {
 		Set<Restaurant> copy = new HashSet<Restaurant>();
 		copy.addAll(this.restaurantSet);
-		
+
 		return copy;
 	}
-
 
 }
