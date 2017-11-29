@@ -8,6 +8,8 @@ import javax.json.JsonObjectBuilder;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.ToDoubleBiFunction;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Database implements MP5Db<Object> {
 
@@ -87,8 +89,16 @@ public class Database implements MP5Db<Object> {
 		Map<Business, Cluster> clusteringMap = new HashMap<Business, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
 
+		List<Coordinates> coordinateList = this.businessSet.stream().map(business -> business.getLocation())
+				.map(location -> location.getCoordinates()).collect(Collectors.toList());
+		
+		double maxLong = coordinateList.stream().map( coordinates -> coordinates.getlongitude()).reduce(Double.MIN_VALUE, (x,y) -> Double.max(x, y));
+		double maxLat = coordinateList.stream().map( coordinates -> coordinates.getlatitude()).reduce(Double.MIN_VALUE, (x,y) -> Double.max(x, y));
+		double minLong = coordinateList.stream().map( coordinates -> coordinates.getlongitude()).reduce(Double.MAX_VALUE, (x,y) -> Double.min(x, y));
+		double minLat = coordinateList.stream().map( coordinates -> coordinates.getlatitude()).reduce(Double.MAX_VALUE, (x,y) -> Double.min(x, y));
+		
 		for (int i = 0; i < k; i++) {
-			clusterSet.add(new Cluster(360 * Math.random() - 180, 180 * Math.random() - 90));
+			clusterSet.add(new Cluster(( maxLong - minLong )* Math.random() + minLong, (maxLat - minLat) * Math.random() + minLat));
 		}
 
 		while (true) {
@@ -155,7 +165,16 @@ public class Database implements MP5Db<Object> {
 
 		double s_yy = thisUser.getReviewSet().stream().map(review -> (double) review.getStars()).reduce(0.0,
 				(x, y) -> x + Math.pow(y - meanRating, 2));
+
 		return null;
+	}
+
+	public Set<Business> getBusinessSet() {
+
+		Set<Business> copy = new HashSet<Business>();
+		copy.addAll(this.businessSet);
+
+		return copy;
 	}
 
 }

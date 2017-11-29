@@ -157,6 +157,13 @@ public class YelpDB extends Database {
 		System.out.println(reviewSet.size());
 		bufferedReader.close();
 	}
+	
+	public Set<Restaurant> getRestaurantSet(){
+		Set<Restaurant> copy = new HashSet<Restaurant>();
+		copy.addAll(this.restaurantSet);
+		
+		return copy;
+	}
 
 
 }

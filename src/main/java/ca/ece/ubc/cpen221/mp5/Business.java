@@ -151,4 +151,25 @@ public class Business {
 	public boolean containsCategory(String category) {
 		return this.categories.contains(category);
 	}
+	
+	@Override
+	public boolean equals( Object o ) {
+		
+		if( o instanceof Business ) {
+			Business other = (Business) o;
+			return this.businessID.equals(other.getBusinessID());
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.businessID.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
+	}
 }
