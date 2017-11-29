@@ -50,10 +50,13 @@ public class Business {
 		}
 		location.setSchools(schools);
 
-		//set address, city and state
+		//set address, coordinates, city and state
 		location.setAddress(business.getString("full_address"));
+		location.setCoordinates(Double.parseDouble(business.get("longitude").toString()),
+								Double.parseDouble(business.get("latitude").toString()));
 		location.setCity(business.getString("city"));
 		location.setState(business.getString("state"));
+
 
 		this.location = location;
 

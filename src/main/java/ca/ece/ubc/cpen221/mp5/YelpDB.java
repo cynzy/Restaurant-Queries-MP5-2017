@@ -16,6 +16,7 @@ public class YelpDB extends Database {
 	private Set<YelpReview> reviewSet;
 
 	public YelpDB(String restaurantsJson, String usersJson, String reviewsJson) throws IOException {
+		super(new HashSet<>(), new HashSet<>(), new HashSet<>());
 
 		this.restaurantSet = new HashSet<>();
 		this.userSet = new HashSet<>();

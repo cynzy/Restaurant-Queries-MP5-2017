@@ -17,6 +17,12 @@ public class Database implements MP5Db<Object> {
 	private Set<User> userSet;
 	private Set<Review> reviewSet;
 
+	public Database(Set<Business> businessSet, Set<User> userSet, Set<Review> reviewSet) {
+		this.businessSet = businessSet;
+		this.userSet = userSet;
+		this.reviewSet = reviewSet;
+	}
+
 	@Override
 	public Set<Object> getMatches(String queryString) {
 		try {
