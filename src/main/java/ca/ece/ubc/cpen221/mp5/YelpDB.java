@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
 import java.util.function.ToDoubleBiFunction;
+import java.util.stream.Collectors;
 
 public class YelpDB extends Database {
 
@@ -38,8 +39,16 @@ public class YelpDB extends Database {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
 
+		List<Coordinates> coordinateList = this.restaurantSet.stream().map(business -> business.getLocation())
+				.map(location -> location.getCoordinates()).collect(Collectors.toList());
+		
+		double maxLong = coordinateList.stream().map( coordinates -> coordinates.getlongitude()).reduce(Double.MIN_VALUE, (x,y) -> Double.max(x, y));
+		double maxLat = coordinateList.stream().map( coordinates -> coordinates.getlatitude()).reduce(Double.MIN_VALUE, (x,y) -> Double.max(x, y));
+		double minLong = coordinateList.stream().map( coordinates -> coordinates.getlongitude()).reduce(Double.MAX_VALUE, (x,y) -> Double.min(x, y));
+		double minLat = coordinateList.stream().map( coordinates -> coordinates.getlatitude()).reduce(Double.MAX_VALUE, (x,y) -> Double.min(x, y));
+		
 		for (int i = 0; i < k; i++) {
-			clusterSet.add(new Cluster(360 * Math.random() - 180, 180 * Math.random() - 90));
+			clusterSet.add(new Cluster(( maxLong - minLong )* Math.random() + minLong, (maxLat - minLat) * Math.random() + minLat));
 		}
 
 		while (true) {
