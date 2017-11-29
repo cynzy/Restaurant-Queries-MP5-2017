@@ -31,7 +31,6 @@ public class YelpDB extends Database {
 		return super.getMatches(queryString);
 	}
 
-
 	@Override
 	public String kMeansClusters_json(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
@@ -40,19 +39,26 @@ public class YelpDB extends Database {
 		List<Coordinates> coordinateList = this.restaurantSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toList());
 
-		double maxLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude()).reduce(Double.MIN_VALUE,
-				(x, y) -> Double.max(x, y));
-		double maxLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude()).reduce(Double.MIN_VALUE,
-				(x, y) -> Double.max(x, y));
-		double minLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude()).reduce(Double.MAX_VALUE,
-				(x, y) -> Double.min(x, y));
-		double minLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude()).reduce(Double.MAX_VALUE,
-				(x, y) -> Double.min(x, y));
+		double maxLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude())
+				.reduce((double) Integer.MIN_VALUE, (x, y) -> Double.max(x, y));
+		double maxLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude())
+				.reduce((double) Integer.MIN_VALUE, (x, y) -> Double.max(x, y));
+		double minLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude())
+				.reduce((double) Integer.MAX_VALUE, (x, y) -> Double.min(x, y));
+		double minLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude())
+				.reduce((double) Integer.MAX_VALUE, (x, y) -> Double.min(x, y));
 
+		System.out.println(maxLong + "||" + minLong + "||" + maxLat + "||" + minLat);
 		for (int i = 0; i < k; i++) {
 			clusterSet.add(new Cluster((maxLong - minLong) * Math.random() + minLong,
 					(maxLat - minLat) * Math.random() + minLat));
 		}
+
+		/*
+		 * for (int i = 0; i < k; i++) { clusterSet.add(new Cluster(( -122.255591154098
+		 * - (-122.26645)) * Math.random() -122.266645, (37.8751965 - 37.863919) *
+		 * Math.random() + 37.863919)); }
+		 */
 
 		while (true) {
 			for (Restaurant b : this.restaurantSet) {
@@ -104,7 +110,6 @@ public class YelpDB extends Database {
 		return json;
 	}
 
-
 	@Override
 	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
 		Map<String, Business> idMap = new HashMap<String, Business>();
@@ -141,7 +146,6 @@ public class YelpDB extends Database {
 
 		return new YelpPredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
 	}
-
 
 	private void parseRestaurants(String restaurantsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
@@ -200,7 +204,6 @@ public class YelpDB extends Database {
 		System.out.println(reviewSet.size());
 		bufferedReader.close();
 	}
-
 
 	public Set<Restaurant> getRestaurantSet() {
 
