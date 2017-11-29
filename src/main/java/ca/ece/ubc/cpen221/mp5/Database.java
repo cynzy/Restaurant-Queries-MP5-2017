@@ -8,7 +8,6 @@ import javax.json.JsonObjectBuilder;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.ToDoubleBiFunction;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Database implements MP5Db<Object> {
@@ -17,10 +16,10 @@ public class Database implements MP5Db<Object> {
 	private Set<User> userSet;
 	private Set<Review> reviewSet;
 
-	public Database(Set<Business> businessSet, Set<User> userSet, Set<Review> reviewSet) {
-		this.businessSet = businessSet;
-		this.userSet = userSet;
-		this.reviewSet = reviewSet;
+	public Database() {
+		this.businessSet = new HashSet<>();
+		this.userSet = new HashSet<>();
+		this.reviewSet = new HashSet<>();
 	}
 
 	@Override

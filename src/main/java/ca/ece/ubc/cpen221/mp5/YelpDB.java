@@ -16,8 +16,6 @@ public class YelpDB extends Database {
 	private Set<YelpReview> reviewSet;
 
 	public YelpDB(String restaurantsJson, String usersJson, String reviewsJson) throws IOException {
-		super(new HashSet<>(), new HashSet<>(), new HashSet<>());
-
 		this.restaurantSet = new HashSet<>();
 		this.userSet = new HashSet<>();
 		this.reviewSet = new HashSet<>();
@@ -32,6 +30,7 @@ public class YelpDB extends Database {
 	public Set<Object> getMatches(String queryString) {
 		return super.getMatches(queryString);
 	}
+
 
 	@Override
 	public String kMeansClusters_json(int k) {
@@ -105,6 +104,7 @@ public class YelpDB extends Database {
 		return json;
 	}
 
+
 	@Override
 	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
 		Map<String, Business> idMap = new HashMap<String, Business>();
@@ -137,13 +137,6 @@ public class YelpDB extends Database {
 		return null;
 	}
 
-	public Set<Business> getBusinessSet() {
-
-		Set<Business> copy = new HashSet<Business>();
-		copy.addAll(this.restaurantSet);
-
-		return copy;
-	}
 
 	private void parseRestaurants(String restaurantsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
@@ -203,7 +196,9 @@ public class YelpDB extends Database {
 		bufferedReader.close();
 	}
 
+
 	public Set<Restaurant> getRestaurantSet() {
+
 		Set<Restaurant> copy = new HashSet<Restaurant>();
 		copy.addAll(this.restaurantSet);
 
