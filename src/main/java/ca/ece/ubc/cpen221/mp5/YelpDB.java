@@ -134,7 +134,12 @@ public class YelpDB extends Database {
 
 		double s_yy = ratingList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanRating, 2));
 
-		return null;
+		double s_xy = 0;
+		for (int i = 0; i < ratingList.size(); i++) {
+			s_xy += Math.pow(ratingList.get(i) - meanRating, 2) * Math.pow(priceList.get(i) - meanPrice, 2);
+		}
+
+		return new YelpPredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
 	}
 
 
