@@ -62,13 +62,16 @@ public class YelpDB extends Database {
 			emptyClusterList = clusterSet.stream().filter(cluster -> cluster.isEmpty()).collect(Collectors.toList());
 
 		} while (emptyClusterList.isEmpty());
+		
 
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
 		do {
 
 			for (Cluster c : clusterSet) {
 				c.adjustCentroid();
-			}
+			}	
+			
+			reAssignClusters(clusterSet, clusteringMap);
 
 			nonFinishedClustersList = clusterSet.stream().map(cluster -> cluster.isFinished())
 					.filter(isFinished -> false).collect(Collectors.toList());
@@ -119,6 +122,8 @@ public class YelpDB extends Database {
 				closestCluster.addBusiness(b);
 				clusteringMap.put(b, closestCluster);
 			}
+			
+			
 		}
 	}
 
