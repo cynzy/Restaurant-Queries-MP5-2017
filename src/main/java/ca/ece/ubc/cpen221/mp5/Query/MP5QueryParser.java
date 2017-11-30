@@ -1,5 +1,6 @@
-// Generated from MP5Query.g4 by ANTLR 4.7
+// Generated from MP5QueryParser.g4 by ANTLR 4.7
 package ca.ece.ubc.cpen221.mp5.Query;
+
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNDeserializer;
@@ -19,8 +20,8 @@ public class MP5QueryParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		AND=1, OR=2, LPAREN=3, RPAREN=4, GT=5, GTE=6, LT=7, LTE=8, EQ=9, NUM=10, 
-		IN=11, CATEGORY=12, NAME=13, RATING=14, PRICE=15, STR=16;
+		AND=1, OR=2, LPAREN=3, GT=4, GTE=5, LT=6, LTE=7, EQ=8, NUM=9, IN=10, CATEGORY=11, 
+		NAME=12, RATING=13, PRICE=14, WS=15, STR=16, RPAREN=17;
 	public static final int
 		RULE_query = 0, RULE_expr = 1, RULE_orExpr = 2, RULE_andExpr = 3, RULE_atom = 4, 
 		RULE_ineq = 5, RULE_in = 6, RULE_category = 7, RULE_name = 8, RULE_rating = 9, 
@@ -31,12 +32,12 @@ public class MP5QueryParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'&&'", "'||'", "'('", "')'", "'>'", "'>='", "'<'", "'<='", "'='", 
-		null, "'in'", "'category'", "'name'", "'rating'", "'price'"
+		null, "'&&'", "'||'", "'('", "'>'", "'>='", "'<'", "'<='", "'='", null, 
+		"'in'", "'category'", "'name'", "'rating'", "'price'", null, null, "')'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "AND", "OR", "LPAREN", "RPAREN", "GT", "GTE", "LT", "LTE", "EQ", 
-		"NUM", "IN", "CATEGORY", "NAME", "RATING", "PRICE", "STR"
+		null, "AND", "OR", "LPAREN", "GT", "GTE", "LT", "LTE", "EQ", "NUM", "IN", 
+		"CATEGORY", "NAME", "RATING", "PRICE", "WS", "STR", "RPAREN"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -72,7 +73,7 @@ public class MP5QueryParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "MP5Query.g4"; }
+	public String getGrammarFileName() { return "MP5QueryParser.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -91,17 +92,18 @@ public class MP5QueryParser extends Parser {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode EOF() { return getToken(MP5QueryParser.EOF, 0); }
 		public QueryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_query; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener) ((MP5QueryListener)listener).enterQuery(this);
+			if ( listener instanceof MP5QueryParserListener) ((MP5QueryParserListener)listener).enterQuery(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitQuery(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitQuery(this);
 		}
 	}
 
@@ -113,6 +115,8 @@ public class MP5QueryParser extends Parser {
 			{
 			setState(22);
 			expr();
+			setState(23);
+			match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -139,11 +143,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterExpr(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitExpr(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitExpr(this);
 		}
 	}
 
@@ -151,20 +155,20 @@ public class MP5QueryParser extends Parser {
 		ExprContext _localctx = new ExprContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_expr);
 		try {
-			setState(26);
+			setState(27);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(24);
+				setState(25);
 				andExpr();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(25);
+				setState(26);
 				orExpr();
 				}
 				break;
@@ -198,11 +202,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_orExpr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterOrExpr(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterOrExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitOrExpr(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitOrExpr(this);
 		}
 	}
 
@@ -213,21 +217,21 @@ public class MP5QueryParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(28);
+			setState(29);
 			andExpr();
-			setState(33);
+			setState(34);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==OR) {
 				{
 				{
-				setState(29);
-				match(OR);
 				setState(30);
+				match(OR);
+				setState(31);
 				andExpr();
 				}
 				}
-				setState(35);
+				setState(36);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -261,11 +265,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_andExpr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterAndExpr(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterAndExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitAndExpr(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitAndExpr(this);
 		}
 	}
 
@@ -276,21 +280,21 @@ public class MP5QueryParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(36);
+			setState(37);
 			atom();
-			setState(41);
+			setState(42);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==AND) {
 				{
 				{
-				setState(37);
-				match(AND);
 				setState(38);
+				match(AND);
+				setState(39);
 				atom();
 				}
 				}
-				setState(43);
+				setState(44);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -334,11 +338,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_atom; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterAtom(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterAtom(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitAtom(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitAtom(this);
 		}
 	}
 
@@ -346,52 +350,52 @@ public class MP5QueryParser extends Parser {
 		AtomContext _localctx = new AtomContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_atom);
 		try {
-			setState(53);
+			setState(54);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IN:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(44);
+				setState(45);
 				in();
 				}
 				break;
 			case CATEGORY:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(45);
+				setState(46);
 				category();
 				}
 				break;
 			case RATING:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(46);
+				setState(47);
 				rating();
 				}
 				break;
 			case PRICE:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(47);
+				setState(48);
 				price();
 				}
 				break;
 			case NAME:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(48);
+				setState(49);
 				name();
 				}
 				break;
 			case LPAREN:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(49);
-				match(LPAREN);
 				setState(50);
-				orExpr();
+				match(LPAREN);
 				setState(51);
+				orExpr();
+				setState(52);
 				match(RPAREN);
 				}
 				break;
@@ -422,11 +426,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_ineq; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterIneq(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterIneq(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitIneq(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitIneq(this);
 		}
 	}
 
@@ -437,7 +441,7 @@ public class MP5QueryParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(55);
+			setState(56);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << GT) | (1L << GTE) | (1L << LT) | (1L << LTE) | (1L << EQ))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -471,11 +475,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_in; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterIn(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterIn(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitIn(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitIn(this);
 		}
 	}
 
@@ -485,13 +489,13 @@ public class MP5QueryParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(57);
-			match(IN);
 			setState(58);
-			match(LPAREN);
+			match(IN);
 			setState(59);
-			match(STR);
+			match(LPAREN);
 			setState(60);
+			match(STR);
+			setState(61);
 			match(RPAREN);
 			}
 		}
@@ -517,11 +521,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_category; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterCategory(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterCategory(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitCategory(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitCategory(this);
 		}
 	}
 
@@ -531,13 +535,13 @@ public class MP5QueryParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(62);
-			match(CATEGORY);
 			setState(63);
-			match(LPAREN);
+			match(CATEGORY);
 			setState(64);
-			match(STR);
+			match(LPAREN);
 			setState(65);
+			match(STR);
+			setState(66);
 			match(RPAREN);
 			}
 		}
@@ -563,11 +567,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterName(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitName(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitName(this);
 		}
 	}
 
@@ -577,13 +581,13 @@ public class MP5QueryParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(67);
-			match(NAME);
 			setState(68);
-			match(LPAREN);
+			match(NAME);
 			setState(69);
-			match(STR);
+			match(LPAREN);
 			setState(70);
+			match(STR);
+			setState(71);
 			match(RPAREN);
 			}
 		}
@@ -610,11 +614,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_rating; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterRating(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterRating(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitRating(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitRating(this);
 		}
 	}
 
@@ -624,11 +628,11 @@ public class MP5QueryParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(72);
-			match(RATING);
 			setState(73);
-			ineq();
+			match(RATING);
 			setState(74);
+			ineq();
+			setState(75);
 			match(NUM);
 			}
 		}
@@ -655,11 +659,11 @@ public class MP5QueryParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_price; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).enterPrice(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).enterPrice(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MP5QueryListener ) ((MP5QueryListener)listener).exitPrice(this);
+			if ( listener instanceof MP5QueryParserListener ) ((MP5QueryParserListener)listener).exitPrice(this);
 		}
 	}
 
@@ -669,11 +673,11 @@ public class MP5QueryParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(76);
-			match(PRICE);
 			setState(77);
-			ineq();
+			match(PRICE);
 			setState(78);
+			ineq();
+			setState(79);
 			match(NUM);
 			}
 		}
@@ -689,26 +693,26 @@ public class MP5QueryParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\22S\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\23T\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
-		"\f\t\f\3\2\3\2\3\3\3\3\5\3\35\n\3\3\4\3\4\3\4\7\4\"\n\4\f\4\16\4%\13\4"+
-		"\3\5\3\5\3\5\7\5*\n\5\f\5\16\5-\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3"+
-		"\6\5\68\n\6\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\n\3\n\3"+
-		"\n\3\n\3\n\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\2\2\r\2\4\6\b\n\f\16"+
-		"\20\22\24\26\2\3\3\2\7\13\2O\2\30\3\2\2\2\4\34\3\2\2\2\6\36\3\2\2\2\b"+
-		"&\3\2\2\2\n\67\3\2\2\2\f9\3\2\2\2\16;\3\2\2\2\20@\3\2\2\2\22E\3\2\2\2"+
-		"\24J\3\2\2\2\26N\3\2\2\2\30\31\5\4\3\2\31\3\3\2\2\2\32\35\5\b\5\2\33\35"+
-		"\5\6\4\2\34\32\3\2\2\2\34\33\3\2\2\2\35\5\3\2\2\2\36#\5\b\5\2\37 \7\4"+
-		"\2\2 \"\5\b\5\2!\37\3\2\2\2\"%\3\2\2\2#!\3\2\2\2#$\3\2\2\2$\7\3\2\2\2"+
-		"%#\3\2\2\2&+\5\n\6\2\'(\7\3\2\2(*\5\n\6\2)\'\3\2\2\2*-\3\2\2\2+)\3\2\2"+
-		"\2+,\3\2\2\2,\t\3\2\2\2-+\3\2\2\2.8\5\16\b\2/8\5\20\t\2\608\5\24\13\2"+
-		"\618\5\26\f\2\628\5\22\n\2\63\64\7\5\2\2\64\65\5\6\4\2\65\66\7\6\2\2\66"+
-		"8\3\2\2\2\67.\3\2\2\2\67/\3\2\2\2\67\60\3\2\2\2\67\61\3\2\2\2\67\62\3"+
-		"\2\2\2\67\63\3\2\2\28\13\3\2\2\29:\t\2\2\2:\r\3\2\2\2;<\7\r\2\2<=\7\5"+
-		"\2\2=>\7\22\2\2>?\7\6\2\2?\17\3\2\2\2@A\7\16\2\2AB\7\5\2\2BC\7\22\2\2"+
-		"CD\7\6\2\2D\21\3\2\2\2EF\7\17\2\2FG\7\5\2\2GH\7\22\2\2HI\7\6\2\2I\23\3"+
-		"\2\2\2JK\7\20\2\2KL\5\f\7\2LM\7\f\2\2M\25\3\2\2\2NO\7\21\2\2OP\5\f\7\2"+
-		"PQ\7\f\2\2Q\27\3\2\2\2\6\34#+\67";
+		"\f\t\f\3\2\3\2\3\2\3\3\3\3\5\3\36\n\3\3\4\3\4\3\4\7\4#\n\4\f\4\16\4&\13"+
+		"\4\3\5\3\5\3\5\7\5+\n\5\f\5\16\5.\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6"+
+		"\3\6\5\69\n\6\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\n\3\n"+
+		"\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\2\2\r\2\4\6\b\n\f"+
+		"\16\20\22\24\26\2\3\3\2\6\n\2P\2\30\3\2\2\2\4\35\3\2\2\2\6\37\3\2\2\2"+
+		"\b\'\3\2\2\2\n8\3\2\2\2\f:\3\2\2\2\16<\3\2\2\2\20A\3\2\2\2\22F\3\2\2\2"+
+		"\24K\3\2\2\2\26O\3\2\2\2\30\31\5\4\3\2\31\32\7\2\2\3\32\3\3\2\2\2\33\36"+
+		"\5\b\5\2\34\36\5\6\4\2\35\33\3\2\2\2\35\34\3\2\2\2\36\5\3\2\2\2\37$\5"+
+		"\b\5\2 !\7\4\2\2!#\5\b\5\2\" \3\2\2\2#&\3\2\2\2$\"\3\2\2\2$%\3\2\2\2%"+
+		"\7\3\2\2\2&$\3\2\2\2\',\5\n\6\2()\7\3\2\2)+\5\n\6\2*(\3\2\2\2+.\3\2\2"+
+		"\2,*\3\2\2\2,-\3\2\2\2-\t\3\2\2\2.,\3\2\2\2/9\5\16\b\2\609\5\20\t\2\61"+
+		"9\5\24\13\2\629\5\26\f\2\639\5\22\n\2\64\65\7\5\2\2\65\66\5\6\4\2\66\67"+
+		"\7\23\2\2\679\3\2\2\28/\3\2\2\28\60\3\2\2\28\61\3\2\2\28\62\3\2\2\28\63"+
+		"\3\2\2\28\64\3\2\2\29\13\3\2\2\2:;\t\2\2\2;\r\3\2\2\2<=\7\f\2\2=>\7\5"+
+		"\2\2>?\7\22\2\2?@\7\23\2\2@\17\3\2\2\2AB\7\r\2\2BC\7\5\2\2CD\7\22\2\2"+
+		"DE\7\23\2\2E\21\3\2\2\2FG\7\16\2\2GH\7\5\2\2HI\7\22\2\2IJ\7\23\2\2J\23"+
+		"\3\2\2\2KL\7\17\2\2LM\5\f\7\2MN\7\13\2\2N\25\3\2\2\2OP\7\20\2\2PQ\5\f"+
+		"\7\2QR\7\13\2\2R\27\3\2\2\2\6\35$,8";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

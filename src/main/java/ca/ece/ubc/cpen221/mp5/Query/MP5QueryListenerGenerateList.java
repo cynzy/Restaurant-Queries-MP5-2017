@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by Cynzy on 2017-11-25.
  */
-public class MP5QueryListenerGenerateList extends MP5QueryBaseListener{
+public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
 
     private List<String> categories;
     private List<Location> locations;
@@ -45,7 +45,6 @@ public class MP5QueryListenerGenerateList extends MP5QueryBaseListener{
     @Override
     public void exitName(MP5QueryParser.NameContext ctx) {
         TerminalNode token = ctx.STR();
-        System.out.println(token.getText());
         this.names.add(token.getText());
     }
 

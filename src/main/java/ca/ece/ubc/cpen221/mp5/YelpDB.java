@@ -163,7 +163,8 @@ public class YelpDB extends Database {
 			s_xy += Math.pow(ratingList.get(i) - meanRating, 2) * Math.pow(priceList.get(i) - meanPrice, 2);
 		}
 
-		return new YelpPredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
+		return null;
+//		return new YelpPredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
 	}
 
 	private void parseRestaurants(String restaurantsJson) throws IOException {
