@@ -49,6 +49,16 @@ public class Coordinates {
 		return false;
 	}
 	
+	@Override
+	public int hashCode() {
+		return (int) (this.latitude + this.longitude);
+		
+	}
+	
+	@Override
+	public String toString() {
+		return "Latitude:" + this.latitude + ", Longitude:" + this.longitude;
+	}
 	
 
 }

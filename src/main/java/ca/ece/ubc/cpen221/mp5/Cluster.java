@@ -1,7 +1,9 @@
 package ca.ece.ubc.cpen221.mp5;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Cluster {
 
@@ -29,17 +31,21 @@ public class Cluster {
 	}
 
 	public boolean adjustCentroid() {
-		double sumX = 0;
-		double sumY = 0;
 
-		for (Business b : businessSet) {
-			sumX += b.getLocation().getCoordinates().getlongitude();
-			sumY += b.getLocation().getCoordinates().getlatitude();
-		}
-		Coordinates previous = new Coordinates(this.centroid.getlongitude(), this.centroid.getlatitude());
-		this.centroid = new Coordinates(sumX / businessSet.size(), sumY / businessSet.size());
+		List<Coordinates> coordinateList = this.businessSet.stream().map(business -> business.getLocation())
+				.map(location -> location.getCoordinates()).collect(Collectors.toList());
 
-		return this.centroid.equals(previous);
+		double longAverage = coordinateList.stream().map(coordinate -> coordinate.getlongitude()).reduce(0.0,
+				(x, y) -> x + y) / this.businessSet.size();
+		double latAverage = coordinateList.stream().map(coordinate -> coordinate.getlatitude()).reduce(0.0,
+				(x, y) -> x + y) / this.businessSet.size();
+
+		Coordinates previousCentroid = new Coordinates(this.centroid.getlongitude(), this.centroid.getlatitude());
+		this.centroid = new Coordinates(longAverage, latAverage);
+		
+		System.out.println( previousCentroid.toString() + "||" + this.centroid.toString() );
+
+		return this.centroid.equals(previousCentroid);
 	}
 
 	public Coordinates getCentroid() {

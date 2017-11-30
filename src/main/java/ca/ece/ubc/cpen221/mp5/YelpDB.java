@@ -54,12 +54,6 @@ public class YelpDB extends Database {
 					(maxLat - minLat) * Math.random() + minLat));
 		}
 
-		/*
-		 * for (int i = 0; i < k; i++) { clusterSet.add(new Cluster(( -122.255591154098
-		 * - (-122.26645)) * Math.random() -122.266645, (37.8751965 - 37.863919) *
-		 * Math.random() + 37.863919)); }
-		 */
-
 		while (true) {
 			for (Restaurant b : this.restaurantSet) {
 				double minDistance = Integer.MAX_VALUE;
@@ -108,6 +102,31 @@ public class YelpDB extends Database {
 		}
 		String json = array.build().toString();
 		return json;
+	}
+
+	public void reAssignClusers(Set<Cluster> clusterSet, Map<Business, Cluster> clusteringMap) {
+
+		for (Restaurant b : this.restaurantSet) {
+			double minDistance = Integer.MAX_VALUE;
+			Cluster closestCluster = new Cluster(0, 0);
+			for (Cluster c : clusterSet) {
+				double currentDistance = b.getLocation().getCoordinates().getDistance(c.getCentroid());
+				if (minDistance > currentDistance) {
+					closestCluster = c;
+					minDistance = currentDistance;
+				}
+			}
+			if (!clusteringMap.containsKey(b)) {
+				clusteringMap.put(b, closestCluster);
+			}
+
+			if (!closestCluster.equals(clusteringMap.get(b))) {
+
+				clusteringMap.get(b).removeBusiness(b);
+				closestCluster.addBusiness(b);
+				clusteringMap.put(b, closestCluster);
+			}
+		}
 	}
 
 	@Override
