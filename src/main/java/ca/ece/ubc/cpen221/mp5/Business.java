@@ -5,6 +5,44 @@ import javax.json.JsonObject;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Business - represents a business to input into a database. Includes
+ * information about the business' location, name, ID, etc.
+ * 
+ * Representation Invariants:
+ *
+ * - none of the instance fields are null
+ *
+ * - this.businessID is unique to this business
+ *
+ * - this.open represents the current open/close status of the business
+ *
+ * - this.url has a proper web address format, and is unique to this business
+ *
+ * - this.name is the name of this business and is unique to it
+ *
+ * - this.photoUrl is in proper web address format and links to a picture set by
+ * the business
+ * 
+ * - this.categories includes a list of tags that identify the categories for which the business falls under
+ * 
+ * - All reviews in this.reviewSet must have this.businessID
+ * 
+ * - this.rating must be the average value of the ratings of the reviews in this.reviewSet
+ * 
+ * - this.rating is between 0 and 5
+ * 
+ * - this.reviewCount == this.reviewSet.size()
+ * 
+ * - this.price is a value between 1 and 5 rating how expensive this business it
+ * Abstraction Function:
+ * 
+ * - this.location represents the location of this business
+ * 
+ * - businessID and name are immutable
+ * 
+ * Abstraction Function:
+ */
 public class Business {
 
 	protected boolean open;
@@ -31,55 +69,53 @@ public class Business {
 		this.price = business.getInt("price");
 		this.rating = business.getInt("stars");
 
-
-		//parsing location
+		// parsing location
 		Location location = new Location();
-		//make a set of strings from JSON array of neighborhoods
+		// make a set of strings from JSON array of neighborhoods
 		JsonArray array = business.get("neighborhoods").asJsonArray();
 		Set<String> neighbourhoods = new HashSet<>();
-		for (int index = 0; index < array.size(); index++){
+		for (int index = 0; index < array.size(); index++) {
 			neighbourhoods.add(array.getString(index));
 		}
 		location.setNeighbourhoods(neighbourhoods);
 
-		//make a set of strings from JSON array of schools
+		// make a set of strings from JSON array of schools
 		array = business.get("schools").asJsonArray();
 		Set<String> schools = new HashSet<>();
-		for (int index = 0; index < array.size(); index++){
+		for (int index = 0; index < array.size(); index++) {
 			schools.add(array.getString(index));
 		}
 		location.setSchools(schools);
 
-		//set address, coordinates, city and state
+		// set address, coordinates, city and state
 		location.setAddress(business.getString("full_address"));
 		location.setCoordinates(Double.parseDouble(business.get("longitude").toString()),
-								Double.parseDouble(business.get("latitude").toString()));
+				Double.parseDouble(business.get("latitude").toString()));
 		location.setCity(business.getString("city"));
 		location.setState(business.getString("state"));
 
-
 		this.location = location;
 
-		//parsing categories
-		//make a set of strings from JSON array of categories
+		// parsing categories
+		// make a set of strings from JSON array of categories
 		array = business.get("categories").asJsonArray();
 		Set<String> categories = new HashSet<>();
-		for (int index = 0; index < array.size(); index++){
+		for (int index = 0; index < array.size(); index++) {
 			categories.add(array.getString(index));
 		}
 
 		this.categories = categories;
 
 	}
-	
+
 	public double getRating() {
 		return this.rating;
 	}
-	
+
 	public int getReviewCount() {
 		return this.reviewCount;
 	}
-	
+
 	public int getPrice() {
 		return this.price;
 	}
@@ -154,23 +190,23 @@ public class Business {
 	public boolean containsCategory(String category) {
 		return this.categories.contains(category);
 	}
-	
+
 	@Override
-	public boolean equals( Object o ) {
-		
-		if( o instanceof Business ) {
+	public boolean equals(Object o) {
+
+		if (o instanceof Business) {
 			Business other = (Business) o;
 			return this.businessID.equals(other.getBusinessID());
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return this.businessID.hashCode();
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.name;

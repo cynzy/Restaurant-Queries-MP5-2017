@@ -5,24 +5,74 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/*
+ * Cluster - Represents a group of businesses and the location of their centroid. Used to find the k-means clustering of a set of businesses
+ * 
+ * Representation Invariants:
+ * 
+ * - this.businessSet has to include all the businesses in the cluser
+ * 
+ * - businesses in this.businessSet are unique to this cluster for a specific calculation of k-means clustering
+ * 
+ * - this.centroid is the average longitude and latitude of the values in this.businessSet after adjustCentroid() is called
+ * 
+ * - this.centroid has to be the closes cluster to the businesses in this.businessSet out of the centroids of all other clusters within a computation of k-means clustering until adjustCentroid() is called
+ * 
+ * - this.isFinished is true if the centroid remained the same after adjustCentroi() was called. False otherwise
+ * 
+ * - this.centroid must be unique to this cluster
+ * 
+ * - all instance fields are not null
+ * 
+ * Abstraction Function:
+ * 
+ */
 public class Cluster {
 
 	private Set<Business> businessSet;
 	private Coordinates centroid;
 	private boolean isFinished;
 
+	/**
+	 * Constructs a Cluster object
+	 *
+	 * @param x
+	 *            The longitude of the initial centroid
+	 * @param y
+	 *            The latitude of the initial centroid
+	 * 
+	 */
 	public Cluster(double x, double y) {
 		this.businessSet = new HashSet<Business>();
 		this.centroid = new Coordinates(x, y);
 		this.isFinished = false;
 	}
 
+	/**
+	 * gets the set of businesses in this cluster and returns it
+	 *
+	 * @param void
+	 * 
+	 * @return the set of businesses in this cluster
+	 * 
+	 */
 	public Set<Business> getBusinessSet() {
 		Set<Business> copy = new HashSet<Business>();
 		copy.addAll(this.businessSet);
 
 		return copy;
 	}
+	
+	/**
+	 * Adds a business to this cluster. Does nothing if this cluster already contains this business.
+	 *
+	 * requires: business is not null
+	 *
+	 * @param business
+	 *            The business to be added to this cluster
+	 * @return void
+	 * 
+	 */
 
 	public void addBusiness(Business business) {
 		this.businessSet.add(business);
@@ -31,7 +81,7 @@ public class Cluster {
 	public void removeBusiness(Business business) {
 		this.businessSet.remove(business);
 	}
-	
+
 	public boolean isEmpty() {
 		return this.businessSet.isEmpty();
 	}
@@ -40,8 +90,6 @@ public class Cluster {
 
 		List<Coordinates> coordinateList = this.businessSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toList());
-		
-		System.out.println(this.businessSet.size());
 
 		double longAverage = coordinateList.stream().map(coordinate -> coordinate.getlongitude()).reduce(0.0,
 				(x, y) -> x + y) / this.businessSet.size();
@@ -53,7 +101,7 @@ public class Cluster {
 
 		this.isFinished = this.centroid.equals(previousCentroid);
 	}
-	
+
 	public boolean isFinished() {
 		return this.isFinished;
 	}
