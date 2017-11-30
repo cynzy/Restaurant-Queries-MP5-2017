@@ -1,27 +1,9 @@
-grammar MP5Query;
+parser grammar MP5QueryParser;
 
-
-// lexical rules for parsing
-AND : '&&' ;
-OR : '||' ;
-LPAREN : '(' ;
-RPAREN : ')' ;
-GT : '>' ;
-GTE : '>=' ;
-LT : '<' ;
-LTE : '<=' ;
-EQ : '=' ;
-NUM : [1-5] ;
-IN : 'in' ;
-CATEGORY : 'category' ;
-NAME : 'name' ;
-RATING : 'rating' ;
-PRICE : 'price' ;
-STR: [A-Za-z]+ ;
-
+options { tokenVocab=MP5QueryLexer; }
 
 //token rules for parsing
-query : expr <EOF> ;
+query : expr EOF ;
 expr: andExpr | orExpr ;
 orExpr : andExpr(OR andExpr)* ;
 andExpr : atom (AND atom)* ;

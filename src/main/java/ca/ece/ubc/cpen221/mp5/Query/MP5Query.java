@@ -55,7 +55,7 @@ public class MP5Query {
         ParseTree tree = parser.query();
         System.out.println(tree.toStringTree(parser));
         ParseTreeWalker walker = new ParseTreeWalker();
-        MP5QueryBaseListener listener = new MP5QueryListenerGenerateList(this.categories,this.locations,this.names,this.rating,this.price);
+        MP5QueryParserListener listener = new MP5QueryListenerGenerateList(this.categories,this.locations,this.names,this.rating,this.price);
         walker.walk(listener, tree);
 
 
@@ -69,5 +69,25 @@ public class MP5Query {
 
     public Set<Restaurant> getRestaurantsSet() {
         return restaurantsSet;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public List<String> getNames() {
+        return names;
+    }
+
+    public List<Integer> getRating() {
+        return rating;
+    }
+
+    public List<Integer> getPrice() {
+        return price;
     }
 }

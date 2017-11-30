@@ -1,12 +1,11 @@
-// Generated from MP5Query.g4 by ANTLR 4.7
-package ca.ece.ubc.cpen221.mp5.Query;
+package ca.ece.ubc.cpen221.mp5.Query;// Generated from MP5QueryParser.g4 by ANTLR 4.7
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by
  * {@link MP5QueryParser}.
  */
-public interface MP5QueryListener extends ParseTreeListener {
+public interface MP5QueryParserListener extends ParseTreeListener {
 	/**
 	 * Enter a parse tree produced by {@link MP5QueryParser#query}.
 	 * @param ctx the parse tree

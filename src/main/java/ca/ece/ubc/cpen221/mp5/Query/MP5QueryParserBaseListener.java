@@ -1,15 +1,16 @@
-package ca.ece.ubc.cpen221.mp5.Query;// Generated from MP5Query.g4 by ANTLR 4.7
+// Generated from MP5QueryParser.g4 by ANTLR 4.7
+package ca.ece.ubc.cpen221.mp5.Query;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link MP5QueryListener},
+ * This class provides an empty implementation of {@link MP5QueryParserListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-public class MP5QueryBaseListener implements MP5QueryListener {
+public class MP5QueryParserBaseListener implements MP5QueryParserListener {
 	/**
 	 * {@inheritDoc}
 	 *

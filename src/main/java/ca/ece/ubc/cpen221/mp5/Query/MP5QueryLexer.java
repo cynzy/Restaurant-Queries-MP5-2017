@@ -1,4 +1,4 @@
-// Generated from MP5Query.g4 by ANTLR 4.7
+// Generated from MP5QueryLexer.g4 by ANTLR 4.7
 package ca.ece.ubc.cpen221.mp5.Query;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATN;
@@ -15,28 +15,30 @@ public class MP5QueryLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		AND=1, OR=2, LPAREN=3, RPAREN=4, GT=5, GTE=6, LT=7, LTE=8, EQ=9, NUM=10, 
-		IN=11, CATEGORY=12, NAME=13, RATING=14, PRICE=15, STR=16;
+		AND=1, OR=2, LPAREN=3, GT=4, GTE=5, LT=6, LTE=7, EQ=8, NUM=9, IN=10, CATEGORY=11, 
+		NAME=12, RATING=13, PRICE=14, WS=15, STR=16, RPAREN=17;
+	public static final int
+		WORD=1;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
 
 	public static String[] modeNames = {
-		"DEFAULT_MODE"
+		"DEFAULT_MODE", "WORD"
 	};
 
 	public static final String[] ruleNames = {
-		"AND", "OR", "LPAREN", "RPAREN", "GT", "GTE", "LT", "LTE", "EQ", "NUM", 
-		"IN", "CATEGORY", "NAME", "RATING", "PRICE", "STR"
+		"AND", "OR", "LPAREN", "GT", "GTE", "LT", "LTE", "EQ", "NUM", "IN", "CATEGORY", 
+		"NAME", "RATING", "PRICE", "WS", "STR", "RPAREN"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'&&'", "'||'", "'('", "')'", "'>'", "'>='", "'<'", "'<='", "'='", 
-		null, "'in'", "'category'", "'name'", "'rating'", "'price'"
+		null, "'&&'", "'||'", "'('", "'>'", "'>='", "'<'", "'<='", "'='", null, 
+		"'in'", "'category'", "'name'", "'rating'", "'price'", null, null, "')'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "AND", "OR", "LPAREN", "RPAREN", "GT", "GTE", "LT", "LTE", "EQ", 
-		"NUM", "IN", "CATEGORY", "NAME", "RATING", "PRICE", "STR"
+		null, "AND", "OR", "LPAREN", "GT", "GTE", "LT", "LTE", "EQ", "NUM", "IN", 
+		"CATEGORY", "NAME", "RATING", "PRICE", "WS", "STR", "RPAREN"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -78,7 +80,7 @@ public class MP5QueryLexer extends Lexer {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "MP5Query.g4"; }
+	public String getGrammarFileName() { return "MP5QueryLexer.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -96,29 +98,33 @@ public class MP5QueryLexer extends Lexer {
 	public ATN getATN() { return _ATN; }
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\22^\b\1\4\2\t\2\4"+
-		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
-		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\3\2\3\2\3"+
-		"\2\3\3\3\3\3\3\3\4\3\4\3\5\3\5\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\t\3\t\3\t"+
-		"\3\n\3\n\3\13\3\13\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\16"+
-		"\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\20\3\20\3\20"+
-		"\3\20\3\20\3\20\3\21\6\21[\n\21\r\21\16\21\\\2\2\22\3\3\5\4\7\5\t\6\13"+
-		"\7\r\b\17\t\21\n\23\13\25\f\27\r\31\16\33\17\35\20\37\21!\22\3\2\4\3\2"+
-		"\63\67\4\2C\\c|\2^\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13"+
-		"\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2"+
-		"\2\2\27\3\2\2\2\2\31\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2"+
-		"!\3\2\2\2\3#\3\2\2\2\5&\3\2\2\2\7)\3\2\2\2\t+\3\2\2\2\13-\3\2\2\2\r/\3"+
-		"\2\2\2\17\62\3\2\2\2\21\64\3\2\2\2\23\67\3\2\2\2\259\3\2\2\2\27;\3\2\2"+
-		"\2\31>\3\2\2\2\33G\3\2\2\2\35L\3\2\2\2\37S\3\2\2\2!Z\3\2\2\2#$\7(\2\2"+
-		"$%\7(\2\2%\4\3\2\2\2&\'\7~\2\2\'(\7~\2\2(\6\3\2\2\2)*\7*\2\2*\b\3\2\2"+
-		"\2+,\7+\2\2,\n\3\2\2\2-.\7@\2\2.\f\3\2\2\2/\60\7@\2\2\60\61\7?\2\2\61"+
-		"\16\3\2\2\2\62\63\7>\2\2\63\20\3\2\2\2\64\65\7>\2\2\65\66\7?\2\2\66\22"+
-		"\3\2\2\2\678\7?\2\28\24\3\2\2\29:\t\2\2\2:\26\3\2\2\2;<\7k\2\2<=\7p\2"+
-		"\2=\30\3\2\2\2>?\7e\2\2?@\7c\2\2@A\7v\2\2AB\7g\2\2BC\7i\2\2CD\7q\2\2D"+
-		"E\7t\2\2EF\7{\2\2F\32\3\2\2\2GH\7p\2\2HI\7c\2\2IJ\7o\2\2JK\7g\2\2K\34"+
-		"\3\2\2\2LM\7t\2\2MN\7c\2\2NO\7v\2\2OP\7k\2\2PQ\7p\2\2QR\7i\2\2R\36\3\2"+
-		"\2\2ST\7r\2\2TU\7t\2\2UV\7k\2\2VW\7e\2\2WX\7g\2\2X \3\2\2\2Y[\t\3\2\2"+
-		"ZY\3\2\2\2[\\\3\2\2\2\\Z\3\2\2\2\\]\3\2\2\2]\"\3\2\2\2\4\2\\\2";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\23l\b\1\b\1\4\2\t"+
+		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
+		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
+		"\3\2\3\2\3\2\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\5\3\5\3\6\3\6\3\6\3\7\3\7\3"+
+		"\b\3\b\3\b\3\t\3\t\3\n\3\n\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f"+
+		"\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\17\3"+
+		"\17\3\17\3\17\3\17\3\17\3\20\6\20^\n\20\r\20\16\20_\3\20\3\20\3\21\6\21"+
+		"e\n\21\r\21\16\21f\3\22\3\22\3\22\3\22\2\2\23\4\3\6\4\b\5\n\6\f\7\16\b"+
+		"\20\t\22\n\24\13\26\f\30\r\32\16\34\17\36\20 \21\"\22$\23\4\2\3\5\3\2"+
+		"\63\67\5\2\"\"\61\61vv\5\2\"\"C\\c|\2l\2\4\3\2\2\2\2\6\3\2\2\2\2\b\3\2"+
+		"\2\2\2\n\3\2\2\2\2\f\3\2\2\2\2\16\3\2\2\2\2\20\3\2\2\2\2\22\3\2\2\2\2"+
+		"\24\3\2\2\2\2\26\3\2\2\2\2\30\3\2\2\2\2\32\3\2\2\2\2\34\3\2\2\2\2\36\3"+
+		"\2\2\2\2 \3\2\2\2\3\"\3\2\2\2\3$\3\2\2\2\4&\3\2\2\2\6)\3\2\2\2\b,\3\2"+
+		"\2\2\n\60\3\2\2\2\f\62\3\2\2\2\16\65\3\2\2\2\20\67\3\2\2\2\22:\3\2\2\2"+
+		"\24<\3\2\2\2\26>\3\2\2\2\30A\3\2\2\2\32J\3\2\2\2\34O\3\2\2\2\36V\3\2\2"+
+		"\2 ]\3\2\2\2\"d\3\2\2\2$h\3\2\2\2&\'\7(\2\2\'(\7(\2\2(\5\3\2\2\2)*\7~"+
+		"\2\2*+\7~\2\2+\7\3\2\2\2,-\7*\2\2-.\3\2\2\2./\b\4\2\2/\t\3\2\2\2\60\61"+
+		"\7@\2\2\61\13\3\2\2\2\62\63\7@\2\2\63\64\7?\2\2\64\r\3\2\2\2\65\66\7>"+
+		"\2\2\66\17\3\2\2\2\678\7>\2\289\7?\2\29\21\3\2\2\2:;\7?\2\2;\23\3\2\2"+
+		"\2<=\t\2\2\2=\25\3\2\2\2>?\7k\2\2?@\7p\2\2@\27\3\2\2\2AB\7e\2\2BC\7c\2"+
+		"\2CD\7v\2\2DE\7g\2\2EF\7i\2\2FG\7q\2\2GH\7t\2\2HI\7{\2\2I\31\3\2\2\2J"+
+		"K\7p\2\2KL\7c\2\2LM\7o\2\2MN\7g\2\2N\33\3\2\2\2OP\7t\2\2PQ\7c\2\2QR\7"+
+		"v\2\2RS\7k\2\2ST\7p\2\2TU\7i\2\2U\35\3\2\2\2VW\7r\2\2WX\7t\2\2XY\7k\2"+
+		"\2YZ\7e\2\2Z[\7g\2\2[\37\3\2\2\2\\^\t\3\2\2]\\\3\2\2\2^_\3\2\2\2_]\3\2"+
+		"\2\2_`\3\2\2\2`a\3\2\2\2ab\b\20\3\2b!\3\2\2\2ce\t\4\2\2dc\3\2\2\2ef\3"+
+		"\2\2\2fd\3\2\2\2fg\3\2\2\2g#\3\2\2\2hi\7+\2\2ij\3\2\2\2jk\b\22\4\2k%\3"+
+		"\2\2\2\6\2\3_f\5\4\3\2\b\2\2\4\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
