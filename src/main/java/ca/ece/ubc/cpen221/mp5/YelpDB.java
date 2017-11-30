@@ -35,6 +35,7 @@ public class YelpDB extends Database {
 	public String kMeansClusters_json(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
+		List<Cluster> emptyClusterList = new ArrayList<Cluster>();
 
 		List<Coordinates> coordinateList = this.restaurantSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toList());
@@ -48,39 +49,31 @@ public class YelpDB extends Database {
 		double minLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude())
 				.reduce((double) Integer.MAX_VALUE, (x, y) -> Double.min(x, y));
 
-		System.out.println(maxLong + "||" + minLong + "||" + maxLat + "||" + minLat);
-		for (int i = 0; i < k; i++) {
-			clusterSet.add(new Cluster((maxLong - minLong) * Math.random() + minLong,
-					(maxLat - minLat) * Math.random() + minLat));
-		}
+		do {
 
-		while (true) {
-			for (Restaurant b : this.restaurantSet) {
-				double minDistance = Integer.MAX_VALUE;
-				Cluster closestCluster = new Cluster(0, 0);
-				for (Cluster c : clusterSet) {
-					double currentDistance = b.getLocation().getCoordinates().getDistance(c.getCentroid());
-					if (minDistance > currentDistance) {
-						closestCluster = c;
-						minDistance = currentDistance;
-					}
-				}
-				if (clusteringMap.containsKey(b)) {
-					clusteringMap.get(b).removeBusiness(b);
-				}
-				closestCluster.addBusiness(b);
-				clusteringMap.put(b, closestCluster);
+			clusterSet.clear();
+			for (int i = 0; i < k; i++) {
+				clusterSet.add(new Cluster((maxLong - minLong) * Math.random() + minLong,
+						(maxLat - minLat) * Math.random() + minLat));
 			}
 
-			boolean centroidChange = false;
+			reAssignClusters(clusterSet, clusteringMap);
+
+			emptyClusterList = clusterSet.stream().filter(cluster -> cluster.isEmpty()).collect(Collectors.toList());
+
+		} while (emptyClusterList.isEmpty());
+
+		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
+		do {
+
 			for (Cluster c : clusterSet) {
-				centroidChange = c.adjustCentroid();
+				c.adjustCentroid();
 			}
 
-			if (!centroidChange) {
-				break;
-			}
-		}
+			nonFinishedClustersList = clusterSet.stream().map(cluster -> cluster.isFinished())
+					.filter(isFinished -> false).collect(Collectors.toList());
+		
+		} while (nonFinishedClustersList.isEmpty());
 
 		int index = 0;
 		JsonObjectBuilder j;
@@ -104,7 +97,7 @@ public class YelpDB extends Database {
 		return json;
 	}
 
-	public void reAssignClusers(Set<Cluster> clusterSet, Map<Business, Cluster> clusteringMap) {
+	public void reAssignClusters(Set<Cluster> clusterSet, Map<Restaurant, Cluster> clusteringMap) {
 
 		for (Restaurant b : this.restaurantSet) {
 			double minDistance = Integer.MAX_VALUE;

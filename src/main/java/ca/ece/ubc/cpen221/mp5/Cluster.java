@@ -9,10 +9,12 @@ public class Cluster {
 
 	private Set<Business> businessSet;
 	private Coordinates centroid;
+	private boolean isFinished;
 
 	public Cluster(double x, double y) {
 		this.businessSet = new HashSet<Business>();
 		this.centroid = new Coordinates(x, y);
+		this.isFinished = false;
 	}
 
 	public Set<Business> getBusinessSet() {
@@ -29,8 +31,12 @@ public class Cluster {
 	public void removeBusiness(Business business) {
 		this.businessSet.remove(business);
 	}
+	
+	public boolean isEmpty() {
+		return this.businessSet.isEmpty();
+	}
 
-	public boolean adjustCentroid() {
+	public void adjustCentroid() {
 
 		List<Coordinates> coordinateList = this.businessSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toList());
@@ -45,7 +51,11 @@ public class Cluster {
 		
 		System.out.println( previousCentroid.toString() + "||" + this.centroid.toString() );
 
-		return this.centroid.equals(previousCentroid);
+		this.isFinished = this.centroid.equals(previousCentroid);
+	}
+	
+	public boolean isFinished() {
+		return this.isFinished;
 	}
 
 	public Coordinates getCentroid() {
