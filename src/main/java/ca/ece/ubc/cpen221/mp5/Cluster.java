@@ -49,7 +49,7 @@ public class Cluster {
 		Coordinates previousCentroid = new Coordinates(this.centroid.getlongitude(), this.centroid.getlatitude());
 		this.centroid = new Coordinates(longAverage, latAverage);
 		
-		System.out.println( previousCentroid.toString() + "||" + this.centroid.toString() );
+		//System.out.println( previousCentroid.toString() + "||" + this.centroid.toString() );
 
 		this.isFinished = this.centroid.equals(previousCentroid);
 	}
