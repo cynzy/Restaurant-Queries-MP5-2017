@@ -61,7 +61,7 @@ public class YelpDB extends Database {
 
 			emptyClusterList = clusterSet.stream().filter(cluster -> cluster.isEmpty()).collect(Collectors.toList());
 
-		} while (emptyClusterList.isEmpty());
+		} while ( !emptyClusterList.isEmpty());
 		
 
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
@@ -76,7 +76,7 @@ public class YelpDB extends Database {
 			nonFinishedClustersList = clusterSet.stream().map(cluster -> cluster.isFinished())
 					.filter(isFinished -> false).collect(Collectors.toList());
 		
-		} while (nonFinishedClustersList.isEmpty());
+		} while ( !nonFinishedClustersList.isEmpty());
 
 		int index = 0;
 		JsonObjectBuilder j;

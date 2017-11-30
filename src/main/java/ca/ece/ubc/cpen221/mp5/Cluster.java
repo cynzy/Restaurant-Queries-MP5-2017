@@ -40,6 +40,8 @@ public class Cluster {
 
 		List<Coordinates> coordinateList = this.businessSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toList());
+		
+		System.out.println(this.businessSet.size());
 
 		double longAverage = coordinateList.stream().map(coordinate -> coordinate.getlongitude()).reduce(0.0,
 				(x, y) -> x + y) / this.businessSet.size();
