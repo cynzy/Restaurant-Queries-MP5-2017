@@ -35,7 +35,7 @@ public class YelpDB extends Database {
 	public String kMeansClusters_json(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
-		List<Cluster> emptyClusterList = new ArrayList<Cluster>();
+		List<Cluster> emptyClusterList;
 
 		List<Coordinates> coordinateList = this.restaurantSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toList());
@@ -69,23 +69,20 @@ public class YelpDB extends Database {
 
 			for (Cluster c : clusterSet) {
 				c.adjustCentroid();
-			}	
-			
+			}
 			reAssignClusters(clusterSet, clusteringMap);
-
 			nonFinishedClustersList = clusterSet.stream().map(cluster -> cluster.isFinished())
 					.filter(isFinished -> false).collect(Collectors.toList());
 		
 		} while ( !nonFinishedClustersList.isEmpty());
 
+
+		//parsing final clusters into JSON formatted string
 		int index = 0;
 		JsonObjectBuilder j;
 		JsonArrayBuilder array = Json.createArrayBuilder();
 		for (Cluster c : clusterSet) {
-			System.out.println("cluster: " + index);
-
 			for (Business b : c.getBusinessSet()) {
-				System.out.println(b.getName());
 				j = javax.json.Json.createObjectBuilder();
 				j.add("x", b.getLocation().getCoordinates().getlatitude());
 				j.add("y", b.getLocation().getCoordinates().getlongitude());
@@ -96,9 +93,11 @@ public class YelpDB extends Database {
 			}
 			index++;
 		}
+
 		String json = array.build().toString();
 		return json;
 	}
+
 
 	public void reAssignClusters(Set<Cluster> clusterSet, Map<Restaurant, Cluster> clusteringMap) {
 
@@ -122,8 +121,6 @@ public class YelpDB extends Database {
 				closestCluster.addBusiness(b);
 				clusteringMap.put(b, closestCluster);
 			}
-			
-			
 		}
 	}
 
@@ -165,6 +162,7 @@ public class YelpDB extends Database {
 //		return new YelpPredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
 	}
 
+
 	private void parseRestaurants(String restaurantsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
 		String line;
@@ -177,6 +175,7 @@ public class YelpDB extends Database {
 		bufferedReader.close();
 	}
 
+
 	private void parseUsers(String userJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(userJson));
 		String line;
@@ -188,6 +187,7 @@ public class YelpDB extends Database {
 		}
 		bufferedReader.close();
 	}
+
 
 	private void parseReviews(String reviewsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(reviewsJson));
@@ -222,6 +222,7 @@ public class YelpDB extends Database {
 		System.out.println(reviewSet.size());
 		bufferedReader.close();
 	}
+
 
 	public Set<Restaurant> getRestaurantSet() {
 

@@ -71,7 +71,7 @@ public class Database implements MP5Db<Object> {
 
 			boolean centroidChange = false;
 			for (Cluster c : clusterSet) {
-				centroidChange = c.adjustCentroid();
+			//	centroidChange = c.adjustCentroid();
 			}
 
 			if (!centroidChange) {
@@ -135,7 +135,7 @@ public class Database implements MP5Db<Object> {
 
 			boolean centroidChange = false;
 			for (Cluster c : clusterSet) {
-				centroidChange = c.adjustCentroid();
+			//	centroidChange = c.adjustCentroid();
 			}
 
 			if (!centroidChange) {
@@ -190,5 +190,7 @@ public class Database implements MP5Db<Object> {
 
 		return copy;
 	}
+
+
 
 }
