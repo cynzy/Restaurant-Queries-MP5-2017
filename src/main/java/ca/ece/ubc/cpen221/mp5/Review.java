@@ -97,7 +97,7 @@ public class Review {
 
 	@Override
 	public String toString() {
-		return this.reviewID;
+		return this.text;
 	}
 
 }

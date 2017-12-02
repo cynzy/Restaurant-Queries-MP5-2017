@@ -142,13 +142,14 @@ public class DatatypeTests {
 
         //***************************
         //checking validity of parsing DatatypeTest2
-        assertEquals(review.toString(),review.getUserID());
+        assertEquals(review.toString(),review.getText());
         assertEquals(3, review.getStars());
         assertEquals(review.getBusinessID().hashCode(), review.hashCode());
-        assertTrue(!review.equals(yelpReview));
+        assertEquals(review, yelpReview);
         assertTrue(!review.equals("m"));
         assertTrue(review.getText().contains("pinball machine that works"));
         assertEquals("2008-11-24",review.getDate());
+        assertEquals("HLu2iuxxmDYmVGWcitJXXw", review.getUserID());
 
         //checking validity of hashmap of reactions
         assertEquals(2,yelpReview.getNumReactions(PossibleReactions.COOL));
