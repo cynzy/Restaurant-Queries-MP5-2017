@@ -44,4 +44,25 @@ public class Review {
 		return this.rating;
 	}
 	
+	@Override
+	public boolean equals( Object o ) {
+		if( o instanceof Review ) {
+			Review other = (Review) o;
+			
+			return this.reviewID.equals(other.getReviewID());
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.businessID.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return this.reviewID;
+	}
+	
 }

@@ -62,9 +62,10 @@ public class Cluster {
 
 		return copy;
 	}
-	
+
 	/**
-	 * Adds a business to this cluster. Does nothing if this cluster already contains this business.
+	 * Adds a business to this cluster. Does nothing if this cluster already
+	 * contains this business.
 	 *
 	 * requires: business is not null
 	 *
@@ -78,10 +79,32 @@ public class Cluster {
 		this.businessSet.add(business);
 	}
 
+	/**
+	 * Removes a business from this cluster. Does nothing if this cluster does not
+	 * contain this business.
+	 *
+	 * requires: business is not null
+	 *
+	 * @param business
+	 *            The business to be removed from this cluster
+	 * @return void
+	 * 
+	 */
 	public void removeBusiness(Business business) {
 		this.businessSet.remove(business);
 	}
 
+	/**
+	 * Checks if there are businesses contained in this cluster. If the businessSet
+	 * of this cluster is empty, it will return true. False otherwise
+	 *
+	 * requires: cluster is not null
+	 *
+	 * @param void
+	 * 
+	 * @return A boolean indicating whether the cluster is empty or not
+	 * 
+	 */
 	public boolean isEmpty() {
 		return this.businessSet.isEmpty();
 	}
@@ -109,6 +132,26 @@ public class Cluster {
 	public Coordinates getCentroid() {
 		Coordinates copy = new Coordinates(this.centroid.getlongitude(), this.centroid.getlatitude());
 		return copy;
+	}
+	
+	@Override
+	public boolean equals( Object o ) {
+		if( o instanceof Cluster ) {
+			Cluster other = (Cluster) o;
+			return this.getCentroid().equals(other.getCentroid());
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.centroid.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return "Centroid:" + this.centroid.toString() + "|| Set:" + this.businessSet.toString();
 	}
 
 }

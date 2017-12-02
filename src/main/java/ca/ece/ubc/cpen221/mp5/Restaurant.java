@@ -28,5 +28,4 @@ public class Restaurant extends Business {
 		copy.addAll(this.reviewSet);
 		return copy;
 	}
-
 }

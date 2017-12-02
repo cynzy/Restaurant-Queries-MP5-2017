@@ -84,5 +84,26 @@ public class Location {
 	public String getState() {
 		return this.state;
 	}
+	
+	@Override
+	public boolean equals( Object o ) {
+		if( o instanceof Location ) {
+			Location other = (Location) o;
+			
+			return this.getCoordinates().equals(other.getCoordinates());
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.neighbourhood.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return this.address + ", " + this.city + ", " + this.state + ", " + "|| Coordinates:" + this.coordinates.toString();
+	}
 
 }

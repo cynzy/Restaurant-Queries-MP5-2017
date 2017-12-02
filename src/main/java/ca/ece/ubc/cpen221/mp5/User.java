@@ -69,4 +69,25 @@ public class User {
 		return this.userID;
 	}
 	
+	@Override
+	public boolean equals( Object o ) {
+		if( o instanceof User ) {
+			User other = (User) o;
+			
+			return this.userID.equals(other.getUserID());
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return (int) this.getAverageRating();
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
+	}
+	
 }
