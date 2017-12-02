@@ -41,6 +41,9 @@ public class DatatypeTests {
         //checking size
         assertEquals(27,set.size());
 
+
+
+
         //parsing DatatypeTest1
         String DatatypeTest1 = "data/DatatypeTest1.json";
         BufferedReader bufferedReader2 = new BufferedReader(new FileReader(DatatypeTest1));
@@ -52,12 +55,28 @@ public class DatatypeTests {
         //restaurantTests should contain the restaurant Coffee Lab
         assertTrue(set.contains(coffeeLab));
 
+        //***************************
         //checking validity of parsing DatatypeTest1
-        assertEquals("The Coffee Lab",coffeeLab.getName());
-        assertTrue(coffeeLab.containsCategory("Coffee & Tea"));
+        assertEquals(coffeeLab.toString(),coffeeLab.getName());
         assertEquals(4.0, coffeeLab.getRating(),0);
         assertEquals("http://www.yelp.com/biz/the-coffee-lab-berkeley-2", coffeeLab.getUrl());
+        assertEquals(1,coffeeLab.getPrice());
+        assertEquals("8leHSCn0DCa1ilxfbHuCQA",coffeeLab.getBusinessID());
+        assertEquals( "http://s3-media2.ak.yelpcdn.com/bphoto/WtJT52wSvRU5CqtsL5ajUA/ms.jpg", coffeeLab.getPhotoUrl());
+        assertEquals(12, coffeeLab.getReviewCount());
+        assertEquals(coffeeLab.getBusinessID().hashCode(), coffeeLab.hashCode());
+        assertTrue(!coffeeLab.equals("m"));
 
+        //**********
+        //checking validity of category
+        coffeeLab.addCategory("Chocolate");
+        assertTrue(coffeeLab.containsCategory("Chocolate"));
+        coffeeLab.removeCategory("Chocolate");
+        assertTrue(!coffeeLab.getCategories().contains("Chocolate"));
+        //**********
+
+
+        //**********
         //checking validity of Location class
         assertTrue(coffeeLab.getLocation().getNeighbourhoods().contains("UC Campus Area"));
         assertTrue(coffeeLab.getLocation().getAddress().contains("94720"));
@@ -78,10 +97,20 @@ public class DatatypeTests {
         assertTrue(coffeeLab.getLocation().getNeighbourhoods().isEmpty());
         coffeeLab.getLocation().removeSchool("University of California at Berkeley");
         assertTrue(coffeeLab.getLocation().getSchool().isEmpty());
+        //***********
 
+
+        //***********
+        //modifying instance fields
         //checking validity of other instance fields
         coffeeLab.setOpen(false);
         assertTrue(!coffeeLab.isOpen());
+        coffeeLab.setLocation(location);
+        assertTrue(coffeeLab.getLocation().getSchool().isEmpty());
+        coffeeLab.setPhotoUrl("");
+        assertEquals("",coffeeLab.getPhotoUrl());
+        coffeeLab.setUrl("");
+        assertEquals("",coffeeLab.getUrl());
 
     }
 
