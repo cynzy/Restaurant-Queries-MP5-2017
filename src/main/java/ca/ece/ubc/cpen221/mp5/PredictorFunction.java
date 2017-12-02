@@ -3,11 +3,11 @@ package ca.ece.ubc.cpen221.mp5;
 import java.util.function.ToDoubleBiFunction;
 
 /**
- * PredictorFunction - represents a function. taylored to a specific user, which
+ * PredictorFunction - represents a function. tailored to a specific user, which
  * predicts the rating that user will give to a specific restaurant based on
  * previous ratings and the restaurant's price. The database allows to access
  * the specific business for which a client would wish to predict a rating for.
- * The function then preforms a linear regression using data passed on to the
+ * The function then performs a linear regression using data passed on to the
  * class to predict a rating given to that business.
  * 
  * Representation Invariants:
@@ -19,7 +19,7 @@ import java.util.function.ToDoubleBiFunction;
  * Abstraction Function:
  * 
  * AF( s_xx, s_yy. s_xy, meanX, meanY ) = x -> a*X + b, where a is the slope and
- * b is the y intercept calcualted from the least square regression analysis
+ * b is the y intercept calculated from the least square regression analysis
  *
  */
 public class PredictorFunction implements ToDoubleBiFunction<MP5Db<Object>, String> {
