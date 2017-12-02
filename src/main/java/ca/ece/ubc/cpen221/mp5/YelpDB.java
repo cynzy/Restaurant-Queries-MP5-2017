@@ -21,7 +21,7 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 
 public class YelpDB implements Database {
-	
+
 	private Set<Restaurant> restaurantSet;
 	private Set<YelpUser> userSet;
 	private Set<YelpReview> reviewSet;
@@ -36,66 +36,63 @@ public class YelpDB implements Database {
 		parseReviews(reviewsJson);
 
 	}
-	
 
-private void parseRestaurants(String restaurantsJson) throws IOException {
-	BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
-	String line;
-	while ((line = bufferedReader.readLine()) != null) {
-		JsonReader jsonReader = Json.createReader(new StringReader(line));
-		JsonObject restaurants = jsonReader.readObject();
-		Restaurant restaurant = new Restaurant(restaurants);
-		this.restaurantSet.add(restaurant);
-	}
-	bufferedReader.close();
-}
-
-
-private void parseUsers(String userJson) throws IOException {
-	BufferedReader bufferedReader = new BufferedReader(new FileReader(userJson));
-	String line;
-	while ((line = bufferedReader.readLine()) != null) {
-		JsonReader jsonReader = Json.createReader(new StringReader(line));
-		JsonObject users = jsonReader.readObject();
-		YelpUser user = new YelpUser(users);
-		this.userSet.add(user);
-	}
-	bufferedReader.close();
-}
-
-
-private void parseReviews(String reviewsJson) throws IOException {
-	BufferedReader bufferedReader = new BufferedReader(new FileReader(reviewsJson));
-	String line;
-	Iterator<Restaurant> iterator;
-	Iterator<YelpUser> iterator2;
-	while ((line = bufferedReader.readLine()) != null) {
-		JsonReader jsonReader = Json.createReader(new StringReader(line));
-		JsonObject reviews = jsonReader.readObject();
-		YelpReview review = new YelpReview(reviews);
-		this.reviewSet.add(review);
-
-		// adds review to corresponding YelpUser and Restaurant
-		iterator = this.restaurantSet.iterator();
-		while (iterator.hasNext()) {
-			Restaurant current = iterator.next();
-			if (current.getBusinessID().equals(review.getBusinessID())) {
-				current.addReview(review);
-				break;
-			}
+	private void parseRestaurants(String restaurantsJson) throws IOException {
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+			JsonReader jsonReader = Json.createReader(new StringReader(line));
+			JsonObject restaurants = jsonReader.readObject();
+			Restaurant restaurant = new Restaurant(restaurants);
+			this.restaurantSet.add(restaurant);
 		}
-		iterator2 = this.userSet.iterator();
-		while (iterator2.hasNext()) {
-			YelpUser current = iterator2.next();
-			if (current.getUserID().equals(review.getUserID())) {
-				current.addReview(review);
-				break;
-			}
-		}
-
+		bufferedReader.close();
 	}
-	bufferedReader.close();
-}
+
+	private void parseUsers(String userJson) throws IOException {
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(userJson));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+			JsonReader jsonReader = Json.createReader(new StringReader(line));
+			JsonObject users = jsonReader.readObject();
+			YelpUser user = new YelpUser(users);
+			this.userSet.add(user);
+		}
+		bufferedReader.close();
+	}
+
+	private void parseReviews(String reviewsJson) throws IOException {
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(reviewsJson));
+		String line;
+		Iterator<Restaurant> iterator;
+		Iterator<YelpUser> iterator2;
+		while ((line = bufferedReader.readLine()) != null) {
+			JsonReader jsonReader = Json.createReader(new StringReader(line));
+			JsonObject reviews = jsonReader.readObject();
+			YelpReview review = new YelpReview(reviews);
+			this.reviewSet.add(review);
+
+			// adds review to corresponding YelpUser and Restaurant
+			iterator = this.restaurantSet.iterator();
+			while (iterator.hasNext()) {
+				Restaurant current = iterator.next();
+				if (current.getBusinessID().equals(review.getBusinessID())) {
+					current.addReview(review);
+					break;
+				}
+			}
+			iterator2 = this.userSet.iterator();
+			while (iterator2.hasNext()) {
+				YelpUser current = iterator2.next();
+				if (current.getUserID().equals(review.getUserID())) {
+					current.addReview(review);
+					break;
+				}
+			}
+
+		}
+		bufferedReader.close();
+	}
 
 	@Override
 	public Set<Object> getMatches(String queryString) {
@@ -132,8 +129,7 @@ private void parseReviews(String reviewsJson) throws IOException {
 
 			emptyClusterList = clusterSet.stream().filter(cluster -> cluster.isEmpty()).collect(Collectors.toList());
 
-		} while ( !emptyClusterList.isEmpty());
-		
+		} while (!emptyClusterList.isEmpty());
 
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
 		do {
@@ -144,11 +140,10 @@ private void parseReviews(String reviewsJson) throws IOException {
 			reAssignClusters(clusterSet, clusteringMap);
 			nonFinishedClustersList = clusterSet.stream().map(cluster -> cluster.isFinished())
 					.filter(isFinished -> false).collect(Collectors.toList());
-		
-		} while ( !nonFinishedClustersList.isEmpty());
 
+		} while (!nonFinishedClustersList.isEmpty());
 
-		//parsing final clusters into JSON formatted string
+		// parsing final clusters into JSON formatted string
 		int index = 0;
 		JsonObjectBuilder j;
 		JsonArrayBuilder array = Json.createArrayBuilder();
@@ -168,7 +163,7 @@ private void parseReviews(String reviewsJson) throws IOException {
 		String json = array.build().toString();
 		return json;
 	}
-	
+
 	private void reAssignClusters(Set<Cluster> clusterSet, Map<Restaurant, Cluster> clusteringMap) {
 
 		for (Restaurant b : this.restaurantSet) {
@@ -201,9 +196,9 @@ private void parseReviews(String reviewsJson) throws IOException {
 			idMap.put(b.getBusinessID(), b);
 		}
 
-		List<Double> priceList = this.reviewSet.stream().filter(review -> review.getUserID().equals(user)).map(review -> review.getBusinessID())
-				.map(businessID -> idMap.get(businessID)).map(business -> (double) business.getPrice())
-				.collect(Collectors.toList());
+		List<Double> priceList = this.reviewSet.stream().filter(review -> review.getUserID().equals(user))
+				.map(review -> review.getBusinessID()).map(businessID -> idMap.get(businessID))
+				.map(business -> (double) business.getPrice()).collect(Collectors.toList());
 
 		double sumPrice = priceList.stream().reduce(0.0, (x, y) -> x + y);
 
@@ -211,12 +206,13 @@ private void parseReviews(String reviewsJson) throws IOException {
 
 		double meanPrice = sumPrice / priceListSize;
 
-		double meanRating = thisUser.getAverageRating();
+		double meanRating = this.userSet.stream().filter(thisuser -> thisuser.getUserID().equals(user))
+				.map(thisuser -> thisuser.getAverageRating()).reduce(0.0, (x, y) -> y);
 
 		double s_xx = priceList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanPrice, 2));
 
-		List<Double> ratingList = thisUser.getReviewSet().stream().map(review -> (double) review.getStars())
-				.collect(Collectors.toList());
+		List<Double> ratingList = this.reviewSet.stream().filter(review -> review.getUserID().equals(user))
+				.map(review -> (double) review.getStars()).collect(Collectors.toList());
 
 		double s_yy = ratingList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanRating, 2));
 
@@ -225,14 +221,14 @@ private void parseReviews(String reviewsJson) throws IOException {
 			s_xy += Math.pow(ratingList.get(i) - meanRating, 2) * Math.pow(priceList.get(i) - meanPrice, 2);
 		}
 
-		return new PredictorFunction( s_xx, s_yy, s_xy, meanPrice, meanRating);
+		return new PredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
 	}
 
 	@Override
 	public Set<Business> getBusinessSet() {
 		Set<Business> copy = new HashSet<Business>();
 		copy.addAll(this.restaurantSet);
-		
+
 		return copy;
 	}
 
@@ -240,7 +236,7 @@ private void parseReviews(String reviewsJson) throws IOException {
 	public Set<User> getUserSet() {
 		Set<User> copy = new HashSet<User>();
 		copy.addAll(this.userSet);
-		
+
 		return copy;
 	}
 
@@ -248,7 +244,7 @@ private void parseReviews(String reviewsJson) throws IOException {
 	public Set<Review> getReviewSet() {
 		Set<Review> copy = new HashSet<Review>();
 		copy.addAll(this.reviewSet);
-		
+
 		return copy;
 	}
 

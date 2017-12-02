@@ -15,8 +15,6 @@ import java.util.Set;
  *
  * - this.businessID is unique to this business
  *
- * - this.open represents the current open/close status of the business
- *
  * - this.url has a proper web address format, and is unique to this business
  *
  * - this.name is the name of this business and is unique to it
@@ -42,6 +40,8 @@ import java.util.Set;
  * - businessID and name are immutable
  * 
  * Abstraction Function:
+ * 
+ *  - this.open represents the current open/close status of the business
  */
 public class Business {
 
@@ -51,7 +51,6 @@ public class Business {
 	protected final String name;
 	protected String photoUrl;
 	protected Set<String> categories;
-	private Set<Review> reviewSet;
 	protected Location location;
 	protected double rating;
 	protected int reviewCount;
@@ -59,7 +58,6 @@ public class Business {
 
 	public Business(JsonObject business) {
 
-		this.reviewSet = new HashSet<Review>();
 		this.businessID = business.getString("business_id");
 		this.url = business.getString("url");
 		this.open = business.getBoolean("open");
@@ -118,18 +116,6 @@ public class Business {
 
 	public int getPrice() {
 		return this.price;
-	}
-
-	public void addReview(Review review) {
-
-		if (!this.businessID.equals(review.getBusinessID())) {
-			throw new IllegalArgumentException("business ID's do not match");
-		}
-		this.reviewSet.add(review);
-	}
-
-	public void removeReview(Review review) {
-		this.reviewSet.remove(review);
 	}
 
 	public void setUrl(String newUrl) {

@@ -11,7 +11,6 @@ public class User {
 	protected final String userID;
 	protected int reviewCount;
 	protected double averageRating;
-	private Set<Review> reviewSet;
 	
 	public User(JsonObject user) {
 		
@@ -20,33 +19,6 @@ public class User {
 		this.userID = user.getString("user_id");
 		this.reviewCount = user.getInt("review_count");
 		this.averageRating = Double.parseDouble(user.get("average_stars").toString());
-		this.reviewSet = new HashSet<>();
-	}
-	
-	public void addReview( Review review ) {
-		if( !this.userID.equals(review.userID)) {
-			throw new IllegalArgumentException( "user ID's do not match" );
-		}
-		
-		this.reviewSet.add(review);
-		this.reviewCount = this.reviewSet.size();
-		int ratingSum = 0;
-		for( Review r: this.reviewSet) {
-			ratingSum += r.getStars();
-		}
-		
-		this.averageRating = ((double)ratingSum)/this.reviewCount;
-	}
-	
-	public Set<Review> getReviewSet(){
-		Set<Review> copy = new HashSet<Review>();
-		copy.addAll(this.reviewSet);
-		
-		return copy;
-	}
-	
-	public boolean wroteReview( Review review ) {
-		return this.reviewSet.contains(review);
 	}
 	
 	public double getAverageRating() {
