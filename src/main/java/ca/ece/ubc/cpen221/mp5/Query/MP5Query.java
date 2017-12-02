@@ -58,7 +58,6 @@ public class MP5Query {
         MP5QueryParserListener listener = new MP5QueryListenerGenerateList(this.categories,this.locations,this.names,this.rating,this.price);
         walker.walk(listener, tree);
 
-
     }
 
     //modifies list of restaurants by searching through the database
