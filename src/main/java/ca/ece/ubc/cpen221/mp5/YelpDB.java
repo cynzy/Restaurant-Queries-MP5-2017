@@ -1,24 +1,13 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import javax.json.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.ToDoubleBiFunction;
 import java.util.stream.Collectors;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
 
 public class YelpDB implements Database {
 
@@ -26,10 +15,16 @@ public class YelpDB implements Database {
 	private Set<YelpUser> userSet;
 	private Set<YelpReview> reviewSet;
 
+    private Map<String,Set<Review>> UserReviewMap;
+    private Map<String,Set<Review>> RestaurantReviewMap;
+
 	public YelpDB(String restaurantsJson, String usersJson, String reviewsJson) throws IOException {
 		this.restaurantSet = new HashSet<>();
 		this.userSet = new HashSet<>();
 		this.reviewSet = new HashSet<>();
+
+		this.UserReviewMap = new HashMap<>();
+        this.RestaurantReviewMap = new HashMap<>();
 
 		parseRestaurants(restaurantsJson);
 		parseUsers(usersJson);
@@ -64,39 +59,39 @@ public class YelpDB implements Database {
 	private void parseReviews(String reviewsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(reviewsJson));
 		String line;
-		Iterator<Restaurant> iterator;
-		Iterator<YelpUser> iterator2;
+
 		while ((line = bufferedReader.readLine()) != null) {
 			JsonReader jsonReader = Json.createReader(new StringReader(line));
 			JsonObject reviews = jsonReader.readObject();
 			YelpReview review = new YelpReview(reviews);
 			this.reviewSet.add(review);
 
-			// adds review to corresponding YelpUser and Restaurant
-			iterator = this.restaurantSet.iterator();
-			while (iterator.hasNext()) {
-				Restaurant current = iterator.next();
-				if (current.getBusinessID().equals(review.getBusinessID())) {
-					current.addReview(review);
-					break;
-				}
-			}
-			iterator2 = this.userSet.iterator();
-			while (iterator2.hasNext()) {
-				YelpUser current = iterator2.next();
-				if (current.getUserID().equals(review.getUserID())) {
-					current.addReview(review);
-					break;
-				}
-			}
+			//parsing UserReviewMap
+			if(UserReviewMap.containsKey(review.getUserID())){
+			    this.UserReviewMap.get(review.userID).add(review);
+            } else {
+			    Set<Review> reviewSet = new HashSet<>();
+			    reviewSet.add(review);
+			    this.UserReviewMap.put(review.userID,reviewSet);
+            }
+
+            //parsing RestaurantReviewMap
+            if(RestaurantReviewMap.containsKey(review.getBusinessID())){
+                this.RestaurantReviewMap.get(review.getBusinessID()).add(review);
+            } else {
+                Set<Review> reviewSet = new HashSet<>();
+                reviewSet.add(review);
+                this.RestaurantReviewMap.put(review.getBusinessID(),reviewSet);
+            }
 
 		}
 		bufferedReader.close();
 	}
 
+
 	@Override
 	public Set<Object> getMatches(String queryString) {
-		return super.getMatches(queryString);
+		return null;
 	}
 
 	@Override
