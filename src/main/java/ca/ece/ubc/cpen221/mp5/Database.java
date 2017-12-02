@@ -15,10 +15,37 @@ import java.util.Set;
  */
 public interface Database extends MP5Db<Object> {
 
+	/**
+	 * returns the set of businesses in this database. requires: this object is not
+	 * null and businesses in the set are not null and have no null instance fields
+	 *
+	 * @param void
+	 * 
+	 * @return The set of businesses in this database
+	 * 
+	 */
 	public Set<Business> getBusinessSet();
 
+	/**
+	 * returns the set of users in this database. requires: this object is not null
+	 * and users in the set are not null and have no null instance fields
+	 *
+	 * @param void
+	 * 
+	 * @return The set of users in this database
+	 * 
+	 */
 	public Set<User> getUserSet();
 
+	/**
+	 * returns the set of reviews in this database. requires: this object is not
+	 * null and reviews in the set are not null and have no null instance fields
+	 *
+	 * @param void
+	 * 
+	 * @return The set of reviews in this database
+	 * 
+	 */
 	public Set<Review> getReviewSet();
 
 	/**

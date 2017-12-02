@@ -75,11 +75,11 @@ public class Business {
 	protected int price;
 
 	/**
-	 * Constructs a Businessobject
+	 * Constructs a Business object
 	 *
 	 * @param business
 	 *            a JsonObject representing a file with all the information for this
-	 *            object's representation requires: business is not null
+	 *            object's representation. requires: business is not null
 	 * 
 	 */
 	public Business(JsonObject business) {
@@ -383,11 +383,25 @@ public class Business {
 		return false;
 	}
 
+	/**
+	 * Computes a hash code for this object
+	 *
+	 * @param void
+	 * 
+	 * @return This object's hash code
+	 */
 	@Override
 	public int hashCode() {
 		return this.businessID.hashCode();
 	}
 
+	/**
+	 * Returns a string representation of this object
+	 *
+	 * @param void
+	 * 
+	 * @return A string representation of the object
+	 */
 	@Override
 	public String toString() {
 		return this.name;

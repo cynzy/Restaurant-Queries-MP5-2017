@@ -25,6 +25,14 @@ public class YelpUser extends User {
 
 	private Map<PossibleReactions, Integer> votes;
 
+	/**
+	 * Constructs a YelpUser object
+	 *
+	 * @param yelpUser
+	 *            a JsonObject representing a file with all the information for this
+	 *            object's representation. requires: yelpuser is not null
+	 * 
+	 */
 	public YelpUser(JsonObject yelpUser) {
 		super(yelpUser);
 
@@ -40,17 +48,34 @@ public class YelpUser extends User {
 
 	}
 
+	/**
+	 * Increments the number of votes for a specified reaction by 1.
+	 *
+	 * @param reaction
+	 *            an Enum representing one the possible reactions: "FUNNY",
+	 *            "USEFUL", and "COOL".
+	 * @return the number of times that this user voted for that specific reaction
+	 */
 	public void addVote(PossibleReactions reaction) {
 		this.votes.put(reaction, this.votes.get(reaction) + 1);
 	}
-	
+
+	/**
+	 * returns the number of votes this user's reviews got in total given a specific
+	 * reaction.
+	 *
+	 * @param reaction
+	 *            an Enum representing one the possible reactions: "FUNNY",
+	 *            "USEFUL", and "COOL".
+	 * @return the number of times that specific reaction got voted by the user
+	 */
 	public int getNumVotes(PossibleReactions reaction) {
 		return votes.get(reaction);
 	}
 
 	/**
-	 * returns a map of this YelpUser's votes for reviews. requires: this object is not
-	 * null
+	 * returns a map of this YelpUser's votes for reviews. requires: this object is
+	 * not null
 	 *
 	 * @param void
 	 * 

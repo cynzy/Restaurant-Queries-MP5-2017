@@ -21,6 +21,14 @@ import java.util.Set;
  */
 public class Restaurant extends Business {
 	
+	/**
+	 * Constructs a Restaurant object
+	 *
+	 * @param restaurant
+	 *            a JsonObject representing a file with all the information for this
+	 *            object's representation. requires: restaurant is not null
+	 * 
+	 */
 	public Restaurant(JsonObject restaurant) {
 		super(restaurant);
 	}

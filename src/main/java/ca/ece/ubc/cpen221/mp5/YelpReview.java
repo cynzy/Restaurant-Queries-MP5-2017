@@ -11,7 +11,8 @@ import java.util.Map;
  *
  * - Same representation invariants as its supertype: Review
  *
- * - this.reactionMap only includes positive values and cannot be modified after being initialized
+ * - this.reactionMap only includes positive values and cannot be modified after
+ * being initialized
  *
  * 
  * Abstraction Function:
@@ -26,6 +27,14 @@ public class YelpReview extends Review {
 
 	private final Map<PossibleReactions, Integer> reactionMap;
 
+	/**
+	 * Constructs a YelpReview object
+	 *
+	 * @param review
+	 *            a JsonObject representing a file with all the information for this
+	 *            object's representation. requires: review is not null
+	 * 
+	 */
 	public YelpReview(JsonObject review) {
 		super(review);
 
@@ -41,13 +50,21 @@ public class YelpReview extends Review {
 
 	}
 
+	/**
+	 * returns the number of reactions this review got given a specific reaction.
+	 *
+	 * @param reaction
+	 *            an Enum representing one the possible reactions: "FUNNY",
+	 *            "USEFUL", and "COOL".
+	 * @return the number of times that specific reaction got voted for this review
+	 */
 	public int getNumReactions(PossibleReactions reaction) {
 		return this.reactionMap.get(reaction);
 	}
 
 	/**
-	 * returns a map of the reactions voted for this review. requires: this object is not
-	 * null
+	 * returns a map of the reactions voted for this review. requires: this object
+	 * is not null
 	 *
 	 * @param void
 	 * 

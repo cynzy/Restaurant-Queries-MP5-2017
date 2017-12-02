@@ -65,14 +65,42 @@ public class Coordinates {
 		this.latitude = newlatitude;
 	}
 
+	/**
+	 * returns the longitude of these coordinates. requires: this object is not null
+	 *
+	 * @param void
+	 * 
+	 * @return The longitude of these coordinates
+	 * 
+	 */
 	public double getlongitude() {
 		return this.longitude;
 	}
 
+	/**
+	 * returns the latitude of these coordinates. requires: this object is not null
+	 *
+	 * @param void
+	 * 
+	 * @return The latitude of these coordinates
+	 * 
+	 */
 	public double getlatitude() {
 		return this.latitude;
 	}
 
+	/**
+	 * computes the distance between these coordinates and another pair of
+	 * coordinates. The distance is calculated using the Haversine formula.
+	 * Required: this object is not null.
+	 *
+	 * @param other
+	 *            the other set of coordinates used to calculate the distance
+	 * 
+	 * @return The distance between the two coordinates as comupted by the Haversine
+	 *         Formula
+	 * 
+	 */
 	public double getDistance(Coordinates other) {
 		double deltaLat = Math.toRadians(Math.abs(this.latitude - other.getlatitude()));
 		double deltaLong = Math.toRadians(Math.abs(this.longitude - other.getlongitude()));
@@ -87,8 +115,8 @@ public class Coordinates {
 
 	/**
 	 * Compares the equality of this Coordinates object and another object. Returns
-	 * true only if o is a Coordinates object with the same longitude and latitude. Requires: this
-	 * coordinates object and o are not null.
+	 * true only if o is a Coordinates object with the same longitude and latitude.
+	 * Requires: this coordinates object and o are not null.
 	 *
 	 * @param o
 	 *            Object to be compared with this Coordinates object
@@ -105,12 +133,26 @@ public class Coordinates {
 		return false;
 	}
 
+	/**
+	 * Computes a hash code for this object
+	 *
+	 * @param void
+	 * 
+	 * @return This object's hash code
+	 */
 	@Override
 	public int hashCode() {
 		return (int) (this.latitude + this.longitude);
 
 	}
 
+	/**
+	 * Returns a string representation of this object
+	 *
+	 * @param void
+	 * 
+	 * @return A string representation of the object
+	 */
 	@Override
 	public String toString() {
 		return "Latitude:" + this.latitude + ", Longitude:" + this.longitude;

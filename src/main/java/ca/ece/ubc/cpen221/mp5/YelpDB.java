@@ -16,8 +16,8 @@ public class YelpDB implements Database {
 	private Set<YelpUser> userSet;
 	private Set<YelpReview> reviewSet;
 
-    private Map<String,Set<Review>> UserReviewMap;
-    private Map<String,Set<Review>> RestaurantReviewMap;
+	private Map<String, Set<Review>> UserReviewMap;
+	private Map<String, Set<Review>> RestaurantReviewMap;
 
 	public YelpDB(String restaurantsJson, String usersJson, String reviewsJson) throws IOException {
 		this.restaurantSet = new HashSet<>();
@@ -25,7 +25,7 @@ public class YelpDB implements Database {
 		this.reviewSet = new HashSet<>();
 
 		this.UserReviewMap = new ConcurrentHashMap<>();
-        this.RestaurantReviewMap = new ConcurrentHashMap<>();
+		this.RestaurantReviewMap = new ConcurrentHashMap<>();
 
 		parseRestaurants(restaurantsJson);
 		parseUsers(usersJson);
@@ -67,28 +67,27 @@ public class YelpDB implements Database {
 			YelpReview review = new YelpReview(reviews);
 			this.reviewSet.add(review);
 
-			//parsing UserReviewMap
-			if(UserReviewMap.containsKey(review.getUserID())){
-			    this.UserReviewMap.get(review.userID).add(review);
-            } else {
-			    Set<Review> reviewSet = new HashSet<>();
-			    reviewSet.add(review);
-			    this.UserReviewMap.put(review.userID,reviewSet);
-            }
+			// parsing UserReviewMap
+			if (UserReviewMap.containsKey(review.getUserID())) {
+				this.UserReviewMap.get(review.userID).add(review);
+			} else {
+				Set<Review> reviewSet = new HashSet<>();
+				reviewSet.add(review);
+				this.UserReviewMap.put(review.userID, reviewSet);
+			}
 
-            //parsing RestaurantReviewMap
-            if(RestaurantReviewMap.containsKey(review.getBusinessID())){
-                this.RestaurantReviewMap.get(review.getBusinessID()).add(review);
-            } else {
-                Set<Review> reviewSet = new HashSet<>();
-                reviewSet.add(review);
-                this.RestaurantReviewMap.put(review.getBusinessID(),reviewSet);
-            }
+			// parsing RestaurantReviewMap
+			if (RestaurantReviewMap.containsKey(review.getBusinessID())) {
+				this.RestaurantReviewMap.get(review.getBusinessID()).add(review);
+			} else {
+				Set<Review> reviewSet = new HashSet<>();
+				reviewSet.add(review);
+				this.RestaurantReviewMap.put(review.getBusinessID(), reviewSet);
+			}
 
 		}
 		bufferedReader.close();
 	}
-
 
 	@Override
 	public Set<Object> getMatches(String queryString) {
@@ -139,12 +138,12 @@ public class YelpDB implements Database {
 		} while (!nonFinishedClustersList.isEmpty());
 
 		List<Set<Business>> clusterList = new ArrayList<Set<Business>>();
-		for( Cluster c: clusterSet) {
+		for (Cluster c : clusterSet) {
 			clusterList.add(c.getBusinessSet());
 		}
-		
+
 		return clusterList;
-		
+
 	}
 
 	/**
@@ -215,7 +214,7 @@ public class YelpDB implements Database {
 		String json = array.build().toString();
 		return json;
 	}
-	
+
 	private void reAssignClusters(Set<Cluster> clusterSet, Map<Restaurant, Cluster> clusteringMap) {
 
 		for (Restaurant b : this.restaurantSet) {
@@ -245,10 +244,10 @@ public class YelpDB implements Database {
 	 * 
 	 * @param user
 	 *            represents a user_id in the database
-	 * @return a function that predicts the user's ratings for objects (of type
-	 *         T) in the database of type MP5Db<T>. The function that is
-	 *         returned takes two arguments: one is the database and other other
-	 *         is a String that represents the id of an object of type T.
+	 * @return a function that predicts the user's ratings for objects (of type T)
+	 *         in the database of type MP5Db<T>. The function that is returned takes
+	 *         two arguments: one is the database and other other is a String that
+	 *         represents the id of an object of type T.
 	 */
 	@Override
 	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
@@ -285,6 +284,15 @@ public class YelpDB implements Database {
 		return new PredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
 	}
 
+	/**
+	 * returns the set of businesses in this database. requires: this object is not
+	 * null and businesses in the set are not null and have no null instance fields
+	 *
+	 * @param void
+	 * 
+	 * @return The set of businesses in this database
+	 * 
+	 */
 	@Override
 	public Set<Business> getBusinessSet() {
 		Set<Business> copy = new HashSet<Business>();
@@ -293,6 +301,15 @@ public class YelpDB implements Database {
 		return copy;
 	}
 
+	/**
+	 * returns the set of users in this database. requires: this object is not null
+	 * and users in the set are not null and have no null instance fields
+	 *
+	 * @param void
+	 * 
+	 * @return The set of users in this database
+	 * 
+	 */
 	@Override
 	public Set<User> getUserSet() {
 		Set<User> copy = new HashSet<User>();
@@ -301,6 +318,15 @@ public class YelpDB implements Database {
 		return copy;
 	}
 
+	/**
+	 * returns the set of reviews in this database. requires: this object is not
+	 * null and reviews in the set are not null and have no null instance fields
+	 *
+	 * @param void
+	 * 
+	 * @return The set of reviews in this database
+	 * 
+	 */
 	@Override
 	public Set<Review> getReviewSet() {
 		Set<Review> copy = new HashSet<Review>();

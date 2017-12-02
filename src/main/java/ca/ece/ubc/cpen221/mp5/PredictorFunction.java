@@ -30,6 +30,20 @@ public class PredictorFunction implements ToDoubleBiFunction<MP5Db<Object>, Stri
 	private double meanX;
 	private double meanY;
 
+	/**
+	 * Constructs an instance of this PredictorFunction
+	 *
+	 * @param s_xx
+	 *            Sum of squares s_xx
+	 * @param s_yy
+	 *            Sum of squares s_yy
+	 * @param s_xy
+	 *            Sum of squares s_xy
+	 * @param meanX
+	 *            Average price for restaurants in the user's rating
+	 * @param MeanY
+	 *            Average rating the user gave on their reviews
+	 */
 	public PredictorFunction(double s_xx, double s_yy, double s_xy, double meanX, double meanY) {
 		this.s_xx = s_xx;
 		this.s_xy = s_xy;
@@ -38,10 +52,35 @@ public class PredictorFunction implements ToDoubleBiFunction<MP5Db<Object>, Stri
 		this.meanY = meanY;
 	}
 
+	/**
+	 * Computes the rating that will be given to the business with a matching
+	 * business ID based on its price. The database inputed into this method gives
+	 * the data necessary to fine the price of the business. The price is then used
+	 * (through least square regression analysis computed from the data of the user
+	 * chosen for the PredictorFunction) to compute the predicted rating the user
+	 * will give to this business based on a linear function. If there is not enough
+	 * data from the user to compute a prediction (i.e. one of the instance fields
+	 * is 0), then the function is undefined and throws an
+	 * UnsupportedOperationException. If businessID does not correspond to a
+	 * business that exists in database, throws an IllegalArgumentException. If the
+	 * rating predicted is above 5, the function returns 5. If the predicted rating
+	 * is below 1, the function returns 1.
+	 *
+	 * @param database
+	 *            the database containing the data required to acquire the price of
+	 *            the business for which the rating is predicted
+	 * 
+	 * @param businessID
+	 *            the business ID for which the rating is predicted
+	 * 
+	 * @return The predicated rating, between 1 and 5, that the user will give the
+	 *         business
+	 * 
+	 */
 	@Override
 	public double applyAsDouble(MP5Db<Object> database, String businessID) {
 		if (this.s_xx == 0 || this.s_xy == 0 || this.s_yy == 0) {
-			return 0;
+			throw new UnsupportedOperationException("not enough data to compute a prediction");
 		}
 
 		double b = this.s_xy / this.s_xx;
@@ -53,10 +92,20 @@ public class PredictorFunction implements ToDoubleBiFunction<MP5Db<Object>, Stri
 				.map(business -> business.getPrice()).reduce(0, (y, z) -> y + z);
 
 		if (x == 0) {
-			return 0;
+			throw new IllegalArgumentException("business does not exist in the database");
 		}
 
-		return a * x + b;
+		double y = a * x + b;
+
+		if (y > 5) {
+			return 5;
+		}
+		if (y < 1) {
+			return 1;
+		}
+
+		return y;
+
 	}
 
 }

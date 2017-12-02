@@ -36,7 +36,8 @@ public class Cluster {
 	private boolean isFinished;
 
 	/**
-	 * Constructs a Cluster object
+	 * Constructs a Cluster object. Required: x is between -180 and 180, and y is
+	 * between -90 and 90.
 	 *
 	 * @param x
 	 *            The longitude of the initial centroid
@@ -111,6 +112,18 @@ public class Cluster {
 		return this.businessSet.isEmpty();
 	}
 
+	/**
+	 * Adjusts the centroid of this cluster to be the true centroid. When businesses
+	 * are added to this cluster, the centroid does not adjust automatically (for
+	 * efficiency purposes). Calling this method will set the center to have the
+	 * average longitude and average latitude of the locations of all businesses in
+	 * this cluster. Requires: Cluster is not null and not empty.
+	 *
+	 * @param void
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void adjustCentroid() {
 
 		List<Coordinates> coordinateList = this.businessSet.stream().map(business -> business.getLocation())
@@ -127,19 +140,38 @@ public class Cluster {
 		this.isFinished = this.centroid.equals(previousCentroid);
 	}
 
+	/**
+	 * returns true if the centroid of the cluster did not change after
+	 * adjustCentroid() was called. Requires: this object is not null.
+	 *
+	 * @param void
+	 * 
+	 * @return true if the centroid of the object did not change after
+	 *         adjustCentroid() was called. False otherwise.
+	 * 
+	 */
 	public boolean isFinished() {
 		return this.isFinished;
 	}
 
+	/**
+	 * returns the centroid of this cluster. The centroid is returned as a
+	 * Coordinates object. requires: this object is not null
+	 *
+	 * @param void
+	 * 
+	 * @return The centroid of this cluster as a pair of coordinates
+	 * 
+	 */
 	public Coordinates getCentroid() {
 		Coordinates copy = new Coordinates(this.centroid.getlongitude(), this.centroid.getlatitude());
 		return copy;
 	}
 
 	/**
-	 * Compares the equality of this Cluster object and another object. Returns
-	 * true only if o is a Cluster with the same centroid. Requires: this
-	 * cluster and o are not null.
+	 * Compares the equality of this Cluster object and another object. Returns true
+	 * only if o is a Cluster with the same centroid. Requires: this cluster and o
+	 * are not null.
 	 *
 	 * @param o
 	 *            Object to be compared with this cluster
@@ -156,11 +188,25 @@ public class Cluster {
 		return false;
 	}
 
+	/**
+	 * Computes a hash code for this object
+	 *
+	 * @param void
+	 * 
+	 * @return This object's hash code
+	 */
 	@Override
 	public int hashCode() {
 		return this.centroid.hashCode();
 	}
 
+	/**
+	 * Returns a string representation of this object
+	 *
+	 * @param void
+	 * 
+	 * @return A string representation of the object
+	 */
 	@Override
 	public String toString() {
 		return "Centroid:" + this.centroid.toString() + "|| Set:" + this.businessSet.toString();

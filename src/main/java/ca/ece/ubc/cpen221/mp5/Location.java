@@ -46,6 +46,12 @@ public class Location {
 	private String address;
 	private String city;
 
+	/**
+	 * Constructs a Location object
+	 *
+	 * @param void
+	 * 
+	 */
 	public Location() {
 		this.city = new String();
 		this.coordinates = new Coordinates(0, 0);
@@ -55,10 +61,32 @@ public class Location {
 		this.state = new String();
 	}
 
+	/**
+	 * sets the coordinates of this location. requires: this object is not null, x
+	 * is between -180 and 180, and y is between -90 and 90
+	 *
+	 * @param x
+	 *            longitude of this location
+	 * @param y
+	 *            the latitude of this location
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setCoordinates(double x, double y) {
 		this.coordinates = new Coordinates(x, y);
 	}
 
+	/**
+	 * sets the state of this location. requires: this object is not null and state
+	 * is not null and is in proper format.
+	 *
+	 * @param state
+	 *            the state set for this location
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setState(String state) {
 		this.state = state;
 	}
@@ -67,32 +95,90 @@ public class Location {
 		this.neighbourhood.remove(neighbourhood);
 	}
 
+	/**
+	 * sets the set of neighourhoods of this location. requires: this object is not
+	 * null, neighbourhoods is not null, and no Strings in neighbourhoods are null.
+	 *
+	 * @param neighbouhoods
+	 *            the set of neighbourhoods set for this location
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setNeighbourhoods(Set<String> neighbourhoods) {
 		this.neighbourhood.addAll(neighbourhoods);
 	}
-	
-	public void removeSchool( String school ) {
+
+	public void removeSchool(String school) {
 		this.school.remove(school);
 	}
 
+	/**
+	 * sets the set of schools of this location. requires: this object is not
+	 * null, schools is not null, and no Strings in schools are null.
+	 *
+	 * @param schools
+	 *            the set of schools set for this location
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setSchools(Set<String> schools) {
 		this.school.addAll(schools);
 	}
 
+	/**
+	 * sets the address of this location. requires: this object is not null and
+	 * address is not null and is in proper format.
+	 *
+	 * @param address
+	 *            the address set for this location
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setAddress(String address) {
 		this.address = address;
 	}
 
+	/**
+	 * sets the city of this location. requires: this object is not null and city is
+	 * not null and is in proper format.
+	 *
+	 * @param city
+	 *            the city set for this location
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setCity(String city) {
 		this.city = city;
 	}
 
+	/**
+	 * returns the longitude latitude pair of this location. requires: this object
+	 * is not null
+	 *
+	 * @param void
+	 * 
+	 * @return The coordinates of this location
+	 * 
+	 */
 	public Coordinates getCoordinates() {
 		Coordinates copy = new Coordinates(this.coordinates.getlongitude(), this.coordinates.getlatitude());
 
 		return copy;
 	}
 
+	/**
+	 * returns the set of neighbourhoods this location is in. requires: this object
+	 * is not null and neighbourhood is not empty
+	 *
+	 * @param void
+	 * 
+	 * @return The set of neighbourhoods this location is found in
+	 * 
+	 */
 	public Set<String> getNeighbourhoods() {
 		Set<String> copy = new HashSet<String>();
 		copy.addAll(this.neighbourhood);
@@ -100,10 +186,28 @@ public class Location {
 		return copy;
 	}
 
+	/**
+	 * returns the city this location is in. requires: this object is not null and
+	 * city is not empty
+	 *
+	 * @param void
+	 * 
+	 * @return The city this location is found in
+	 * 
+	 */
 	public String getCity() {
 		return this.city;
 	}
 
+	/**
+	 * returns the set of schools that are near this location. requires: this object
+	 * is not null and school is not empty
+	 *
+	 * @param void
+	 * 
+	 * @return The set of schools near this location
+	 * 
+	 */
 	public Set<String> getSchool() {
 		Set<String> copy = new HashSet<String>();
 		copy.addAll(this.school);
@@ -111,10 +215,28 @@ public class Location {
 		return copy;
 	}
 
+	/**
+	 * returns the address of this location. requires: this object is not null and
+	 * address is not empty
+	 *
+	 * @param void
+	 * 
+	 * @return The address of this location
+	 * 
+	 */
 	public String getAddress() {
 		return this.address;
 	}
 
+	/**
+	 * returns the state this location is in. requires: this object is not null and
+	 * state is not empty
+	 *
+	 * @param void
+	 * 
+	 * @return The state this location is found in
+	 * 
+	 */
 	public String getState() {
 		return this.state;
 	}
@@ -140,11 +262,25 @@ public class Location {
 		return false;
 	}
 
+	/**
+	 * Computes a hash code for this object
+	 *
+	 * @param void
+	 * 
+	 * @return This object's hash code
+	 */
 	@Override
 	public int hashCode() {
 		return this.neighbourhood.hashCode();
 	}
 
+	/**
+	 * Returns a string representation of this object
+	 *
+	 * @param void
+	 * 
+	 * @return A string representation of the object
+	 */
 	@Override
 	public String toString() {
 		return this.address + ", " + this.city + ", " + this.state + ", " + "|| Coordinates:"

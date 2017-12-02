@@ -47,6 +47,14 @@ public class Review {
 	protected final String date;
 	protected final int rating;
 
+	/**
+	 * Constructs a Review object
+	 *
+	 * @param review
+	 *            a JsonObject representing a file with all the information for this
+	 *            object's representation. requires: review is not null
+	 * 
+	 */
 	public Review(JsonObject review) {
 		this.businessID = review.getString("business_id");
 		this.userID = review.getString("user_id");
@@ -154,11 +162,25 @@ public class Review {
 		return false;
 	}
 
+	/**
+	 * Computes a hash code for this object
+	 *
+	 * @param void
+	 * 
+	 * @return This object's hash code
+	 */
 	@Override
 	public int hashCode() {
 		return this.businessID.hashCode();
 	}
 
+	/**
+	 * Returns a string representation of this object
+	 *
+	 * @param void
+	 * 
+	 * @return A string representation of the object
+	 */
 	@Override
 	public String toString() {
 		return this.text;
