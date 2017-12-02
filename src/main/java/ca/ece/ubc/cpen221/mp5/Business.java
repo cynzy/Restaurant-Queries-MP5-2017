@@ -22,26 +22,39 @@ import java.util.Set;
  * - this.photoUrl is in proper web address format and links to a picture set by
  * the business
  * 
- * - this.categories includes a list of tags that identify the categories for which the business falls under
+ * - this.rating must be the average value of the ratings of all reviews that include this.businessID
  * 
- * - All reviews in this.reviewSet must have this.businessID
+ * - this.rating is between 1 and 5
  * 
- * - this.rating must be the average value of the ratings of the reviews in this.reviewSet
- * 
- * - this.rating is between 0 and 5
- * 
- * - this.reviewCount == this.reviewSet.size()
+ * - this.reviewCount == the size of the set of reviews that contain this.businessID
  * 
  * - this.price is a value between 1 and 5 rating how expensive this business it
- * Abstraction Function:
- * 
- * - this.location represents the location of this business
- * 
+ 
  * - businessID and name are immutable
  * 
  * Abstraction Function:
  * 
- *  - this.open represents the current open/close status of the business
+ * - this.open represents the current open/close status of the business
+ * 
+ * - this.url represents the url address of the business
+ * 
+ * - this.businessID represets the business ID of this business
+ * 
+ * - this.name represents the name of this business
+ * 
+ * - this.photourl represents a link to the photo that the business has on the
+ * website this database is implemented for
+ * 
+ * - this.categories includes a list of tags that identify the categories for
+ * which the business falls under
+ * 
+ * - this.location represents the geographical location of this business
+ * 
+ * - this.rating represents the average rating this business has received through reviews
+ * 
+ * - this.reviewCount represents the amount of reviews that have been written for this business
+ * 
+ * - this.price represents a rating of how expensive the products or services that this business produces are
  */
 public class Business {
 
@@ -54,7 +67,7 @@ public class Business {
 	protected Location location;
 	protected double rating;
 	protected int reviewCount;
-	private final int price;
+	protected int price;
 
 	public Business(JsonObject business) {
 
