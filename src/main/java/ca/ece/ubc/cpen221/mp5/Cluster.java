@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
  * 
  * Abstraction Function:
  * 
+ * - AF(businessSet, centroid) = { Business } such that the coordinates of each Business are closer to centroid than any other centroid
+ * 
  */
 public class Cluster {
 
@@ -133,22 +135,22 @@ public class Cluster {
 		Coordinates copy = new Coordinates(this.centroid.getlongitude(), this.centroid.getlatitude());
 		return copy;
 	}
-	
+
 	@Override
-	public boolean equals( Object o ) {
-		if( o instanceof Cluster ) {
+	public boolean equals(Object o) {
+		if (o instanceof Cluster) {
 			Cluster other = (Cluster) o;
 			return this.getCentroid().equals(other.getCentroid());
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return this.centroid.hashCode();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Centroid:" + this.centroid.toString() + "|| Set:" + this.businessSet.toString();
