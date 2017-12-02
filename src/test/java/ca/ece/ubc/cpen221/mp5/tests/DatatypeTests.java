@@ -97,6 +97,20 @@ public class DatatypeTests {
         assertTrue(!coffeeLab.getLocation().equals(location));
         assertTrue(!coffeeLab.getLocation().equals("m"));
 
+        //checking validity of Coordinates
+        assertEquals(coffeeLab.getLocation().getCoordinates().hashCode(),
+                (int) (coffeeLab.getLocation().getCoordinates().getlatitude() + coffeeLab.getLocation().getCoordinates().getlongitude()));
+        assertTrue(coffeeLab.getLocation().getCoordinates().toString().contains("37.8727784971583"));
+        assertTrue(!coffeeLab.getLocation().getCoordinates().equals(","));
+
+        //changing latitude and longitude and checking
+        coffeeLab.getLocation().getCoordinates().setlatitude(0);
+        coffeeLab.getLocation().getCoordinates().setlongitude(0);
+        //should not change internal coordinates since getLocation() only returns a copy of coordinates
+        assertTrue(!(coffeeLab.getLocation().getCoordinates().getlatitude() == 0.0));
+        assertTrue(!(coffeeLab.getLocation().getCoordinates().getlongitude() == 0.0));
+
+
         //removing neighborhoods and checking
         coffeeLab.getLocation().removeNeighbourhood("UC Campus Area");
         assertTrue(coffeeLab.getLocation().getNeighbourhoods().isEmpty());
@@ -154,7 +168,6 @@ public class DatatypeTests {
         //checking validity of hashmap of reactions
         assertEquals(2,yelpReview.getNumReactions(PossibleReactions.COOL));
         assertTrue(yelpReview.getReactionMap().containsKey(PossibleReactions.FUNNY));
-
 
     }
 
