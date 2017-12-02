@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.ToDoubleBiFunction;
 import java.util.stream.Collectors;
 
@@ -23,8 +24,8 @@ public class YelpDB implements Database {
 		this.userSet = new HashSet<>();
 		this.reviewSet = new HashSet<>();
 
-		this.UserReviewMap = new HashMap<>();
-        this.RestaurantReviewMap = new HashMap<>();
+		this.UserReviewMap = new ConcurrentHashMap<>();
+        this.RestaurantReviewMap = new ConcurrentHashMap<>();
 
 		parseRestaurants(restaurantsJson);
 		parseUsers(usersJson);
@@ -113,7 +114,6 @@ public class YelpDB implements Database {
 				.reduce((double) Integer.MAX_VALUE, (x, y) -> Double.min(x, y));
 
 		do {
-
 			clusterSet.clear();
 			for (int i = 0; i < k; i++) {
 				clusterSet.add(new Cluster((maxLong - minLong) * Math.random() + minLong,
@@ -180,14 +180,12 @@ public class YelpDB implements Database {
 
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
 		do {
-
 			for (Cluster c : clusterSet) {
 				c.adjustCentroid();
 			}
 			reAssignClusters(clusterSet, clusteringMap);
 			nonFinishedClustersList = clusterSet.stream().map(cluster -> cluster.isFinished())
 					.filter(isFinished -> false).collect(Collectors.toList());
-
 		} while (!nonFinishedClustersList.isEmpty());
 
 		// parsing final clusters into JSON formatted string
