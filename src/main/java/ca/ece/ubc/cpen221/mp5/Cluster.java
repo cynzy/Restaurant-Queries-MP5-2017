@@ -136,6 +136,16 @@ public class Cluster {
 		return copy;
 	}
 
+	/**
+	 * Compares the equality of this Cluster object and another object. Returns
+	 * true only if o is a Cluster with the same centroid. Requires: this
+	 * cluster and o are not null.
+	 *
+	 * @param o
+	 *            Object to be compared with this cluster
+	 * 
+	 * @return true if the objects equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Cluster) {

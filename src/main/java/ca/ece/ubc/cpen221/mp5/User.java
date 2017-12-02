@@ -16,9 +16,11 @@ import java.util.Set;
  * 
  * - this.userID is unique to this user
  * 
- * - this.reviewCount is equal to the size of the set of reviews that contain this.userID
+ * - this.reviewCount is equal to the size of the set of reviews that contain
+ * this.userID
  * 
- * - this.averageRating is equal to the average rating of reviews that contain this.userID
+ * - this.averageRating is equal to the average rating of reviews that contain
+ * this.userID
  * 
  * - this.averageRating is a number between 1 and 5
  * 
@@ -34,7 +36,8 @@ import java.util.Set;
  * 
  * - this.reviewCount represents the amount of reviews this user has wrote
  * 
- * - this.averageRating represents the average rating this user gives on their review
+ * - this.averageRating represents the average rating this user gives on their
+ * review
  *
  */
 public class User {
@@ -54,26 +57,81 @@ public class User {
 		this.averageRating = Double.parseDouble(user.get("average_stars").toString());
 	}
 
+	/**
+	 * returns the average rating voted on by this user. requires: this object is
+	 * not null
+	 *
+	 * @param void
+	 * 
+	 * @return The average rating voted on by this user
+	 * 
+	 */
 	public double getAverageRating() {
 		return this.averageRating;
 	}
 
+	/**
+	 * returns the number of reviews written by this user. requires: this object is
+	 * not null
+	 *
+	 * @param void
+	 * 
+	 * @return The number of reviews written by this user
+	 * 
+	 */
 	public int getReviewCount() {
 		return this.reviewCount;
 	}
 
+	/**
+	 * returns the username of this user. requires: this object is not null and name
+	 * is in the proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The username of this user
+	 * 
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 * returns the url address of this user's profile. requires: this object is not
+	 * null and url is in the proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The url address of this user's profile
+	 * 
+	 */
 	public String getUrl() {
 		return this.url;
 	}
 
+	/**
+	 * returns the user ID of this user. requires: this object is not
+	 * null and user ID is in the proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The user ID of this user
+	 * 
+	 */
 	public String getUserID() {
 		return this.userID;
 	}
 
+	/**
+	 * Compares the equality of this User object and another object. Returns
+	 * true only if o is a User with the same userID. Requires: this
+	 * user and o are not null.
+	 *
+	 * @param o
+	 *            Object to be compared with this user
+	 * 
+	 * @return true if the objects equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof User) {

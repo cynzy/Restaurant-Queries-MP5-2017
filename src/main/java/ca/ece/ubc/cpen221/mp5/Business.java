@@ -133,11 +133,12 @@ public class Business {
 	}
 
 	/**
-	 * returns the average rating of this business. requires: this object is not null
+	 * returns the average rating of this business. requires: this object is not
+	 * null
 	 *
 	 * @param void
 	 * 
-	 * @return The average rating of this business
+	 * @return The average rating, between 1 and 5, of this business
 	 * 
 	 */
 	public double getRating() {
@@ -157,57 +158,159 @@ public class Business {
 	}
 
 	/**
-	 * returns the price rating of this business
+	 * returns the price rating of this business. requires: this object is not null
 	 *
 	 * @param void
 	 * 
-	 * @return The average rating of this business
+	 * @return The rating, between 1 and 5, of how expensive this business is
 	 * 
 	 */
 	public int getPrice() {
 		return this.price;
 	}
 
+	/**
+	 * sets the url of this business to the new url. requires: this object is not
+	 * null and newUrl is not null and in proper format
+	 *
+	 * @param newUrl
+	 *            the url to be set for this business
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setUrl(String newUrl) {
 		this.url = newUrl;
 	}
 
+	/**
+	 * Adds a category tag to this business. If the category is already within this
+	 * business' set of categories, the method does nothing. Requires: this object
+	 * is not null and category is not null and in proper format
+	 *
+	 * @param newCategory
+	 *            category to be added to this business' set of categories
+	 * 
+	 * @return void
+	 */
 	public void addCategory(String newCategory) {
 		this.categories.add(newCategory);
 	}
 
+	/**
+	 * Removes a category tag from this business. If the category already does not
+	 * exist for this business, this methid does nothing. Requires: this object is
+	 * not null and category is not null and in proper format
+	 *
+	 * @param newCategory
+	 *            category to be removed from this business' set of categories
+	 * 
+	 * @return void
+	 */
 	public void removeCategory(String category) {
 		this.categories.remove(category);
 	}
 
+	/**
+	 * sets the open/close status of this business. requires: this object is not
+	 * null and newOpem is not null
+	 *
+	 * @param newOpen
+	 *            the open/close status to be set for this business
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setOpen(Boolean newOpen) {
 		this.open = newOpen;
 	}
 
+	/**
+	 * sets the photo url of this business to the new photo url. requires: this
+	 * object is not null and newPhotoUrl is not null and in proper format
+	 *
+	 * @param newPhotoUrl
+	 *            the photo url to be set for this business
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setPhotoUrl(String newPhotoUrl) {
 		this.photoUrl = newPhotoUrl;
 	}
 
+	/**
+	 * Checks whether this business is open of closed. Returns true only if this
+	 * business is open. requires: this object is not null
+	 *
+	 * @param void
+	 * 
+	 * @return True if this business is open. False otherwise.
+	 */
 	public Boolean isOpen() {
 		return this.open;
 	}
 
+	/**
+	 * returns the business ID of this business. requires: this object is not null
+	 * and in proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The business ID of this business
+	 * 
+	 */
 	public String getBusinessID() {
 		return this.businessID;
 	}
 
+	/**
+	 * returns the name of this business. requires: this object is not null
+	 *
+	 * @param void
+	 * 
+	 * @return The name of this business
+	 * 
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 * returns the url of this business. requires: this object is not null and url
+	 * is in proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The url address of this business
+	 * 
+	 */
 	public String getUrl() {
 		return this.url;
 	}
 
+	/**
+	 * returns the photo url of this business. requires: this object is not null and
+	 * photourl is in proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The url address of this business' photo
+	 * 
+	 */
 	public String getPhotoUrl() {
 		return this.photoUrl;
 	}
 
+	/**
+	 * returns the set of category tags of this business. requires: this object is
+	 * not null and categories are in proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The set of categories of this business
+	 * 
+	 */
 	public Set<String> getCategories() {
 		Set<String> copy = new HashSet<String>();
 		copy.addAll(this.categories);
@@ -215,18 +318,60 @@ public class Business {
 		return copy;
 	}
 
+	/**
+	 * sets the location of this business to a new location. requires: this object
+	 * is not null and newLocation is not null and has no null instance fields
+	 *
+	 * @param newLocation
+	 *            the location to be set for this business
+	 * 
+	 * @return void
+	 * 
+	 */
 	public void setLocation(Location newLocation) {
 		this.location = newLocation;
 	}
 
+	/**
+	 * returns the location of this business. requires: this object is not null and
+	 * location has no null fields
+	 *
+	 * @param void
+	 * 
+	 * @return The location of this business
+	 * 
+	 */
 	public Location getLocation() {
 		return this.location;
 	}
 
+	/**
+	 * Checks whether the category describes this business. Returns true only if
+	 * this category is in this business' set of categories. requires: this object
+	 * is not null and category is not null and in proper format.
+	 *
+	 * @param category
+	 *            the String for which this method checks inclusion in the category
+	 *            set
+	 * 
+	 * @return True if the category is in this business' category set. False
+	 *         otherwise.
+	 * 
+	 */
 	public boolean containsCategory(String category) {
 		return this.categories.contains(category);
 	}
 
+	/**
+	 * Compares the equality of this Business object and another object. Returns
+	 * true only if o is a Business with the same business ID. Requires: this
+	 * business and o are not null.
+	 *
+	 * @param o
+	 *            Object to be compared with this business
+	 * 
+	 * @return true if the objects equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 

@@ -85,6 +85,16 @@ public class Coordinates {
 		return c * EARTH_RADIUS;
 	}
 
+	/**
+	 * Compares the equality of this Coordinates object and another object. Returns
+	 * true only if o is a Coordinates object with the same longitude and latitude. Requires: this
+	 * coordinates object and o are not null.
+	 *
+	 * @param o
+	 *            Object to be compared with this Coordinates object
+	 * 
+	 * @return true if the objects equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Coordinates) {

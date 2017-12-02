@@ -147,6 +147,13 @@ public class YelpDB implements Database {
 		
 	}
 
+	/**
+	 * Cluster objects into k clusters using k-means clustering
+	 * 
+	 * @param k
+	 *            number of clusters to create (0 < k <= number of objects)
+	 * @return a String, in JSON format, that represents the clusters
+	 */
 	public String kMeansClusters_json(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
@@ -234,6 +241,15 @@ public class YelpDB implements Database {
 		}
 	}
 
+	/**
+	 * 
+	 * @param user
+	 *            represents a user_id in the database
+	 * @return a function that predicts the user's ratings for objects (of type
+	 *         T) in the database of type MP5Db<T>. The function that is
+	 *         returned takes two arguments: one is the database and other other
+	 *         is a String that represents the id of an object of type T.
+	 */
 	@Override
 	public ToDoubleBiFunction<MP5Db<Object>, String> getPredictorFunction(String user) {
 		Map<String, Business> idMap = new HashMap<String, Business>();

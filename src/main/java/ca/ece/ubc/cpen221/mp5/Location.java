@@ -119,6 +119,16 @@ public class Location {
 		return this.state;
 	}
 
+	/**
+	 * Compares the equality of this Location object and another object. Returns
+	 * true only if o is a Location object with the same coordinates. Requires: this
+	 * Location object and o are not null.
+	 *
+	 * @param o
+	 *            Object to be compared with this location
+	 * 
+	 * @return true if the objects equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Location) {

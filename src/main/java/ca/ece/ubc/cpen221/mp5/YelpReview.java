@@ -45,6 +45,15 @@ public class YelpReview extends Review {
 		return this.reactionMap.get(reaction);
 	}
 
+	/**
+	 * returns a map of the reactions voted for this review. requires: this object is not
+	 * null
+	 *
+	 * @param void
+	 * 
+	 * @return A map detailing this review's votes of different reactions
+	 * 
+	 */
 	public Map<PossibleReactions, Integer> getReactionMap() {
 		Map<PossibleReactions, Integer> copy = new HashMap<>();
 		copy.putAll(this.reactionMap);

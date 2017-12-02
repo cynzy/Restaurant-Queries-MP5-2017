@@ -43,11 +43,20 @@ public class YelpUser extends User {
 	public void addVote(PossibleReactions reaction) {
 		this.votes.put(reaction, this.votes.get(reaction) + 1);
 	}
-
+	
 	public int getNumVotes(PossibleReactions reaction) {
 		return votes.get(reaction);
 	}
 
+	/**
+	 * returns a map of this YelpUser's votes for reviews. requires: this object is not
+	 * null
+	 *
+	 * @param void
+	 * 
+	 * @return A map detailing this user's votes of different reactions on reviews
+	 * 
+	 */
 	public Map<PossibleReactions, Integer> getVotes() {
 		Map<PossibleReactions, Integer> copy = new HashMap<PossibleReactions, Integer>();
 		copy.putAll(this.votes);

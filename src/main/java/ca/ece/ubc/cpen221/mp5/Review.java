@@ -29,7 +29,8 @@ import javax.json.JsonObject;
  * 
  * - this.userID represents the ID of the user that wrote the review
  * 
- * - this.text represents the content of the review (the written text) and cannot be edited after being initialized
+ * - this.text represents the content of the review (the written text) and
+ * cannot be edited after being initialized
  * 
  * - this.date represents the date on which this review was written
  * 
@@ -55,30 +56,93 @@ public class Review {
 		this.rating = review.getInt("stars");
 	}
 
+	/**
+	 * returns the business ID of the business this review is written about.
+	 * requires: this object is not null and business ID is in the proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The business ID of the business this review is written about
+	 * 
+	 */
 	public String getBusinessID() {
 		return this.businessID;
 	}
 
+	/**
+	 * returns the review ID of this review. requires: this object is not null and
+	 * review ID is in the proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The review ID of this review
+	 * 
+	 */
 	public String getReviewID() {
 		return this.reviewID;
 	}
 
+	/**
+	 * returns the user ID of the user who wrote this review. requires: this object
+	 * is not null and user ID is in the proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The user ID of the user who wrote this review
+	 * 
+	 */
 	public String getUserID() {
 		return this.userID;
 	}
 
+	/**
+	 * returns the written text which composes this review. requires: this object is
+	 * not null
+	 *
+	 * @param void
+	 * 
+	 * @return The written text which composes this review
+	 * 
+	 */
 	public String getText() {
 		return this.text;
 	}
 
+	/**
+	 * returns the date on which this review was written. requires: this object is
+	 * not null and date is in the proper format
+	 *
+	 * @param void
+	 * 
+	 * @return The date on which this review was written
+	 * 
+	 */
 	public String getDate() {
 		return this.date;
 	}
 
+	/**
+	 * returns the rating of this review. requires: this object is not null
+	 *
+	 * @param void
+	 * 
+	 * @return The rating given to the restaurant by the user in this review
+	 * 
+	 */
 	public int getStars() {
 		return this.rating;
 	}
 
+	/**
+	 * Compares the equality of this Review object and another object. Returns true
+	 * only if o is a Review with the same reviewID. Requires: this review and o are
+	 * not null.
+	 *
+	 * @param o
+	 *            Object to be compared with this review
+	 * 
+	 * @return true if the objects equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Review) {
