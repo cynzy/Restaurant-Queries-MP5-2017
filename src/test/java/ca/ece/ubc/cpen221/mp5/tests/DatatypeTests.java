@@ -1,7 +1,6 @@
 package ca.ece.ubc.cpen221.mp5.tests;
 
-import ca.ece.ubc.cpen221.mp5.Business;
-import ca.ece.ubc.cpen221.mp5.Location;
+import ca.ece.ubc.cpen221.mp5.*;
 import org.junit.Test;
 
 import javax.json.Json;
@@ -50,10 +49,15 @@ public class DatatypeTests {
         line = bufferedReader2.readLine();
         JsonReader jsonReader = Json.createReader(new StringReader(line));
         JsonObject business = jsonReader.readObject();
-        Business coffeeLab = new Business(business);
 
+        Business coffeeLab = new Business(business);
+        Restaurant coffeeLabRestaurant = new Restaurant(business);
+
+        //two classes should be the same since one subtypes the other
+        assertEquals(coffeeLab, coffeeLabRestaurant);
         //restaurantTests should contain the restaurant Coffee Lab
         assertTrue(set.contains(coffeeLab));
+
 
         //***************************
         //checking validity of parsing DatatypeTest1
@@ -66,6 +70,7 @@ public class DatatypeTests {
         assertEquals(12, coffeeLab.getReviewCount());
         assertEquals(coffeeLab.getBusinessID().hashCode(), coffeeLab.hashCode());
         assertTrue(!coffeeLab.equals("m"));
+
 
         //**********
         //checking validity of category
@@ -111,6 +116,44 @@ public class DatatypeTests {
         assertEquals("",coffeeLab.getPhotoUrl());
         coffeeLab.setUrl("");
         assertEquals("",coffeeLab.getUrl());
+        //***********
+
+        //***************************
+
+    }
+
+
+
+    //testing Reviews
+    @Test
+    public void test1() throws IOException {
+
+        //parsing DatatypeTest2
+        String line;
+        String DatatypeTest2 = "data/DatatypeTest2.json";
+        BufferedReader bufferedReader2 = new BufferedReader(new FileReader(DatatypeTest2));
+        line = bufferedReader2.readLine();
+        JsonReader jsonReader = Json.createReader(new StringReader(line));
+        JsonObject readObject = jsonReader.readObject();
+
+        Review review = new Review(readObject);
+        YelpReview yelpReview = new YelpReview(readObject);
+
+
+        //***************************
+        //checking validity of parsing DatatypeTest2
+        assertEquals(review.toString(),review.getUserID());
+        assertEquals(3, review.getStars());
+        assertEquals(review.getBusinessID().hashCode(), review.hashCode());
+        assertTrue(!review.equals(yelpReview));
+        assertTrue(!review.equals("m"));
+        assertTrue(review.getText().contains("pinball machine that works"));
+        assertEquals("2008-11-24",review.getDate());
+
+        //checking validity of hashmap of reactions
+        assertEquals(2,yelpReview.getNumReactions(PossibleReactions.COOL));
+        assertTrue(yelpReview.getReactionMap().containsKey(PossibleReactions.FUNNY));
+
 
     }
 

@@ -29,7 +29,7 @@ import javax.json.JsonObject;
  * 
  * - this.userID represents the ID of the user that wrote the review
  * 
- * - this.text represents the content of the review (the written text)
+ * - this.text represents the content of the review (the written text) and cannot be edited after being initialized
  * 
  * - this.date represents the date on which this review was written
  * 
