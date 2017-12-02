@@ -171,5 +171,38 @@ public class DatatypeTests {
 
     }
 
+    //testing Users
+    @Test
+    public void test2() throws IOException {
+
+        //parsing DatatypeTest3
+        String line;
+        String DatatypeTest3 = "data/DatatypeTest3.json";
+        BufferedReader bufferedReader2 = new BufferedReader(new FileReader(DatatypeTest3));
+        line = bufferedReader2.readLine();
+        JsonReader jsonReader = Json.createReader(new StringReader(line));
+        JsonObject readObject = jsonReader.readObject();
+
+        User user = new User(readObject);
+        YelpUser yelpUser = new YelpUser(readObject);
+
+
+        //***************************
+        //checking validity of parsing DatatypeTest3
+        assertEquals(user.toString(),user.getName());
+        assertEquals(user.hashCode(), (int) user.getAverageRating());
+        assertEquals("http://www.yelp.com/user_details?userid=_NH7Cpq3qZkByP5xR4gXog", user.getUrl());
+        assertEquals(user, yelpUser);
+        assertTrue(!user.equals("m"));
+        assertEquals(29, user.getReviewCount());
+
+        //checking validity of hashmap of reactions
+        assertEquals(14,yelpUser.getNumVotes(PossibleReactions.COOL));
+        assertTrue(yelpUser.getVotes().containsKey(PossibleReactions.FUNNY));
+        yelpUser.addVote(PossibleReactions.COOL);
+        assertEquals(15,yelpUser.getNumVotes(PossibleReactions.COOL));
+
+    }
+
 }
 

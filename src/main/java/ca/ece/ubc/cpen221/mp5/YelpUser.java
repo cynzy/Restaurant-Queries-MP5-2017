@@ -2,9 +2,7 @@ package ca.ece.ubc.cpen221.mp5;
 
 import javax.json.JsonObject;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * YelpUser - Represents a user on the website Yelp
@@ -43,7 +41,7 @@ public class YelpUser extends User {
 	}
 
 	public void addVote(PossibleReactions reaction) {
-		this.votes.put(reaction, this.votes.get(reaction));
+		this.votes.put(reaction, this.votes.get(reaction) + 1);
 	}
 
 	public int getNumVotes(PossibleReactions reaction) {
