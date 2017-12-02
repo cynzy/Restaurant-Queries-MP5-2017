@@ -22,14 +22,16 @@ import java.util.Set;
  * - this.photoUrl is in proper web address format and links to a picture set by
  * the business
  * 
- * - this.rating must be the average value of the ratings of all reviews that include this.businessID
+ * - this.rating must be the average value of the ratings of all reviews that
+ * include this.businessID
  * 
  * - this.rating is between 1 and 5
  * 
- * - this.reviewCount == the size of the set of reviews that contain this.businessID
+ * - this.reviewCount == the size of the set of reviews that contain
+ * this.businessID
  * 
  * - this.price is a value between 1 and 5 rating how expensive this business it
- 
+ * 
  * - businessID and name are immutable
  * 
  * Abstraction Function:
@@ -50,11 +52,14 @@ import java.util.Set;
  * 
  * - this.location represents the geographical location of this business
  * 
- * - this.rating represents the average rating this business has received through reviews
+ * - this.rating represents the average rating this business has received
+ * through reviews
  * 
- * - this.reviewCount represents the amount of reviews that have been written for this business
+ * - this.reviewCount represents the amount of reviews that have been written
+ * for this business
  * 
- * - this.price represents a rating of how expensive the products or services that this business produces are
+ * - this.price represents a rating of how expensive the products or services
+ * that this business produces are
  */
 public class Business {
 
@@ -69,6 +74,14 @@ public class Business {
 	protected int reviewCount;
 	protected int price;
 
+	/**
+	 * Constructs a Businessobject
+	 *
+	 * @param business
+	 *            a JsonObject representing a file with all the information for this
+	 *            object's representation requires: business is not null
+	 * 
+	 */
 	public Business(JsonObject business) {
 
 		this.businessID = business.getString("business_id");
@@ -119,14 +132,38 @@ public class Business {
 
 	}
 
+	/**
+	 * returns the average rating of this business. requires: this object is not null
+	 *
+	 * @param void
+	 * 
+	 * @return The average rating of this business
+	 * 
+	 */
 	public double getRating() {
 		return this.rating;
 	}
 
+	/**
+	 * returns the review count of this business. requires: this object is not null
+	 *
+	 * @param void
+	 * 
+	 * @return The number of reviews written about this business
+	 * 
+	 */
 	public int getReviewCount() {
 		return this.reviewCount;
 	}
 
+	/**
+	 * returns the price rating of this business
+	 *
+	 * @param void
+	 * 
+	 * @return The average rating of this business
+	 * 
+	 */
 	public int getPrice() {
 		return this.price;
 	}
