@@ -38,7 +38,7 @@ public class Location {
 	}
 	
 	public void removeSchool( String school ) {
-		this.school.add(school);
+		this.school.remove(school);
 	}
 	
 	public void setSchools( Set<String> schools ) {

@@ -1,6 +1,7 @@
 package ca.ece.ubc.cpen221.mp5.tests;
 
 import ca.ece.ubc.cpen221.mp5.Business;
+import ca.ece.ubc.cpen221.mp5.Location;
 import org.junit.Test;
 
 import javax.json.Json;
@@ -37,8 +38,10 @@ public class DatatypeTests {
         }
         bufferedReader.close();
 
+        //checking size
         assertEquals(27,set.size());
 
+        //parsing DatatypeTest1
         String DatatypeTest1 = "data/DatatypeTest1.json";
         BufferedReader bufferedReader2 = new BufferedReader(new FileReader(DatatypeTest1));
         line = bufferedReader2.readLine();
@@ -46,13 +49,37 @@ public class DatatypeTests {
         JsonObject business = jsonReader.readObject();
         Business coffeeLab = new Business(business);
 
+        //restaurantTests should contain the restaurant Coffee Lab
         assertTrue(set.contains(coffeeLab));
+
+        //checking validity of parsing DatatypeTest1
         assertEquals("The Coffee Lab",coffeeLab.getName());
         assertTrue(coffeeLab.containsCategory("Coffee & Tea"));
         assertEquals(4.0, coffeeLab.getRating(),0);
         assertEquals("http://www.yelp.com/biz/the-coffee-lab-berkeley-2", coffeeLab.getUrl());
-        assertTrue(coffeeLab.getLocation().getNeighbourhoods().contains("UC Campus Area"));
 
+        //checking validity of Location class
+        assertTrue(coffeeLab.getLocation().getNeighbourhoods().contains("UC Campus Area"));
+        assertTrue(coffeeLab.getLocation().getAddress().contains("94720"));
+        assertEquals("Berkeley", coffeeLab.getLocation().getCity());
+        assertEquals("CA", coffeeLab.getLocation().getState());
+        assertEquals(37.8727784971583,coffeeLab.getLocation().getCoordinates().getlatitude(),0);
+        assertEquals(-122.255591154098,coffeeLab.getLocation().getCoordinates().getlongitude(),0);
+        assertTrue(coffeeLab.getLocation().getSchool().contains("University of California at Berkeley"));
+        assertEquals(coffeeLab.getLocation().hashCode(), coffeeLab.getLocation().getNeighbourhoods().hashCode());
+        assertTrue(coffeeLab.getLocation().toString().contains(coffeeLab.getLocation().getCity()));
+
+        Location location = new Location();
+        assertTrue(!coffeeLab.getLocation().equals(location));
+        assertTrue(!coffeeLab.getLocation().equals("m"));
+
+        //removing neighborhoods and checking
+        coffeeLab.getLocation().removeNeighbourhood("UC Campus Area");
+        assertTrue(coffeeLab.getLocation().getNeighbourhoods().isEmpty());
+        coffeeLab.getLocation().removeSchool("University of California at Berkeley");
+        assertTrue(coffeeLab.getLocation().getSchool().isEmpty());
+
+        //checking validity of other instance fields
         coffeeLab.setOpen(false);
         assertTrue(!coffeeLab.isOpen());
 
