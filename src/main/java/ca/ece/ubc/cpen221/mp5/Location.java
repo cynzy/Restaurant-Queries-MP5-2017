@@ -70,9 +70,9 @@ public class Location {
 	public void setNeighbourhoods(Set<String> neighbourhoods) {
 		this.neighbourhood.addAll(neighbourhoods);
 	}
-
-	public void removeSchool(String school) {
-		this.school.add(school);
+	
+	public void removeSchool( String school ) {
+		this.school.remove(school);
 	}
 
 	public void setSchools(Set<String> schools) {
