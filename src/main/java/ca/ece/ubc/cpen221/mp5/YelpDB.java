@@ -201,10 +201,7 @@ private void parseReviews(String reviewsJson) throws IOException {
 			idMap.put(b.getBusinessID(), b);
 		}
 
-		User thisUser = this.userSet.stream().filter(listUser -> listUser.getUserID().equals(user)).reduce(null,
-				(x, y) -> y);
-
-		List<Double> priceList = thisUser.getReviewSet().stream().map(review -> review.getBusinessID())
+		List<Double> priceList = this.reviewSet.stream().filter(review -> review.getUserID().equals(user)).map(review -> review.getBusinessID())
 				.map(businessID -> idMap.get(businessID)).map(business -> (double) business.getPrice())
 				.collect(Collectors.toList());
 
