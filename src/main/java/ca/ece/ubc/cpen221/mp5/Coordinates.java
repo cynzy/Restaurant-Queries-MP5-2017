@@ -102,8 +102,8 @@ public class Coordinates {
 	 * 
 	 */
 	public double getDistance(Coordinates other) {
-		double deltaLat = Math.toRadians(Math.abs(this.latitude - other.getlatitude()));
-		double deltaLong = Math.toRadians(Math.abs(this.longitude - other.getlongitude()));
+		double deltaLat = Math.toRadians(this.latitude - other.getlatitude());
+		double deltaLong = Math.toRadians(this.longitude - other.getlongitude());
 
 		double a = Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(Math.toRadians(this.latitude))
 				* Math.cos(Math.toRadians(other.getlatitude())) * Math.pow(Math.sin(deltaLong / 2), 2);
