@@ -33,6 +33,17 @@ public class YelpDB implements Database {
 
 	}
 
+	/**
+	 * Takes a JSON string of the restuarnats json data file
+	 * and parses corresponding key values into specific
+	 * instances of the Restaurant datatype
+	 *
+	 * Modifies this.restaurantSet
+	 *
+	 * @param restaurantsJson
+	 *            JSON formatted string
+	 * @return void
+	 */
 	private void parseRestaurants(String restaurantsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
 		String line;
@@ -45,6 +56,17 @@ public class YelpDB implements Database {
 		bufferedReader.close();
 	}
 
+	/**
+	 * Takes a JSON string of the user json data file
+	 * and parses corresponding key values into specific
+	 * instances of the YelpUser datatype
+	 *
+	 * Modifies this.userSet
+	 *
+	 * @param userJson
+	 *            JSON formatted string
+	 * @return void
+	 */
 	private void parseUsers(String userJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(userJson));
 		String line;
@@ -57,6 +79,17 @@ public class YelpDB implements Database {
 		bufferedReader.close();
 	}
 
+	/**
+	 * Takes a JSON string of the reviews json data file
+	 * and parses corresponding key values into specific
+	 * instances of the YelpReview datatype
+	 *
+	 * Modifies this.reviewsSet
+	 *
+	 * @param reviewsJson
+	 *            JSON formatted string
+	 * @return void
+	 */
 	private void parseReviews(String reviewsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(reviewsJson));
 		String line;
@@ -94,6 +127,14 @@ public class YelpDB implements Database {
 		return null;
 	}
 
+
+    /**
+     * Cluster objects into k clusters using k-means clustering
+     *
+     * @param k
+     *            number of clusters to create (0 < k <= number of objects)
+     * @return a List of Set of Businesses that are in one cluster
+     */
 	@Override
 	public List<Set<Business>> kMeansClusters_List(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
