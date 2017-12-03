@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -67,7 +69,18 @@ public class DatabaseTests {
         String reviewsJson = "data/reviews.json";
 
         YelpDB db = new YelpDB(restaurantJson, usersJson, reviewsJson);
+       
+        List<Set<Business>> kmeans = db.kMeansClusters_List(45);
+        
+        int numClusteredBusinesses = kmeans.stream().map(set -> set.size()).reduce(0, (x,y) -> x+y );
+        int numEmptyClusters = kmeans.stream().filter(set -> set.isEmpty()).reduce(0, (x,y) -> x+1); 
+        
+        for( Set<Business> s: kmeans) {
+  
+        }
+        
+        assertEquals( db.getBusinessSet().size(), numClusteredBusinesses);
+        assertEquals( 0, numEmptyClusters );
     }
-
 
 }

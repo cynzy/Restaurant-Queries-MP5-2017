@@ -98,15 +98,17 @@ public class YelpDB implements Database {
 	public List<Set<Business>> kMeansClusters_List(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
-		List<Business> businessList = new ArrayList<Business>();
-		businessList.addAll(restaurantSet);
+		List<Coordinates> coordinatesList = new ArrayList<Coordinates>();
+		coordinatesList.addAll(restaurantSet.stream().map(business -> business.getLocation())
+				.map(location -> location.getCoordinates()).collect(Collectors.toSet()));
 
 		for (int i = 0; i < k; i++) {
-			Coordinates coordinates = businessList.get(i).getLocation().getCoordinates();
+			Coordinates coordinates = coordinatesList.get(i);
 			clusterSet.add(new Cluster(coordinates.getlongitude(), coordinates.getlatitude()));
 		}
 
 		reAssignClusters(clusterSet, clusteringMap);
+		
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
 		do {
 
@@ -138,11 +140,12 @@ public class YelpDB implements Database {
 	public String kMeansClusters_json(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
-		List<Business> businessList = new ArrayList<Business>();
-		businessList.addAll(restaurantSet);
+		List<Coordinates> coordinatesList = new ArrayList<Coordinates>();
+		coordinatesList.addAll(restaurantSet.stream().map(business -> business.getLocation())
+				.map(location -> location.getCoordinates()).collect(Collectors.toSet()));
 
 		for (int i = 0; i < k; i++) {
-			Coordinates coordinates = businessList.get(i).getLocation().getCoordinates();
+			Coordinates coordinates = coordinatesList.get(i);
 			clusterSet.add(new Cluster(coordinates.getlongitude(), coordinates.getlatitude()));
 		}
 
@@ -193,6 +196,7 @@ public class YelpDB implements Database {
 			}
 			if (!clusteringMap.containsKey(b)) {
 				clusteringMap.put(b, closestCluster);
+				closestCluster.addBusiness(b);
 			}
 
 			if (!closestCluster.equals(clusteringMap.get(b))) {
