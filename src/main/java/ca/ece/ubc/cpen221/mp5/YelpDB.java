@@ -27,9 +27,12 @@ import java.util.stream.Collectors;
  *
  * - this.RestaurantReviewMap maps businessID to a set of reviews written for that specific Restaurant
  *
- * - all datatype sets cannot be modified
+ * - all datatype sets cannot be modified (for this part for now)
  *
  * Abstraction Function:
+ *
+ * AF(restaurantsJsonString, usersJsonString, reviewsJsonString) ->
+ *                  Set<Restaurant>, Set<YelpUser>, Set<YelpReview>, Map<String, Set<Review>>, Map<String, Set<Review>>
  *
  *
  */
