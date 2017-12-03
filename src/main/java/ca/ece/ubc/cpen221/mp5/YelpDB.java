@@ -33,17 +33,6 @@ public class YelpDB implements Database {
 
 	}
 
-	/**
-	 * Parses given JSON string of restaurant database
-	 * Reads given values from JSON String into instance
-	 * fields of the Restaurant datatype
-	 *
-	 * Modifies this.restaurantSet
-	 *
-	 * @param restaurantsJson
-	 *            JSON formatted String
-	 * @return void
-	 */
 	private void parseRestaurants(String restaurantsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
 		String line;
@@ -56,17 +45,6 @@ public class YelpDB implements Database {
 		bufferedReader.close();
 	}
 
-	/**
-	 * Parses given JSON string of user database
-	 * Reads given values from JSON String into instance
-	 * fields of the YelpUser datatype
-	 *
-	 * Modifies this.userSet
-	 *
-	 * @param userJson
-	 *            JSON formatted String
-	 * @return void
-	 */
 	private void parseUsers(String userJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(userJson));
 		String line;
@@ -79,17 +57,6 @@ public class YelpDB implements Database {
 		bufferedReader.close();
 	}
 
-	/**
-	 * Parses given JSON string of reviews database
-	 * Reads given values from JSON String into instance
-	 * fields of the YelpReview datatype
-	 *
-	 * Modifies this.reviewSet
-	 *
-	 * @param reviewsJson
-	 *            JSON formatted String
-	 * @return void
-	 */
 	private void parseReviews(String reviewsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(reviewsJson));
 		String line;
@@ -131,33 +98,15 @@ public class YelpDB implements Database {
 	public List<Set<Business>> kMeansClusters_List(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
-		List<Cluster> emptyClusterList;
+		List<Business> businessList = new ArrayList<Business>();
+		businessList.addAll(restaurantSet);
 
-		List<Coordinates> coordinateList = this.restaurantSet.stream().map(business -> business.getLocation())
-				.map(location -> location.getCoordinates()).collect(Collectors.toList());
+		for (int i = 0; i < k; i++) {
+			Coordinates coordinates = businessList.get(i).getLocation().getCoordinates();
+			clusterSet.add(new Cluster(coordinates.getlongitude(), coordinates.getlatitude()));
+		}
 
-		double maxLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude())
-				.reduce((double) Integer.MIN_VALUE, (x, y) -> Double.max(x, y));
-		double maxLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude())
-				.reduce((double) Integer.MIN_VALUE, (x, y) -> Double.max(x, y));
-		double minLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude())
-				.reduce((double) Integer.MAX_VALUE, (x, y) -> Double.min(x, y));
-		double minLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude())
-				.reduce((double) Integer.MAX_VALUE, (x, y) -> Double.min(x, y));
-
-		do {
-			clusterSet.clear();
-			for (int i = 0; i < k; i++) {
-				clusterSet.add(new Cluster((maxLong - minLong) * Math.random() + minLong,
-						(maxLat - minLat) * Math.random() + minLat));
-			}
-
-			reAssignClusters(clusterSet, clusteringMap);
-
-			emptyClusterList = clusterSet.stream().filter(cluster -> cluster.isEmpty()).collect(Collectors.toList());
-
-		} while (!emptyClusterList.isEmpty());
-
+		reAssignClusters(clusterSet, clusteringMap);
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
 		do {
 
@@ -189,33 +138,15 @@ public class YelpDB implements Database {
 	public String kMeansClusters_json(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
-		List<Cluster> emptyClusterList;
+		List<Business> businessList = new ArrayList<Business>();
+		businessList.addAll(restaurantSet);
 
-		List<Coordinates> coordinateList = this.restaurantSet.stream().map(business -> business.getLocation())
-				.map(location -> location.getCoordinates()).collect(Collectors.toList());
+		for (int i = 0; i < k; i++) {
+			Coordinates coordinates = businessList.get(i).getLocation().getCoordinates();
+			clusterSet.add(new Cluster(coordinates.getlongitude(), coordinates.getlatitude()));
+		}
 
-		double maxLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude())
-				.reduce((double) Integer.MIN_VALUE, (x, y) -> Double.max(x, y));
-		double maxLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude())
-				.reduce((double) Integer.MIN_VALUE, (x, y) -> Double.max(x, y));
-		double minLong = coordinateList.stream().map(coordinates -> coordinates.getlongitude())
-				.reduce((double) Integer.MAX_VALUE, (x, y) -> Double.min(x, y));
-		double minLat = coordinateList.stream().map(coordinates -> coordinates.getlatitude())
-				.reduce((double) Integer.MAX_VALUE, (x, y) -> Double.min(x, y));
-
-		do {
-
-			clusterSet.clear();
-			for (int i = 0; i < k; i++) {
-				clusterSet.add(new Cluster((maxLong - minLong) * Math.random() + minLong,
-						(maxLat - minLat) * Math.random() + minLat));
-			}
-
-			reAssignClusters(clusterSet, clusteringMap);
-
-			emptyClusterList = clusterSet.stream().filter(cluster -> cluster.isEmpty()).collect(Collectors.toList());
-
-		} while (!emptyClusterList.isEmpty());
+		reAssignClusters(clusterSet, clusteringMap);
 
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
 		do {
