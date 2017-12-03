@@ -10,6 +10,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.ToDoubleBiFunction;
 import java.util.stream.Collectors;
 
+/**
+ * YelpDB - Represents a database for Yelp Restaurants, Reviews, and Users
+ *          Parse JSON string into sets of Restaurant, YelpReview, YelpUser
+ *          dataset
+ *
+ * Representation Invariants:
+ *
+ * - this.restaurantSet is not null and only contains Restaurant datatypes
+ *
+ * - this.userSet is not null and only contains YelpUser datatypes
+ *
+ * - this.reviewSet is not null and only contains YelpReview datatypes
+ *
+ * - this.UserReviewMap maps userID to a set of reviews written under that specific userID
+ *
+ * - this.RestaurantReviewMap maps businessID to a set of reviews written for that specific Restaurant
+ *
+ * - all datatype sets cannot be modified
+ *
+ * Abstraction Function:
+ *
+ *
+ */
+
 public class YelpDB implements Database {
 
 	private Set<Restaurant> restaurantSet;
@@ -301,7 +325,6 @@ public class YelpDB implements Database {
 			s_xy += (ratingList.get(i) - meanRating) * (priceList.get(i) - meanPrice);
 		}
 
-		System.out.println(s_xx + "||" + s_yy + "||" + s_xy + "||" + meanPrice + "||" + meanRating);
 		return new PredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
 	}
 
