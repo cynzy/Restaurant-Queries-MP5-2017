@@ -173,7 +173,6 @@ public class YelpDB implements Database {
 		}
 
 		reAssignClusters(clusterSet, clusteringMap);
-
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
 		do {
 
@@ -233,12 +232,6 @@ public class YelpDB implements Database {
 		Cluster bullshit = new Cluster(0, 0);
 		Cluster fuckthis = new Cluster(0, 0);
 		for (Cluster c : clusterSet) {
-			if (index == 1) {
-				bullshit = c;
-			}
-			if (index == 3) {
-				fuckthis = c;
-			}
 			for (Business b : c.getBusinessSet()) {
 
 				j = javax.json.Json.createObjectBuilder();

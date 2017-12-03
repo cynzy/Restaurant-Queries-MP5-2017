@@ -79,6 +79,7 @@ public class DatabaseTest {
 		int numEmptyClusters = kmeans.stream().filter(set -> set.isEmpty()).map(set -> set.size()).reduce(0,
 				(x, y) -> x + 1);
 
+		System.out.println(kmeans);
 		assertEquals(db.getBusinessSet().size(), numClusteredBusinesses);
 		assertEquals(0, numEmptyClusters);
 	}
