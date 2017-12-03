@@ -127,6 +127,14 @@ public class YelpDB implements Database {
 		return null;
 	}
 
+
+    /**
+     * Cluster objects into k clusters using k-means clustering
+     *
+     * @param k
+     *            number of clusters to create (0 < k <= number of objects)
+     * @return a List of Set of Businesses that are in one cluster
+     */
 	@Override
 	public List<Set<Business>> kMeansClusters_List(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
