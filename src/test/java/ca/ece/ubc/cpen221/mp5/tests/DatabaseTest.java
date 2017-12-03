@@ -1,6 +1,8 @@
-package ca.ece.ubc.cpen221.mp5;
+package ca.ece.ubc.cpen221.mp5.tests;
 
 import ca.ece.ubc.cpen221.mp5.Business;
+import ca.ece.ubc.cpen221.mp5.MP5Db;
+import ca.ece.ubc.cpen221.mp5.PredictorFunction;
 import ca.ece.ubc.cpen221.mp5.Review;
 import ca.ece.ubc.cpen221.mp5.User;
 import ca.ece.ubc.cpen221.mp5.YelpDB;
@@ -18,11 +20,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import java.util.Set;
+import java.util.function.ToDoubleBiFunction;
 
 /**
  * Created by Cynzy on 2017-12-02.
  */
-public class TestStuff {
+public class DatabaseTest {
 
 	// testing YelpDB parsing
 	@Test
@@ -76,8 +79,20 @@ public class TestStuff {
 		int numEmptyClusters = kmeans.stream().filter(set -> set.isEmpty()).map(set -> set.size()).reduce(0,
 				(x, y) -> x + 1);
 
-		System.out.println(db.kMeansClusters_json(10));
 		assertEquals(db.getBusinessSet().size(), numClusteredBusinesses);
 		assertEquals(0, numEmptyClusters);
 	}
+
+	@Test
+	public void test2() throws IOException {
+		String restaurantJson = "data/restaurants.json";
+		String usersJson = "data/users.json";
+		String reviewsJson = "data/reviews.json";
+
+		YelpDB db = new YelpDB(restaurantJson, usersJson, reviewsJson);
+		ToDoubleBiFunction<MP5Db<Object>, String> rip = db.getPredictorFunction("_n9N41zBLY8uFLyTdynJ1A");
+
+		System.out.println(rip.applyAsDouble(db, "loBOs5ruFXSNL-ZM29cTrA"));
+	}
+	
 }

@@ -108,7 +108,7 @@ public class YelpDB implements Database {
 		}
 
 		reAssignClusters(clusterSet, clusteringMap);
-		
+
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
 		do {
 
@@ -165,8 +165,17 @@ public class YelpDB implements Database {
 		int index = 0;
 		JsonObjectBuilder j;
 		JsonArrayBuilder array = Json.createArrayBuilder();
+		Cluster bullshit = new Cluster(0, 0);
+		Cluster fuckthis = new Cluster(0, 0);
 		for (Cluster c : clusterSet) {
+			if (index == 1) {
+				bullshit = c;
+			}
+			if (index == 3) {
+				fuckthis = c;
+			}
 			for (Business b : c.getBusinessSet()) {
+
 				j = javax.json.Json.createObjectBuilder();
 				j.add("x", b.getLocation().getCoordinates().getlatitude());
 				j.add("y", b.getLocation().getCoordinates().getlongitude());
@@ -224,31 +233,34 @@ public class YelpDB implements Database {
 			idMap.put(b.getBusinessID(), b);
 		}
 
-		List<Double> priceList = this.reviewSet.stream().filter(review -> review.getUserID().equals(user))
-				.map(review -> review.getBusinessID()).map(businessID -> idMap.get(businessID))
-				.map(business -> (double) business.getPrice()).collect(Collectors.toList());
+		List<Review> reviewsByUser = this.reviewSet.stream().filter(review -> review.getUserID().equals(user))
+				.collect(Collectors.toList());
+
+		List<Double> priceList = reviewsByUser.stream().map(review -> review.getBusinessID())
+				.map(businessID -> idMap.get(businessID)).map(business -> (double) business.getPrice())
+				.collect(Collectors.toList());
 
 		double sumPrice = priceList.stream().reduce(0.0, (x, y) -> x + y);
 
-		double priceListSize = priceList.stream().reduce(0.0, (x, y) -> x + 1);
-
-		double meanPrice = sumPrice / priceListSize;
-
-		double meanRating = this.userSet.stream().filter(thisuser -> thisuser.getUserID().equals(user))
-				.map(thisuser -> thisuser.getAverageRating()).reduce(0.0, (x, y) -> y);
-
-		double s_xx = priceList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanPrice, 2));
+		double meanPrice = sumPrice / priceList.size();
 
 		List<Double> ratingList = this.reviewSet.stream().filter(review -> review.getUserID().equals(user))
 				.map(review -> (double) review.getStars()).collect(Collectors.toList());
+
+		double sumRating = ratingList.stream().reduce(0.0, (x, y) -> x + y);
+
+		double meanRating = sumRating / ratingList.size();
+
+		double s_xx = priceList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanPrice, 2));
 
 		double s_yy = ratingList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanRating, 2));
 
 		double s_xy = 0;
 		for (int i = 0; i < ratingList.size(); i++) {
-			s_xy += Math.pow(ratingList.get(i) - meanRating, 2) * Math.pow(priceList.get(i) - meanPrice, 2);
+			s_xy += (ratingList.get(i) - meanRating) * (priceList.get(i) - meanPrice);
 		}
 
+		System.out.println(s_xx + "||" + s_yy + "||" + s_xy + "||" + meanPrice + "||" + meanRating);
 		return new PredictorFunction(s_xx, s_yy, s_xy, meanPrice, meanRating);
 	}
 

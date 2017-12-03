@@ -6,15 +6,15 @@ import org.junit.Test;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+
+import static org.junit.Assert.*;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Cynzy on 2017-11-27.
@@ -202,6 +202,17 @@ public class DatatypeTests {
         yelpUser.addVote(PossibleReactions.COOL);
         assertEquals(15,yelpUser.getNumVotes(PossibleReactions.COOL));
 
+    }
+    
+    @SuppressWarnings("unlikely-arg-type")
+	@Test
+    public void test3() {
+    	Cluster cluster = new Cluster(0,0);
+    	Location location = new Location();
+    	assertTrue(cluster.isEmpty());
+    	assertTrue(cluster.toString().equals("Centroid:Latitude:0.0, Longitude:0.0|| Set:[]"));
+    	assertFalse( cluster.equals(location));
+    	
     }
 
 }
