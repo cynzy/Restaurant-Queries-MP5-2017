@@ -83,7 +83,7 @@ public class DatabaseTest {
 		assertEquals(0, numEmptyClusters);
 	}
 
-	@Test
+	@Test( expected = UnsupportedOperationException.class)
 	public void test2() throws IOException {
 		String restaurantJson = "data/restaurants.json";
 		String usersJson = "data/users.json";
@@ -92,7 +92,32 @@ public class DatabaseTest {
 		YelpDB db = new YelpDB(restaurantJson, usersJson, reviewsJson);
 		ToDoubleBiFunction<MP5Db<Object>, String> rip = db.getPredictorFunction("_n9N41zBLY8uFLyTdynJ1A");
 
-		System.out.println(rip.applyAsDouble(db, "loBOs5ruFXSNL-ZM29cTrA"));
+		rip.applyAsDouble(db, "loBOs5ruFXSNL-ZM29cTrA");
 	}
 	
+
+	@Test
+	public void test3() throws IOException {
+		String restaurantJson = "data/restaurants.json";
+		String usersJson = "data/users.json";
+		String reviewsJson = "data/reviews.json";
+
+		YelpDB db = new YelpDB(restaurantJson, usersJson, reviewsJson);
+		ToDoubleBiFunction<MP5Db<Object>, String> rip = db.getPredictorFunction("KH3cBULZ2y4miI8mtlbY9Q");
+
+		assertEquals(5, (int) rip.applyAsDouble(db, "loBOs5ruFXSNL-ZM29cTrA"));
+	}
+	
+	// found collectively with a friend while going through database
+	@Test
+	public void test4() throws IOException {
+		String restaurantJson = "data/restaurants.json";
+		String usersJson = "data/users.json";
+		String reviewsJson = "data/reviews.json";
+
+		YelpDB db = new YelpDB(restaurantJson, usersJson, reviewsJson);
+		ToDoubleBiFunction<MP5Db<Object>, String> rip = db.getPredictorFunction("QScfKdcxsa7t5qfE0Ev0Cw");
+
+		assertTrue( rip.applyAsDouble(db, "G3d-xJF_Rt-P_za2eZ1q-Q") == 1.0);
+	}
 }
