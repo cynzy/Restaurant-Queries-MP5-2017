@@ -11,9 +11,8 @@ import java.util.function.ToDoubleBiFunction;
 import java.util.stream.Collectors;
 
 /**
- * YelpDB - Represents a database for Yelp Restaurants, Reviews, and Users
- *          Parse JSON string into sets of Restaurant, YelpReview, YelpUser
- *          dataset
+ * YelpDB - Represents a database for Yelp Restaurants, Reviews, and Users Parse
+ * JSON string into sets of Restaurant, YelpReview, YelpUser dataset
  *
  * Representation Invariants:
  *
@@ -23,16 +22,19 @@ import java.util.stream.Collectors;
  *
  * - this.reviewSet is not null and only contains YelpReview datatypes
  *
- * - this.UserReviewMap maps userID to a set of reviews written under that specific userID
+ * - this.UserReviewMap maps userID to a set of reviews written under that
+ * specific userID
  *
- * - this.RestaurantReviewMap maps businessID to a set of reviews written for that specific Restaurant
+ * - this.RestaurantReviewMap maps businessID to a set of reviews written for
+ * that specific Restaurant
  *
  * - all datatype sets cannot be modified (for this part for now)
  *
  * Abstraction Function:
  *
  * AF(restaurantsJsonString, usersJsonString, reviewsJsonString) ->
- *                  Set<Restaurant>, Set<YelpUser>, Set<YelpReview>, Map<String, Set<Review>>, Map<String, Set<Review>>
+ * Set<Restaurant>, Set<YelpUser>, Set<YelpReview>, Map<String, Set<Review>>,
+ * Map<String, Set<Review>>
  *
  *
  */
@@ -61,9 +63,8 @@ public class YelpDB implements Database {
 	}
 
 	/**
-	 * Takes a JSON string of the restuarnats json data file
-	 * and parses corresponding key values into specific
-	 * instances of the Restaurant datatype
+	 * Takes a JSON string of the restuarnats json data file and parses
+	 * corresponding key values into specific instances of the Restaurant datatype
 	 *
 	 * Modifies this.restaurantSet
 	 *
@@ -84,9 +85,8 @@ public class YelpDB implements Database {
 	}
 
 	/**
-	 * Takes a JSON string of the user json data file
-	 * and parses corresponding key values into specific
-	 * instances of the YelpUser datatype
+	 * Takes a JSON string of the user json data file and parses corresponding key
+	 * values into specific instances of the YelpUser datatype
 	 *
 	 * Modifies this.userSet
 	 *
@@ -107,9 +107,8 @@ public class YelpDB implements Database {
 	}
 
 	/**
-	 * Takes a JSON string of the reviews json data file
-	 * and parses corresponding key values into specific
-	 * instances of the YelpReview datatype
+	 * Takes a JSON string of the reviews json data file and parses corresponding
+	 * key values into specific instances of the YelpReview datatype
 	 *
 	 * Modifies this.reviewsSet
 	 *
@@ -149,19 +148,25 @@ public class YelpDB implements Database {
 		bufferedReader.close();
 	}
 
+	/**
+	 * Perform a structured query and return the set of objects that matches the
+	 * query
+	 * 
+	 * @param queryString
+	 * @return the set of objects that matches the query
+	 */
 	@Override
 	public Set<Object> getMatches(String queryString) {
 		return null;
 	}
 
-
-    /**
-     * Cluster objects into k clusters using k-means clustering
-     *
-     * @param k
-     *            number of clusters to create (0 < k <= number of objects)
-     * @return a List of Set of Businesses that are in one cluster
-     */
+	/**
+	 * Cluster objects into k clusters using k-means clustering
+	 *
+	 * @param k
+	 *            number of clusters to create (0 < k <= number of objects)
+	 * @return a List of Set of Businesses that are in one cluster
+	 */
 	@Override
 	public List<Set<Business>> kMeansClusters_List(int k) {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
@@ -252,6 +257,15 @@ public class YelpDB implements Database {
 		return json;
 	}
 
+	/**
+	 * Adjusts the clusters by assigning each business to the cluster with the
+	 * closest centroid. Helper function for k-means clustering methods.
+	 *
+	 * @param clusterSet
+	 *            the Set of clusters in k means clustering
+	 * @param clusteringMap
+	 *            the map detailing which cluster each business is in
+	 */
 	private void reAssignClusters(Set<Cluster> clusterSet, Map<Restaurant, Cluster> clusteringMap) {
 
 		for (Restaurant b : this.restaurantSet) {
