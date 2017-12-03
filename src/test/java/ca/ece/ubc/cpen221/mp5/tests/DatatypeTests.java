@@ -111,14 +111,6 @@ public class DatatypeTests {
         assertTrue(!(coffeeLab.getLocation().getCoordinates().getlongitude() == 0.0));
 
 
-        //removing neighborhoods and checking
-        coffeeLab.getLocation().removeNeighbourhood("UC Campus Area");
-        assertTrue(coffeeLab.getLocation().getNeighbourhoods().isEmpty());
-        coffeeLab.getLocation().removeSchool("University of California at Berkeley");
-        assertTrue(coffeeLab.getLocation().getSchool().isEmpty());
-        //***********
-
-
         //***********
         //modifying instance fields
         //checking validity of other instance fields

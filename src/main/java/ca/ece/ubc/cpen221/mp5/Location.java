@@ -91,10 +91,6 @@ public class Location {
 		this.state = state;
 	}
 
-	public void removeNeighbourhood(String neighbourhood) {
-		this.neighbourhood.remove(neighbourhood);
-	}
-
 	/**
 	 * sets the set of neighourhoods of this location. requires: this object is not
 	 * null, neighbourhoods is not null, and no Strings in neighbourhoods are null.
@@ -107,10 +103,6 @@ public class Location {
 	 */
 	public void setNeighbourhoods(Set<String> neighbourhoods) {
 		this.neighbourhood.addAll(neighbourhoods);
-	}
-
-	public void removeSchool(String school) {
-		this.school.remove(school);
 	}
 
 	/**
