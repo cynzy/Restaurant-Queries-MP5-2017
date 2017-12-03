@@ -33,6 +33,17 @@ public class YelpDB implements Database {
 
 	}
 
+	/**
+	 * Takes a JSON string of the restuarnats json data file
+	 * and parses corresponding key values into specific
+	 * instances of the Restaurant datatype
+	 *
+	 * Modifies this.restaurantSet
+	 *
+	 * @param restaurantsJson
+	 *            JSON formatted string
+	 * @return void
+	 */
 	private void parseRestaurants(String restaurantsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(restaurantsJson));
 		String line;
@@ -45,6 +56,17 @@ public class YelpDB implements Database {
 		bufferedReader.close();
 	}
 
+	/**
+	 * Takes a JSON string of the user json data file
+	 * and parses corresponding key values into specific
+	 * instances of the YelpUser datatype
+	 *
+	 * Modifies this.userSet
+	 *
+	 * @param userJson
+	 *            JSON formatted string
+	 * @return void
+	 */
 	private void parseUsers(String userJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(userJson));
 		String line;
@@ -57,6 +79,17 @@ public class YelpDB implements Database {
 		bufferedReader.close();
 	}
 
+	/**
+	 * Takes a JSON string of the reviews json data file
+	 * and parses corresponding key values into specific
+	 * instances of the YelpReview datatype
+	 *
+	 * Modifies this.reviewsSet
+	 *
+	 * @param reviewsJson
+	 *            JSON formatted string
+	 * @return void
+	 */
 	private void parseReviews(String reviewsJson) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(reviewsJson));
 		String line;
