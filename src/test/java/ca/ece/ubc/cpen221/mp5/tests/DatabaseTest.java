@@ -79,7 +79,7 @@ public class DatabaseTest {
 		int numEmptyClusters = kmeans.stream().filter(set -> set.isEmpty()).map(set -> set.size()).reduce(0,
 				(x, y) -> x + 1);
 
-		System.out.println(kmeans);
+		assertTrue( db.kMeansClusters_json(10).charAt(0) == '[');
 		assertEquals(db.getBusinessSet().size(), numClusteredBusinesses);
 		assertEquals(0, numEmptyClusters);
 	}
@@ -120,5 +120,17 @@ public class DatabaseTest {
 		ToDoubleBiFunction<MP5Db<Object>, String> rip = db.getPredictorFunction("QScfKdcxsa7t5qfE0Ev0Cw");
 
 		assertTrue( rip.applyAsDouble(db, "G3d-xJF_Rt-P_za2eZ1q-Q") == 1.0);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void test5() throws IOException {
+		String restaurantJson = "data/restaurants.json";
+		String usersJson = "data/users.json";
+		String reviewsJson = "data/reviews.json";
+
+		YelpDB db = new YelpDB(restaurantJson, usersJson, reviewsJson);
+		ToDoubleBiFunction<MP5Db<Object>, String> rip = db.getPredictorFunction("QScfKdcxsa7t5qfE0Ev0Cw");
+		rip.applyAsDouble(db, "notARealID" );
+
 	}
 }
