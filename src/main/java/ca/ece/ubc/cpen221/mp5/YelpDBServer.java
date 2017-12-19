@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -97,7 +99,7 @@ public class YelpDBServer {
 					}
 
 					else if (request.equals("ADDUSER")) {
-						
+
 						String output = addUser(line);
 						System.err.println("reply: " + output);
 						out.println(output);
@@ -147,10 +149,10 @@ public class YelpDBServer {
 		JsonObject restaurantInputJson = jsonReader.readObject();
 
 		JsonObjectBuilder j;
-		JsonArrayBuilder array = Json.createArrayBuilder();
 		j = javax.json.Json.createObjectBuilder();
+		
 		j.add("open", true);
-		j.add("url", "http://www.yelp.com/business_details?businessid=" + businessID);
+		j.add("url", restaurantInputJson.getString("url"));
 		j.add("longitude", Double.parseDouble(restaurantInputJson.getString("longitude")));
 		j.add("neighbourhoods", restaurantInputJson.getString("neighbourhoods"));
 		j.add("business_id", businessID);
@@ -171,11 +173,7 @@ public class YelpDBServer {
 		Restaurant restaurant = new Restaurant(business);
 		this.database.addRestaurant(restaurant);
 
-		array.add(j.build());
-
-		String output = array.build().toString();
-
-		return output;
+		return business.toString();
 
 	}
 
@@ -189,10 +187,10 @@ public class YelpDBServer {
 		j.add("open", restaurant.isOpen());
 		j.add("url", restaurant.getUrl());
 		j.add("longitude", restaurant.getLocation().getCoordinates().getlongitude());
-		j.add("neighbourhoods", (JsonValue) restaurant.getLocation().getNeighbourhoods());
+		j.add("neighbourhoods", restaurant.getLocation().getNeighbourhoods().toString());
 		j.add("business_id", restaurant.getBusinessID());
 		j.add("name", restaurant.getName());
-		j.add("categories", (JsonValue) restaurant.getCategories());
+		j.add("categories", restaurant.getCategories().toString());
 		j.add("state", restaurant.getLocation().getState());
 		j.add("type", "business");
 		j.add("stars", restaurant.getRating());
@@ -200,7 +198,7 @@ public class YelpDBServer {
 		j.add("full_address", restaurant.getLocation().getAddress());
 		j.add("review_count", restaurant.getReviewCount());
 		j.add("photo_url", restaurant.getPhotoUrl());
-		j.add("schools", (JsonValue) restaurant.getLocation().getSchool());
+		j.add("schools", restaurant.getLocation().getSchool().toString());
 		j.add("latitude", restaurant.getLocation().getCoordinates().getlatitude());
 		j.add("price", restaurant.getPrice());
 
@@ -213,42 +211,49 @@ public class YelpDBServer {
 		JsonReader jsonReader = Json.createReader(new StringReader(line.substring(line.indexOf(' '), line.length())));
 		JsonObject userInputJson = jsonReader.readObject();
 
+		String userID = "";
+		for (int i = 0; i < 10; i++) {
+			userID = userID + (int) Math.random() * 10;
+		}
+
+		JsonObject votes = javax.json.Json.createObjectBuilder().add("FUNNY", 0).add("COOL", 0).add("USEFUL", 0)
+				.build();
+
 		JsonObjectBuilder j;
-		JsonArrayBuilder array = Json.createArrayBuilder();
 		j = javax.json.Json.createObjectBuilder();
 
-		
-		
-		
-		JsonObject business = j.build();
-		Restaurant restaurant = new Restaurant(business);
-		this.database.addRestaurant(restaurant);
+		j.add("url", "http://www.yelp.com/user_details?userid=" + userID);
+		j.add("votes", votes.toString());
+		j.add("review_count",0);
+		j.add("type", "user");
+		j.add("user_id", userID);
+		j.add("name", userInputJson.getString("name"));
+		j.add("average_stars", 0);
 
-		array.add(j.build());
-
-		String output = array.build().toString();
-
-		return output;
+		JsonObject user = j.build();
+		YelpUser yelpUser = new YelpUser(user);
+		this.database.addUser(yelpUser);
+		
+		return user.toString();
 
 	}
-	
-	private String addReview( String line ) {
+
+	private String addReview(String line) {
 		JsonReader jsonReader = Json.createReader(new StringReader(line.substring(line.indexOf(' '), line.length())));
 		JsonObject reviewInputJson = jsonReader.readObject();
 
 		JsonObjectBuilder j;
-		JsonArrayBuilder array = Json.createArrayBuilder();
 		j = javax.json.Json.createObjectBuilder();
 
 		JsonObject business = j.build();
 		Restaurant restaurant = new Restaurant(business);
 		this.database.addRestaurant(restaurant);
 
-		array.add(j.build());
-
-		String output = array.build().toString();
-
-		return output;
+		JsonObject review = j.build();
+		YelpReview yelpReview = new YelpReview(review);
+		this.database.addReview(yelpReview);;
+		
+		return review.toString();
 	}
 
 	/**

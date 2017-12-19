@@ -377,7 +377,7 @@ public class Business {
 
 		if (o instanceof Business) {
 			Business other = (Business) o;
-			return this.businessID.equals(other.getBusinessID());
+			return this.name.equals(other.getName());
 		}
 
 		return false;
