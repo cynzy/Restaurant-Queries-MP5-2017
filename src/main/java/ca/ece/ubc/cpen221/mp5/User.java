@@ -77,6 +77,11 @@ public class User {
 	public double getAverageRating() {
 		return this.averageRating;
 	}
+	
+	public void adjustRating( int newRating ) {
+		this.averageRating = (this.averageRating * this.reviewCount + newRating)/(this.reviewCount + 1);
+		this.reviewCount++;
+	}
 
 	/**
 	 * returns the number of reviews written by this user. requires: this object is

@@ -144,6 +144,12 @@ public class Business {
 	public double getRating() {
 		return this.rating;
 	}
+	
+	public void adjustRating( int newRating ) {
+		
+		this.rating = (this.rating * this.reviewCount + newRating)/(this.reviewCount + 1);
+		this.reviewCount++;
+	}
 
 	/**
 	 * returns the review count of this business. requires: this object is not null

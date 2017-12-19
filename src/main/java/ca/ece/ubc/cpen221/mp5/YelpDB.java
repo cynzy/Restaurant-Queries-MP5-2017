@@ -237,7 +237,7 @@ public class YelpDB implements Database {
 		int index = 0;
 		JsonObjectBuilder j;
 		JsonArrayBuilder array = Json.createArrayBuilder();
-		
+
 		for (Cluster c : clusterSet) {
 			for (Business b : c.getBusinessSet()) {
 
@@ -403,8 +403,8 @@ public class YelpDB implements Database {
 	}
 
 	/**
-	 * Adds a restaurant to this database. requires: this database is not null and restaurant is
-	 * not null
+	 * Adds a restaurant to this database. requires: this database is not null and
+	 * restaurant is not null
 	 * 
 	 * @param restaurant
 	 *            the restaurant to be added to this database
@@ -417,8 +417,8 @@ public class YelpDB implements Database {
 	}
 
 	/**
-	 * Adds a review to this database. requires: this database is not null and review is
-	 * not null
+	 * Adds a review to this database. requires: this database is not null and
+	 * review is not null
 	 * 
 	 * @param review
 	 *            the review to be added to this database
@@ -428,6 +428,15 @@ public class YelpDB implements Database {
 	 */
 	public void addReview(YelpReview review) {
 		this.reviewSet.add(review);
+
+		YelpUser user = this.userSet.stream().filter(u -> u.getUserID().equals(review.getUserID())).reduce(null,
+				(x, y) -> y);
+		Restaurant restaurant = this.restaurantSet.stream()
+				.filter(r -> r.getBusinessID().equals(review.getBusinessID())).reduce(null, (x, y) -> y);
+		
+		user.adjustRating(review.getStars());
+		restaurant.adjustRating(review.getStars());
+
 	}
 
 }
