@@ -216,7 +216,7 @@ public class YelpDBServer {
 			userID = userID + (int) Math.random() * 10;
 		}
 
-		JsonObject votes = javax.json.Json.createObjectBuilder().add("FUNNY", 0).add("COOL", 0).add("USEFUL", 0)
+		JsonObject votes = javax.json.Json.createObjectBuilder().add("cool", 0).add("useful", 0).add("funny", 0)
 				.build();
 
 		JsonObjectBuilder j;
@@ -241,13 +241,27 @@ public class YelpDBServer {
 	private String addReview(String line) {
 		JsonReader jsonReader = Json.createReader(new StringReader(line.substring(line.indexOf(' '), line.length())));
 		JsonObject reviewInputJson = jsonReader.readObject();
+		
+
+		String reviewID = "";
+		for (int i = 0; i < 10; i++) {
+			reviewID = reviewID + (int) Math.random() * 10;
+		}
+
+		JsonObject votes = javax.json.Json.createObjectBuilder().add("cool", 0).add("useful", 0).add("funny", 0)
+				.build();
 
 		JsonObjectBuilder j;
 		j = javax.json.Json.createObjectBuilder();
-
-		JsonObject business = j.build();
-		Restaurant restaurant = new Restaurant(business);
-		this.database.addRestaurant(restaurant);
+		
+		j.add("type", "review");
+		j.add("business_id", reviewInputJson.getString("business_id"));
+		j.add("votes", votes.toString());
+		j.add("review_id", reviewID);
+		j.add("text", reviewInputJson.getString("text"));
+		j.add("stars", reviewInputJson.getString("stars"));
+		j.add("user_id", reviewInputJson.getString("user_id"));
+		j.add("date", reviewInputJson.get("date"));
 
 		JsonObject review = j.build();
 		YelpReview yelpReview = new YelpReview(review);
