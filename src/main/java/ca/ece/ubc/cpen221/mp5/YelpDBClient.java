@@ -9,12 +9,27 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+/**
+ * YelpDBClient -  a client that sends requests to YelpDBServer
+ * and interprets its replies.
+ * A new YelpDBClient is "open" until the close() method is called,
+ * at which point it is "closed" and may not be used further.
+ * 
+ * Representation Invariants:
+ * 
+ * - no instance fields are null
+ */
 public class YelpDBClient {
 
 	private Socket socket;
 	private BufferedReader input;
 	private PrintWriter output;
 
+	/**
+     * Make a YelpDBClient and connect it to a server running on
+     * hostname at the specified port.
+     * @throws IOException if can't connect
+     */
 	public YelpDBClient(String hostname, int port) throws UnknownHostException, IOException {
 		this.socket = new Socket(hostname, port);
 		this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -31,7 +46,7 @@ public class YelpDBClient {
 	 * Send a request to the server. Requires this is "open".
 	 * 
 	 * @param x
-	 *            to find Fibonacci(x)
+	 *            to find information for the structured request
 	 * @throws IOException
 	 *             if network or server failure
 	 */
@@ -44,7 +59,7 @@ public class YelpDBClient {
 	 * Get a reply from the next request that was submitted. Requires this is
 	 * "open".
 	 * 
-	 * @return the requested Fibonacci number
+	 * @return the requested information
 	 * @throws IOException
 	 *             if network or server failure
 	 */
@@ -59,13 +74,11 @@ public class YelpDBClient {
 	}
 
 	/**
-	 * Use a FibonacciServer to find the first N Fibonacci numbers.
+	 * Use a YelpDBServer to process client requests.
 	 */
 	public static void main(String[] args) {
 		try {
 			YelpDBClient client = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-
-			// send the requests to find the first N Fibonacci numbers
 
 			while (true) {
 				Scanner reader = new Scanner(System.in);

@@ -17,6 +17,31 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
 
+/**
+ * YelpDBServerServer - a server that processes simple requests and queries for
+ * a YelpDb. Handles requests of the form "GETRESTAURANT <business_id>",
+ * "ADDRESTAURANT <restaurant information>", "ADDUSER <user information>",
+ * "ADDREVIEW <review information>", and "QUERY <query information>". For each
+ * request, returns a reply in Json format,or the proper error message.
+ * YelpDBServer can handle multiple concurrent clients.
+ * 
+ * Representation Invariants:
+ * 
+ * - serversocket is not null and has a port number 4949
+ * 
+ * - database is not null and has no null fields
+ * 
+ * Thread Safety Arguments:
+ * 
+ * - All variables used other than database and serversocket are thread local
+ * 
+ * - serverSocket datatypes are thread safe
+ * 
+ * - methods to read and write data in database are synchronized
+ * 
+ * - all datatypes utilized by database (Business, Restaurant, Review,
+ * YelpReview, User, YelpUser) have synchronized methods to prevent data races
+ */
 public class YelpDBServer {
 
 	public static final int YELPDB_PORT = 4949;
@@ -24,6 +49,16 @@ public class YelpDBServer {
 	private ServerSocket serversocket;
 	private YelpDB database;
 
+	/**
+	 * Make a YelpDBServerMulti that listens for connections on port.
+	 * 
+	 * @param port
+	 *            port number, requires 0 <= port <= 65535
+	 * @param database
+	 *            database to read and write data to. requires: database !=null
+	 * @throws IOException
+	 *             if the database is not created
+	 */
 	public YelpDBServer(int port, YelpDB database) throws IOException {
 		this.serversocket = new ServerSocket(port);
 		this.database = database;
@@ -62,7 +97,11 @@ public class YelpDBServer {
 	}
 
 	/**
-	 * Handle one client connection. Returns when client disconnects.
+	 * Handle one client connection and its requests. Returns when client
+	 * disconnects. Could output the following error messages: "ERR:
+	 * ILLEGAL_REQUEST", "ERR: INVALID_USER_STRING", "ERR: NO_SUCH_RESTAURANT",
+	 * "ERR: INVALID_USER_STRING", "ERR: INVALID_RESTAURANT_STRING", "ERR:
+	 * INVALID_REVIEW_STRING", and "ERR: NO_SUCH_USER.
 	 * 
 	 * @param socket
 	 *            socket where client is connected
@@ -132,8 +171,8 @@ public class YelpDBServer {
 						System.err.println("reply: ERR: INVALID_RESTAURANT_STRING");
 						out.print("ERR: INVALID_RESTAURANT_STRING\n");
 					} catch (NullPointerException e) {
-						System.err.println("reply: ERR: INVALID_USER_STRING");
-						out.print("ERR: INVALID_USER_STRING\n");
+						System.err.println("reply: ERR: INVALID_RESTAURANT_STRING");
+						out.print("ERR: INVALID_RESTAURANT_STRING\n");
 					}
 				}
 
@@ -152,8 +191,8 @@ public class YelpDBServer {
 						System.err.println("reply: ERR: NO_SUCH_USER");
 						out.print("ERR: NO_SUCH_USER\n");
 					} catch (NullPointerException e) {
-						System.err.println("reply: ERR: INVALID_USER_STRING");
-						out.print("ERR: INVALID_USER_STRING\n");
+						System.err.println("reply: ERR: INVALID_REVIEW_STRING");
+						out.print("ERR: INVALID_REVIEW_STRING\n");
 					}
 				}
 
@@ -176,6 +215,17 @@ public class YelpDBServer {
 		}
 	}
 
+	/*
+	 * Helper method to handle(). If the request is ADDRESTAURANT, handle() calls
+	 * this method. Adds the restaurant requested to this.database and returns its
+	 * information in Json format.
+	 * 
+	 * @param line the input request from the user
+	 * 
+	 * @return the information of the restaurant that was added to this.database in
+	 * Json format
+	 * 
+	 */
 	private String addRestaurant(String line) {
 		String businessID = "";
 		for (int i = 0; i < 10; i++) {
@@ -187,7 +237,6 @@ public class YelpDBServer {
 
 		JsonObjectBuilder j;
 		j = javax.json.Json.createObjectBuilder();
-		JsonArrayBuilder array = Json.createArrayBuilder();
 
 		j.add("open", true);
 		j.add("url", restaurantInputJson.getString("url"));
@@ -215,6 +264,16 @@ public class YelpDBServer {
 
 	}
 
+	/*
+	 * Helper method to handle(). If the request is GETRESTAURANT, handle() calls
+	 * this method. Finds the requested business and returns its information in Json
+	 * format.
+	 * 
+	 * @param line the input request from the user
+	 * 
+	 * @return the information of the restaurant that was requested
+	 * 
+	 */
 	private String getRestaurant(String line) throws NoSuchRestaurantException {
 		String businessID = line.substring(line.indexOf(' ') + 1, line.length());
 		Business restaurant = this.database.getBusinessSet().stream()
@@ -225,26 +284,26 @@ public class YelpDBServer {
 		}
 
 		JsonObjectBuilder j;
-	
+
 		j = javax.json.Json.createObjectBuilder();
 		j.add("open", restaurant.isOpen());
 		j.add("url", restaurant.getUrl());
 		j.add("longitude", restaurant.getLocation().getCoordinates().getlongitude());
-		
+
 		JsonArrayBuilder array = Json.createArrayBuilder();
-		for( String s: restaurant.getLocation().getNeighbourhoods()) {
+		for (String s : restaurant.getLocation().getNeighbourhoods()) {
 			array.add(s);
 		}
-		
-		j.add("neighbourhoods", array.build());
+
+		j.add("neighborhoods", array.build());
 		j.add("business_id", restaurant.getBusinessID());
 		j.add("name", restaurant.getName());
-		
+
 		JsonArrayBuilder array2 = Json.createArrayBuilder();
-		for( String s: restaurant.getCategories()) {
+		for (String s : restaurant.getCategories()) {
 			array2.add(s);
 		}
-		
+
 		j.add("categories", array2.build());
 		j.add("state", restaurant.getLocation().getState());
 		j.add("type", "business");
@@ -253,20 +312,30 @@ public class YelpDBServer {
 		j.add("full_address", restaurant.getLocation().getAddress());
 		j.add("review_count", restaurant.getReviewCount());
 		j.add("photo_url", restaurant.getPhotoUrl());
-		
+
 		JsonArrayBuilder array3 = Json.createArrayBuilder();
-		for( String s: restaurant.getLocation().getSchool()) {
+		for (String s : restaurant.getLocation().getSchool()) {
 			array3.add(s);
 		}
-		
+
 		j.add("schools", array3.build());
 		j.add("latitude", restaurant.getLocation().getCoordinates().getlatitude());
 		j.add("price", restaurant.getPrice());
 
-	
 		return j.build().toString();
 	}
 
+	/*
+	 * Helper method to handle(). If the request is ADDUSER, handle() calls this
+	 * method. Adds the user requested to this.database and returns its information
+	 * in Json format.
+	 * 
+	 * @param line the input request from the user
+	 * 
+	 * @return the information of the user that was added to this.database in Json
+	 * format
+	 * 
+	 */
 	private String addUser(String line) {
 		JsonReader jsonReader = Json
 				.createReader(new StringReader(line.substring(line.indexOf(' ') + 1, line.length())));
@@ -284,7 +353,7 @@ public class YelpDBServer {
 		j = javax.json.Json.createObjectBuilder();
 
 		j.add("url", "http://www.yelp.com/user_details?userid=" + userID);
-		j.add("votes", votes.toString());
+		j.add("votes", votes.asJsonObject());
 		j.add("review_count", 0);
 		j.add("type", "user");
 		j.add("user_id", userID);
@@ -299,6 +368,17 @@ public class YelpDBServer {
 
 	}
 
+	/*
+	 * Helper method to handle(). If the request is ADDREVIEW, handle() calls this
+	 * method. Adds the review requested to this.database and returns its
+	 * information in Json format.
+	 * 
+	 * @param line the input request from the user
+	 * 
+	 * @return the information of the review that was added to this.database in Json
+	 * format
+	 * 
+	 */
 	private String addReview(String line) throws NoSuchRestaurantException, NoSuchUserException {
 		JsonReader jsonReader = Json
 				.createReader(new StringReader(line.substring(line.indexOf(' ') + 2, line.length())));
@@ -317,7 +397,7 @@ public class YelpDBServer {
 
 		j.add("type", "review");
 		j.add("business_id", reviewInputJson.getString("business_id"));
-		j.add("votes", votes.toString());
+		j.add("votes", votes.asJsonObject());
 		j.add("review_id", reviewID);
 		j.add("text", reviewInputJson.getString("text"));
 		j.add("stars", reviewInputJson.getString("stars"));
@@ -343,7 +423,7 @@ public class YelpDBServer {
 	}
 
 	/**
-	 * Start a FibonacciServerMulti running on the default port.
+	 * Start a YelpDBServer running on the default port with the default database.
 	 */
 	public static void main(String[] args) {
 		try {

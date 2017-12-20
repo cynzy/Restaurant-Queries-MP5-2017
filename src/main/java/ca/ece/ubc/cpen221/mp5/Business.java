@@ -144,10 +144,20 @@ public class Business {
 	public synchronized double getRating() {
 		return this.rating;
 	}
-	
-	public synchronized void adjustRating( int newRating ) {
-		
-		this.rating = (this.rating * this.reviewCount + newRating)/(this.reviewCount + 1);
+
+	/**
+	 * Recomputes the average rating and review count of this business when a review
+	 * is added to the database.
+	 *
+	 * @param newRating
+	 *            the rating from the new review
+	 * 
+	 * @return void
+	 * 
+	 */
+	public synchronized void adjustRating(int newRating) {
+
+		this.rating = (this.rating * this.reviewCount + newRating) / (this.reviewCount + 1);
 		this.reviewCount++;
 	}
 

@@ -78,6 +78,16 @@ public class User {
 		return this.averageRating;
 	}
 	
+	/**
+	 * Recomputes the average rating and review count of this user when a review
+	 * is added to the database.
+	 *
+	 * @param newRating
+	 *            the rating from the new review
+	 * 
+	 * @return void
+	 * 
+	 */
 	public synchronized void adjustRating( int newRating ) {
 		this.averageRating = (this.averageRating * this.reviewCount + newRating)/(this.reviewCount + 1);
 		this.reviewCount++;
