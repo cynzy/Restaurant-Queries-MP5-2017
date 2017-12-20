@@ -347,7 +347,7 @@ public class YelpDB implements Database {
 	 * 
 	 */
 	@Override
-	public Set<Business> getBusinessSet() {
+	public synchronized Set<Business> getBusinessSet() {
 		Set<Business> copy = new HashSet<Business>();
 		copy.addAll(this.restaurantSet);
 
@@ -364,7 +364,7 @@ public class YelpDB implements Database {
 	 * 
 	 */
 	@Override
-	public Set<User> getUserSet() {
+	public synchronized Set<User> getUserSet() {
 		Set<User> copy = new HashSet<User>();
 		copy.addAll(this.userSet);
 
@@ -381,7 +381,7 @@ public class YelpDB implements Database {
 	 * 
 	 */
 	@Override
-	public Set<Review> getReviewSet() {
+	public synchronized Set<Review> getReviewSet() {
 		Set<Review> copy = new HashSet<Review>();
 		copy.addAll(this.reviewSet);
 
@@ -398,7 +398,7 @@ public class YelpDB implements Database {
 	 * @return void
 	 * 
 	 */
-	public void addUser(YelpUser user) {
+	public synchronized void addUser(YelpUser user) {
 		this.userSet.add(user);
 	}
 
@@ -412,7 +412,7 @@ public class YelpDB implements Database {
 	 * @return void
 	 * 
 	 */
-	public void addRestaurant(Restaurant restaurant) {
+	public synchronized void addRestaurant(Restaurant restaurant) {
 		this.restaurantSet.add(restaurant);
 	}
 
@@ -426,7 +426,7 @@ public class YelpDB implements Database {
 	 * @return void
 	 * 
 	 */
-	public void addReview(YelpReview review) {
+	public synchronized void addReview(YelpReview review) {
 		this.reviewSet.add(review);
 
 		YelpUser user = this.userSet.stream().filter(u -> u.getUserID().equals(review.getUserID())).reduce(null,

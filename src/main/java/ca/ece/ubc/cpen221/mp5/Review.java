@@ -73,7 +73,7 @@ public class Review {
 	 * @return The business ID of the business this review is written about
 	 * 
 	 */
-	public String getBusinessID() {
+	public synchronized String getBusinessID() {
 		return this.businessID;
 	}
 
@@ -86,7 +86,7 @@ public class Review {
 	 * @return The review ID of this review
 	 * 
 	 */
-	public String getReviewID() {
+	public synchronized String getReviewID() {
 		return this.reviewID;
 	}
 
@@ -99,7 +99,7 @@ public class Review {
 	 * @return The user ID of the user who wrote this review
 	 * 
 	 */
-	public String getUserID() {
+	public synchronized String getUserID() {
 		return this.userID;
 	}
 
@@ -112,7 +112,7 @@ public class Review {
 	 * @return The written text which composes this review
 	 * 
 	 */
-	public String getText() {
+	public synchronized String getText() {
 		return this.text;
 	}
 
@@ -125,7 +125,7 @@ public class Review {
 	 * @return The date on which this review was written
 	 * 
 	 */
-	public String getDate() {
+	public synchronized String getDate() {
 		return this.date;
 	}
 
@@ -137,7 +137,7 @@ public class Review {
 	 * @return The rating given to the restaurant by the user in this review
 	 * 
 	 */
-	public int getStars() {
+	public synchronized int getStars() {
 		return this.rating;
 	}
 

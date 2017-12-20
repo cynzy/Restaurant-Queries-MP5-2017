@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class YelpDBClient {
 
@@ -19,13 +20,74 @@ public class YelpDBClient {
 		this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		this.output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 	}
-	
-	
 
 	public void close() throws IOException {
 		this.input.close();
 		this.output.close();
 		this.socket.close();
+	}
+
+	/**
+	 * Send a request to the server. Requires this is "open".
+	 * 
+	 * @param x
+	 *            to find Fibonacci(x)
+	 * @throws IOException
+	 *             if network or server failure
+	 */
+	public void sendRequest(String x) throws IOException {
+		this.output.print(x + "\n");
+		this.output.flush(); // important! make sure x actually gets sent
+	}
+
+	/**
+	 * Get a reply from the next request that was submitted. Requires this is
+	 * "open".
+	 * 
+	 * @return the requested Fibonacci number
+	 * @throws IOException
+	 *             if network or server failure
+	 */
+	public String getReply() throws IOException {
+		String reply = this.input.readLine();
+		if (reply == null) {
+			throw new IOException("connection terminated unexpectedly");
+		}
+
+		return new String(reply);
+
+	}
+
+	/**
+	 * Use a FibonacciServer to find the first N Fibonacci numbers.
+	 */
+	public static void main(String[] args) {
+		try {
+			YelpDBClient client = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+
+			// send the requests to find the first N Fibonacci numbers
+
+			while (true) {
+				Scanner reader = new Scanner(System.in);
+
+				System.out.println("Enter your request (if you wish to quit, enter \"quit\": ");
+				String x = reader.nextLine();
+				
+				if( x.equals("quit")) {
+					break;
+				}
+
+				client.sendRequest(x);
+				System.out.println("fibonacci(" + x + ") = ?");
+
+				String y = client.getReply();
+				System.out.println("fibonacci(" + x + ") = " + y);
+				reader.close();
+			}
+			client.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 }

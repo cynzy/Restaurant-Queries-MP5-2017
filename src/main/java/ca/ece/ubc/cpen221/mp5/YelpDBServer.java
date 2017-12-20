@@ -8,15 +8,13 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
-import javax.json.JsonValue;
 
 public class YelpDBServer {
 
@@ -88,47 +86,78 @@ public class YelpDBServer {
 			// each request is a single line containing a number
 			for (String line = in.readLine(); line != null; line = in.readLine()) {
 				System.err.println("request: " + line);
-				try {
-					String request = line.substring(0, line.indexOf(' '));
+				
+				if( !line.contains(" ") || line == null ) {
+					System.err.println("reply: ERR: ILLEGAL_REQUEST");
+					out.print("ERR: ILLEGAL_REQUEST\n");
+				}
 
-					if (request.equals("GETRESTAURANT")) {
+				String request = line.substring(0, line.indexOf(' '));
 
+				if (request.equals("GETRESTAURANT")) {
+
+					try {
 						String output = getRestaurant(line);
 						System.err.println("reply: " + output);
 						out.println(output);
+					} catch (NoSuchRestaurantException e) {
+						System.err.println("reply: ERR: NO_SUCH_RESTAURANT");
+						out.print("ERR: NO_SUCH_RESTAURANT\n");
 					}
+				}
 
-					else if (request.equals("ADDUSER")) {
+				else if (request.equals("ADDUSER")) {
 
+					try {
 						String output = addUser(line);
 						System.err.println("reply: " + output);
 						out.println(output);
-
-						// DONT FORGET TO CHECK JSON FORMAT AND NAME ERRORS
-
+					} catch (NullPointerException e) {
+						System.err.println("reply: ERR: INVALID_USER_STRING");
+						out.print("ERR: INVALID_USER_STRING\n");
 					}
+					// DONT FORGET TO CHECK JSON FORMAT AND NAME ERRORS
 
-					else if (request.equals("ADDRESTAURANT")) {
+				}
 
+				else if (request.equals("ADDRESTAURANT")) {
+
+					try {
 						String output = addRestaurant(line);
 						System.err.println("reply: " + output);
 						out.println(output);
-
+					} catch (NullPointerException e) {
+						System.err.println("reply: ERR: INVALID_RESTAURANT_STRING");
+						out.print("ERR: INVALID_RESTAURANT_STRING\n");
 					}
+				}
 
-					else if (request.equals("ADDREVIEW")) {
+				else if (request.equals("ADDREVIEW")) {
+					try {
 						String output = addReview(line);
 						System.err.println("reply: " + output);
 						out.println(output);
+					} catch (NullPointerException e) {
+						System.err.println("reply: ERR: INVALID_REVIEW_STRING");
+						out.print("ERR: INVALID_REVIEW_STRING\n");
+					} catch (NoSuchRestaurantException e) {
+						System.err.println("reply: ERR: NO_SUCH_RESTAURANT");
+						out.print("ERR: NO_SUCH_RESTAURANT\n");
+					} catch (NoSuchUserException e) {
+						System.err.println("reply: ERR: NO_SUCH_USER");
+						out.print("ERR: NO_SUCH_USER\n");
 					}
-
-					else {
-					}
-				} catch (NumberFormatException e) {
-					// complain about ill-formatted request
-					System.err.println("reply: err");
-					out.print("err\n");
 				}
+
+				else if (request.equals("QUERY")) {
+
+				}
+
+				else {
+					System.err.println("reply: ERR: ILLEGAL_REQUEST");
+					out.print("ERR: ILLEGAL_REQUEST\n");
+				}
+
 				// important! our PrintWriter is auto-flushing, but if it were
 				// not:
 				// out.flush();
@@ -150,7 +179,7 @@ public class YelpDBServer {
 
 		JsonObjectBuilder j;
 		j = javax.json.Json.createObjectBuilder();
-		
+
 		j.add("open", true);
 		j.add("url", restaurantInputJson.getString("url"));
 		j.add("longitude", Double.parseDouble(restaurantInputJson.getString("longitude")));
@@ -177,10 +206,15 @@ public class YelpDBServer {
 
 	}
 
-	private String getRestaurant(String line) {
+	private String getRestaurant(String line) throws NoSuchRestaurantException {
 		String businessID = line.substring(line.indexOf(' '), line.length());
 		Business restaurant = this.database.getBusinessSet().stream()
 				.filter(business -> business.getBusinessID().equals(businessID)).reduce(null, (x, y) -> y);
+
+		if (restaurant == null) {
+			throw new NoSuchRestaurantException();
+		}
+
 		JsonObjectBuilder j;
 		JsonArrayBuilder array = Json.createArrayBuilder();
 		j = javax.json.Json.createObjectBuilder();
@@ -224,7 +258,7 @@ public class YelpDBServer {
 
 		j.add("url", "http://www.yelp.com/user_details?userid=" + userID);
 		j.add("votes", votes.toString());
-		j.add("review_count",0);
+		j.add("review_count", 0);
 		j.add("type", "user");
 		j.add("user_id", userID);
 		j.add("name", userInputJson.getString("name"));
@@ -233,15 +267,14 @@ public class YelpDBServer {
 		JsonObject user = j.build();
 		YelpUser yelpUser = new YelpUser(user);
 		this.database.addUser(yelpUser);
-		
+
 		return user.toString();
 
 	}
 
-	private String addReview(String line) {
+	private String addReview(String line) throws NoSuchRestaurantException, NoSuchUserException {
 		JsonReader jsonReader = Json.createReader(new StringReader(line.substring(line.indexOf(' '), line.length())));
 		JsonObject reviewInputJson = jsonReader.readObject();
-		
 
 		String reviewID = "";
 		for (int i = 0; i < 10; i++) {
@@ -253,7 +286,7 @@ public class YelpDBServer {
 
 		JsonObjectBuilder j;
 		j = javax.json.Json.createObjectBuilder();
-		
+
 		j.add("type", "review");
 		j.add("business_id", reviewInputJson.getString("business_id"));
 		j.add("votes", votes.toString());
@@ -265,8 +298,19 @@ public class YelpDBServer {
 
 		JsonObject review = j.build();
 		YelpReview yelpReview = new YelpReview(review);
-		this.database.addReview(yelpReview);;
-		
+
+		if (this.database.getBusinessSet().stream().filter(b -> b.getBusinessID().equals(yelpReview.getBusinessID()))
+				.collect(Collectors.toList()).isEmpty()) {
+			throw new NoSuchRestaurantException();
+		}
+
+		if (this.database.getUserSet().stream().filter(u -> u.getUserID().equals(yelpReview.getUserID()))
+				.collect(Collectors.toList()).isEmpty()) {
+			throw new NoSuchUserException();
+		}
+
+		this.database.addReview(yelpReview);
+
 		return review.toString();
 	}
 

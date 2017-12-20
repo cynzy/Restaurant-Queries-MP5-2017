@@ -56,7 +56,7 @@ public class YelpUser extends User {
 	 *            "USEFUL", and "COOL".
 	 * @return the number of times that this user voted for that specific reaction
 	 */
-	public void addVote(PossibleReactions reaction) {
+	public synchronized void addVote(PossibleReactions reaction) {
 		this.votes.put(reaction, this.votes.get(reaction) + 1);
 	}
 
@@ -69,7 +69,7 @@ public class YelpUser extends User {
 	 *            "USEFUL", and "COOL".
 	 * @return the number of times that specific reaction got voted by the user
 	 */
-	public int getNumVotes(PossibleReactions reaction) {
+	public synchronized int getNumVotes(PossibleReactions reaction) {
 		return votes.get(reaction);
 	}
 
@@ -82,7 +82,7 @@ public class YelpUser extends User {
 	 * @return A map detailing this user's votes of different reactions on reviews
 	 * 
 	 */
-	public Map<PossibleReactions, Integer> getVotes() {
+	public synchronized Map<PossibleReactions, Integer> getVotes() {
 		Map<PossibleReactions, Integer> copy = new HashMap<PossibleReactions, Integer>();
 		copy.putAll(this.votes);
 		return copy;

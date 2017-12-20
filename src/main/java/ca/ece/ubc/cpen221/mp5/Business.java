@@ -141,11 +141,11 @@ public class Business {
 	 * @return The average rating, between 1 and 5, of this business
 	 * 
 	 */
-	public double getRating() {
+	public synchronized double getRating() {
 		return this.rating;
 	}
 	
-	public void adjustRating( int newRating ) {
+	public synchronized void adjustRating( int newRating ) {
 		
 		this.rating = (this.rating * this.reviewCount + newRating)/(this.reviewCount + 1);
 		this.reviewCount++;
@@ -159,7 +159,7 @@ public class Business {
 	 * @return The number of reviews written about this business
 	 * 
 	 */
-	public int getReviewCount() {
+	public synchronized int getReviewCount() {
 		return this.reviewCount;
 	}
 
@@ -171,7 +171,7 @@ public class Business {
 	 * @return The rating, between 1 and 5, of how expensive this business is
 	 * 
 	 */
-	public int getPrice() {
+	public synchronized int getPrice() {
 		return this.price;
 	}
 
@@ -185,7 +185,7 @@ public class Business {
 	 * @return void
 	 * 
 	 */
-	public void setUrl(String newUrl) {
+	public synchronized void setUrl(String newUrl) {
 		this.url = newUrl;
 	}
 
@@ -199,7 +199,7 @@ public class Business {
 	 * 
 	 * @return void
 	 */
-	public void addCategory(String newCategory) {
+	public synchronized void addCategory(String newCategory) {
 		this.categories.add(newCategory);
 	}
 
@@ -213,7 +213,7 @@ public class Business {
 	 * 
 	 * @return void
 	 */
-	public void removeCategory(String category) {
+	public synchronized void removeCategory(String category) {
 		this.categories.remove(category);
 	}
 
@@ -227,7 +227,7 @@ public class Business {
 	 * @return void
 	 * 
 	 */
-	public void setOpen(Boolean newOpen) {
+	public synchronized void setOpen(Boolean newOpen) {
 		this.open = newOpen;
 	}
 
@@ -241,7 +241,7 @@ public class Business {
 	 * @return void
 	 * 
 	 */
-	public void setPhotoUrl(String newPhotoUrl) {
+	public synchronized void setPhotoUrl(String newPhotoUrl) {
 		this.photoUrl = newPhotoUrl;
 	}
 
@@ -253,7 +253,7 @@ public class Business {
 	 * 
 	 * @return True if this business is open. False otherwise.
 	 */
-	public Boolean isOpen() {
+	public synchronized Boolean isOpen() {
 		return this.open;
 	}
 
@@ -266,7 +266,7 @@ public class Business {
 	 * @return The business ID of this business
 	 * 
 	 */
-	public String getBusinessID() {
+	public synchronized String getBusinessID() {
 		return this.businessID;
 	}
 
@@ -278,7 +278,7 @@ public class Business {
 	 * @return The name of this business
 	 * 
 	 */
-	public String getName() {
+	public synchronized String getName() {
 		return this.name;
 	}
 
@@ -291,7 +291,7 @@ public class Business {
 	 * @return The url address of this business
 	 * 
 	 */
-	public String getUrl() {
+	public synchronized String getUrl() {
 		return this.url;
 	}
 
@@ -304,7 +304,7 @@ public class Business {
 	 * @return The url address of this business' photo
 	 * 
 	 */
-	public String getPhotoUrl() {
+	public synchronized String getPhotoUrl() {
 		return this.photoUrl;
 	}
 
@@ -317,7 +317,7 @@ public class Business {
 	 * @return The set of categories of this business
 	 * 
 	 */
-	public Set<String> getCategories() {
+	public synchronized Set<String> getCategories() {
 		Set<String> copy = new HashSet<String>();
 		copy.addAll(this.categories);
 
@@ -334,7 +334,7 @@ public class Business {
 	 * @return void
 	 * 
 	 */
-	public void setLocation(Location newLocation) {
+	public synchronized void setLocation(Location newLocation) {
 		this.location = newLocation;
 	}
 
@@ -347,7 +347,7 @@ public class Business {
 	 * @return The location of this business
 	 * 
 	 */
-	public Location getLocation() {
+	public synchronized Location getLocation() {
 		return this.location;
 	}
 
@@ -364,7 +364,7 @@ public class Business {
 	 *         otherwise.
 	 * 
 	 */
-	public boolean containsCategory(String category) {
+	public synchronized boolean containsCategory(String category) {
 		return this.categories.contains(category);
 	}
 

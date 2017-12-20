@@ -74,11 +74,11 @@ public class User {
 	 * @return The average rating voted on by this user
 	 * 
 	 */
-	public double getAverageRating() {
+	public synchronized double getAverageRating() {
 		return this.averageRating;
 	}
 	
-	public void adjustRating( int newRating ) {
+	public synchronized void adjustRating( int newRating ) {
 		this.averageRating = (this.averageRating * this.reviewCount + newRating)/(this.reviewCount + 1);
 		this.reviewCount++;
 	}
@@ -92,7 +92,7 @@ public class User {
 	 * @return The number of reviews written by this user
 	 * 
 	 */
-	public int getReviewCount() {
+	public synchronized int getReviewCount() {
 		return this.reviewCount;
 	}
 
@@ -105,7 +105,7 @@ public class User {
 	 * @return The username of this user
 	 * 
 	 */
-	public String getName() {
+	public synchronized String getName() {
 		return this.name;
 	}
 
@@ -118,7 +118,7 @@ public class User {
 	 * @return The url address of this user's profile
 	 * 
 	 */
-	public String getUrl() {
+	public synchronized String getUrl() {
 		return this.url;
 	}
 
@@ -131,7 +131,7 @@ public class User {
 	 * @return The user ID of this user
 	 * 
 	 */
-	public String getUserID() {
+	public synchronized String getUserID() {
 		return this.userID;
 	}
 

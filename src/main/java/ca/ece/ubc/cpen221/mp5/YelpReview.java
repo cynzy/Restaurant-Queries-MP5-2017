@@ -58,7 +58,7 @@ public class YelpReview extends Review {
 	 *            "USEFUL", and "COOL".
 	 * @return the number of times that specific reaction got voted for this review
 	 */
-	public int getNumReactions(PossibleReactions reaction) {
+	public synchronized int getNumReactions(PossibleReactions reaction) {
 		return this.reactionMap.get(reaction);
 	}
 
@@ -71,7 +71,7 @@ public class YelpReview extends Review {
 	 * @return A map detailing this review's votes of different reactions
 	 * 
 	 */
-	public Map<PossibleReactions, Integer> getReactionMap() {
+	public synchronized Map<PossibleReactions, Integer> getReactionMap() {
 		Map<PossibleReactions, Integer> copy = new HashMap<>();
 		copy.putAll(this.reactionMap);
 
