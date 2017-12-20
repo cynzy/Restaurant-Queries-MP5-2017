@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.json.Json;
@@ -16,6 +15,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.json.JsonValue;
 import javax.json.stream.JsonParsingException;
 
 /**
@@ -242,10 +242,22 @@ public class YelpDBServer {
 		j.add("open", true);
 		j.add("url", restaurantInputJson.getString("url"));
 		j.add("longitude", restaurantInputJson.getJsonNumber("longitude"));
-		j.add("neighbourhoods", restaurantInputJson.get("neighborhoods").asJsonArray());
+		
+		JsonArrayBuilder array = Json.createArrayBuilder();
+		for (JsonValue s : restaurantInputJson.get("neighborhoods").asJsonArray()) {
+			array.add(s);
+		}
+
+		j.add("neighborhoods", array.build());
 		j.add("business_id", businessID);
 		j.add("name", restaurantInputJson.getString("name"));
-		j.add("categories", restaurantInputJson.get("categories").asJsonArray());
+		
+		JsonArrayBuilder array2 = Json.createArrayBuilder();
+		for (JsonValue s : restaurantInputJson.get("categories").asJsonArray()) {
+			array.add(s);
+		}
+		
+		j.add("categories", array2.build());
 		j.add("state", restaurantInputJson.getString("state"));
 		j.add("type", "business");
 		j.add("stars", 0);
@@ -253,7 +265,13 @@ public class YelpDBServer {
 		j.add("full_address", restaurantInputJson.getString("full_address"));
 		j.add("review_count", 0);
 		j.add("photo_url", restaurantInputJson.getString("photo_url"));
-		j.add("schools", restaurantInputJson.get("schools").asJsonArray());
+		
+		JsonArrayBuilder array3 = Json.createArrayBuilder();
+		for (JsonValue s : restaurantInputJson.get("schools").asJsonArray()) {
+			array.add(s);
+		}
+		
+		j.add("schools", array3.build());
 		j.add("latitude", restaurantInputJson.getJsonNumber("latitude"));
 		j.add("price", restaurantInputJson.getInt("price"));
 
@@ -412,7 +430,7 @@ public class YelpDBServer {
 		j.add("votes", votes.asJsonObject());
 		j.add("review_id", reviewID);
 		j.add("text", reviewInputJson.getString("text"));
-		j.add("stars", reviewInputJson.getString("stars"));
+		j.add("stars", reviewInputJson.getInt("stars"));
 		j.add("user_id", reviewInputJson.getString("user_id"));
 		j.add("date", reviewInputJson.get("date"));
 

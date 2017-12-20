@@ -88,6 +88,78 @@ public class ServerTests {
 	}
 
 	@Test
+	public void test1() throws IOException, InterruptedException {
+		String request1 = "ADDRESTAURANT {\"url\": \"http://www.yelp.com/biz/cafe-3-berkeley\", \"longitude\": -122.260408, \"neighborhoods\": [\"Telegraph Ave\", \"UC Campus Area\"], \"name\": \"Cafe 42\", \"categories\": [\"Cafes\", \"Restaurants\"], \"state\": \"CA\", \"city\": \"Berkeley\", \"full_address\": \"2400 Durant Ave\\nTelegraph Ave\\nBerkeley, CA 94701\", \"photo_url\": \"http://s3-media1.ak.yelpcdn.com/bphoto/AaHq1UzXiT6zDBUYrJ2NKA/ms.jpg\", \"schools\": [\"University of California at Berkeley\"], \"latitude\": 37.867417, \"price\": 1}\r\n";
+		String request2 = "ADDREVIEW {\"business_id\": \"1CBs84C-a-cuA3vncXVSAw\", \"stars\": 1, \"user_id\": \"9fMogxnnd0m9_FKSi-4AoQ\", \"text\": \"I personally thought the fries were a bit too soggy\", \"date\": \"2007-10-11\"}";
+		YelpDB database = new YelpDB("data/restaurants.json", "data/users.json", "data/reviews.json");
+		String businessID = "1CBs84C-a-cuA3vncXVSAw";
+		String userID = "9fMogxnnd0m9_FKSi-4AoQ";
+		int originalRestaurantSize = database.getBusinessSet().size();
+		int originalReviewSize = database.getReviewSet().size();
+		int originalBusinessReviewCount = database.getBusinessSet().stream()
+				.filter(b -> b.getBusinessID().equals(businessID)).map(b -> b.getReviewCount()).reduce(0, (x, y) -> y);
+		int originalUserReviewCount = database.getUserSet().stream().filter(u -> u.getUserID().equals(userID))
+				.map(u -> u.getReviewCount()).reduce(0, (x, y) -> y);
+		
+		try {
+			final YelpDBServer server = new YelpDBServer(YelpDBServer.YELPDB_PORT, database);
+			Thread serverThread = new Thread(() -> {
+				try {
+					server.serve();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+			serverThread.start();
+
+			YelpDBClient client1 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+			YelpDBClient client2 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+
+			Thread client1Thread = new Thread(() -> {
+				try {
+					client1.sendRequest(request1);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+
+			Thread client2Thread = new Thread(() -> {
+				try {
+					client2.sendRequest(request2);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+			client1Thread.start();
+			client2Thread.start();
+
+			client1Thread.join();
+			client2Thread.join();
+			
+			client1.getReply();
+			client2.getReply();
+			
+			client1.close();
+			client2.close();
+			
+			assertEquals( originalRestaurantSize +1, database.getBusinessSet().size());
+			assertEquals( originalReviewSize +1, database.getReviewSet().size());
+
+		} catch (IOException e) {
+			fail();
+		}
+		
+		int newUserReviewCount = database.getUserSet().stream().filter(u -> u.getUserID().equals(userID))
+				.map(u -> u.getReviewCount()).reduce(0, (x, y) -> y);
+		int newBusinessReviewCount = database.getBusinessSet().stream().filter(b -> b.getBusinessID().equals(businessID))
+				.map(b -> b.getReviewCount()).reduce(0, (x, y) -> y);
+		
+		assertEquals( newUserReviewCount, originalUserReviewCount + 1);
+		assertEquals( newBusinessReviewCount, originalBusinessReviewCount +1);
+		
+	}
+
+	@Test
 	public void testErrorHandling() throws IOException, InterruptedException {
 		String request1 = "rip";
 		String request2 = "ADDUSER rip";
