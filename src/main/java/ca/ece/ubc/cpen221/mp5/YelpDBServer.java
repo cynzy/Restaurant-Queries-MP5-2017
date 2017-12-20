@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.json.Json;
@@ -381,9 +382,20 @@ public class YelpDBServer {
 	 */
 	private String addReview(String line) throws NoSuchRestaurantException, NoSuchUserException {
 		JsonReader jsonReader = Json
-				.createReader(new StringReader(line.substring(line.indexOf(' ') + 2, line.length())));
+				.createReader(new StringReader(line.substring(line.indexOf(' ') + 1, line.length())));
 		JsonObject reviewInputJson = jsonReader.readObject();
+		
+		if (this.database.getBusinessSet().stream().filter(b -> b.getBusinessID().equals(reviewInputJson.getString("business_id")))
+				.collect(Collectors.toList()).isEmpty()) {
+			throw new NoSuchRestaurantException();
+		}
 
+		if (this.database.getUserSet().stream().filter(u -> u.getUserID().equals(reviewInputJson.getString("user_id")))
+				.collect(Collectors.toList()).isEmpty()) {
+			throw new NoSuchUserException();
+		}
+
+		
 		String reviewID = "";
 		for (int i = 0; i < 10; i++) {
 			reviewID = reviewID + (int) Math.random() * 10;
@@ -406,16 +418,6 @@ public class YelpDBServer {
 
 		JsonObject review = j.build();
 		YelpReview yelpReview = new YelpReview(review);
-
-		if (this.database.getBusinessSet().stream().filter(b -> b.getBusinessID().equals(yelpReview.getBusinessID()))
-				.collect(Collectors.toList()).isEmpty()) {
-			throw new NoSuchRestaurantException();
-		}
-
-		if (this.database.getUserSet().stream().filter(u -> u.getUserID().equals(yelpReview.getUserID()))
-				.collect(Collectors.toList()).isEmpty()) {
-			throw new NoSuchUserException();
-		}
 
 		this.database.addReview(yelpReview);
 
