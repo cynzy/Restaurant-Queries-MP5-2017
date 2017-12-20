@@ -78,10 +78,10 @@ public class YelpDBClient {
 				}
 
 				client.sendRequest(x);
-				System.out.println("fibonacci(" + x + ") = ?");
+				System.out.println("request sent");
 
 				String y = client.getReply();
-				System.out.println("fibonacci(" + x + ") = " + y);
+				System.out.println("server replied");
 				reader.close();
 			}
 			client.close();
