@@ -156,7 +156,7 @@ public class YelpDBServer {
 				else if (request.equals("ADDRESTAURANT")) {
 
 					try {
-						String output = addRestaurant(line);
+						String output = addRestaurant(line.substring(line.indexOf(" ")+1));
 						System.err.println("reply: " + output);
 						out.println(output);
 					} catch (JsonParsingException e) {
@@ -242,7 +242,7 @@ public class YelpDBServer {
 			businessID = businessID + (int) Math.random() * 10;
 		}
 
-		JsonReader jsonReader = Json.createReader(new StringReader(line.substring(line.indexOf(' '), line.length())));
+		JsonReader jsonReader = Json.createReader(new StringReader(line.substring(line.indexOf(' ') +1, line.length())));
 		JsonObject restaurantInputJson = jsonReader.readObject();
 
 		JsonObjectBuilder j;

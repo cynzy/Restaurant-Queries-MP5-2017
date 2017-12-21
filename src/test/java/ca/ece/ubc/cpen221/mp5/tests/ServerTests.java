@@ -403,4 +403,71 @@ public class ServerTests {
 		assertTrue(reply10.equals("ERR: NO_SUCH_RESTAURANT\\n"));
 		assertTrue(reply11.equals("ERR: ILLEGAL_REQUEST\n"));
 	}
+	
+	@Test
+	public void testQuery1() throws IOException, InterruptedException {
+		String request1 = "QUERY in(Terminal Ave) && category(Chinese";
+		String request2 = "QUERY in(Telegraph Ave) && category(Food)";
+		String request3 = "QUERY in(UC Campus Area)";
+		
+		YelpDB database = new YelpDB("data/restaurants.json", "data/users.json", "data/reviews.json");
+
+		final YelpDBServer server = new YelpDBServer(YelpDBServer.YELPDB_PORT, database);
+		Thread serverThread = new Thread(() -> {
+			try {
+				server.serve();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		serverThread.start();
+
+		YelpDBClient client1 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		YelpDBClient client2 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		YelpDBClient client3 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		
+		Thread client1Thread = new Thread(() -> {
+			try {
+				client1.sendRequest(request1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		Thread client2Thread = new Thread(() -> {
+			try {
+				client2.sendRequest(request2);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		Thread client3Thread = new Thread(() -> {
+			try {
+				client3.sendRequest(request3);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+
+		client1Thread.start();
+		client2Thread.start();
+		client3Thread.start();
+
+		client1Thread.join();
+		client2Thread.join();
+		client3Thread.join();
+
+		String reply1 = client1.getReply();
+		String reply2 = client2.getReply();
+		String reply3 = client3.getReply();
+		
+		client1.close();
+		client2.close();
+		client3.close();
+
+		System.out.println(reply1);
+		System.out.println(reply2);
+		System.out.println(reply3);
+
+
+	}
 }
