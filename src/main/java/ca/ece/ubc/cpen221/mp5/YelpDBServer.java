@@ -5,6 +5,8 @@ import javax.json.stream.JsonParsingException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -189,7 +191,7 @@ public class YelpDBServer {
 				else if (request.equals("QUERY")) {
 
 					try {
-						String output = getQuery(line);
+						String output = getQuery(database.getMatches(line));
 						System.err.println("reply: " + output);
 						out.println(output);
 						if (output.length() == 0) {
@@ -201,6 +203,9 @@ public class YelpDBServer {
 					} catch (StringIndexOutOfBoundsException  e) {
 						System.err.println("reply: ERR: INVALID_QUERY");
 						out.print("ERR: INVALID_QUERY\n");
+					} catch (NoSuchRestaurantException e) {
+						System.err.println("reply: ERR: NO_MATCH");
+						out.print("ERR: NO_MATCH\n");
 					}
 
 				}
@@ -455,9 +460,62 @@ public class YelpDBServer {
 	 * @return list of restaurants in Json format
 	 *
 	 */
-	private String getQuery(String line) {
+	private String getQuery(Set<Object> restaurants) throws NoSuchRestaurantException{
 
-		return null;
+		if (restaurants.isEmpty()) {
+			throw new NoSuchRestaurantException();
+		}
+
+		Iterator i = restaurants.iterator();
+		String restaurantsString = "";
+
+		while (i.hasNext()) {
+
+			JsonObjectBuilder j;
+			Restaurant restaurant = (Restaurant) i.next();
+
+			j = javax.json.Json.createObjectBuilder();
+			j.add("open", restaurant.isOpen());
+			j.add("url", restaurant.getUrl());
+			j.add("longitude", restaurant.getLocation().getCoordinates().getlongitude());
+
+			JsonArrayBuilder array = Json.createArrayBuilder();
+			for (String s : restaurant.getLocation().getNeighbourhoods()) {
+				array.add(s);
+			}
+
+			j.add("neighborhoods", array.build());
+			j.add("business_id", restaurant.getBusinessID());
+			j.add("name", restaurant.getName());
+
+			JsonArrayBuilder array2 = Json.createArrayBuilder();
+			for (String s : restaurant.getCategories()) {
+				array2.add(s);
+			}
+
+			j.add("categories", array2.build());
+			j.add("state", restaurant.getLocation().getState());
+			j.add("type", "business");
+			j.add("stars", restaurant.getRating());
+			j.add("city", restaurant.getLocation().getCity());
+			j.add("full_address", restaurant.getLocation().getAddress());
+			j.add("review_count", restaurant.getReviewCount());
+			j.add("photo_url", restaurant.getPhotoUrl());
+
+			JsonArrayBuilder array3 = Json.createArrayBuilder();
+			for (String s : restaurant.getLocation().getSchool()) {
+				array3.add(s);
+			}
+
+			j.add("schools", array3.build());
+			j.add("latitude", restaurant.getLocation().getCoordinates().getlatitude());
+			j.add("price", restaurant.getPrice());
+
+			restaurantsString += j.build().toString() + "\n";
+		}
+
+		return restaurantsString;
+
 	}
 
 	/**

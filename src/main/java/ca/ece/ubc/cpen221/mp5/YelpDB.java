@@ -162,33 +162,47 @@ public class YelpDB implements Database {
 		MP5Query query = new MP5Query(queryString);
 
 		List<String> categories = query.getCategories();
-		List<Location> locations = query.getLocations();
+		List<String> locations = query.getLocations();
 		List<String> names = query.getNames();
 		List<Integer> rating = query.getRating();
 		List<Integer> price = query.getPrice();
-		Set<Object> restaurantSet = new HashSet<>();
+		Set<Restaurant> restaurantQuerySet = new HashSet<>();
 
 		if (!categories.isEmpty()){
-
+			restaurantQuerySet = this.restaurantSet;
+			for (String category : categories) {
+				restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
+						Restaurant.getCategories().contains(category)).collect(Collectors.toSet());
+			}
 		}
 
 		if (!locations.isEmpty()){
-
+			for (String location : locations) {
+				restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
+						Restaurant.getLocation().getNeighbourhoods().contains(location)).collect(Collectors.toSet());
+			}
 		}
 
 		if (!names.isEmpty()){
-
+			for (String name : names) {
+				restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
+						Restaurant.getName().contains(name)).collect(Collectors.toSet());
+			}
 		}
 
 		if (!rating.isEmpty()){
-
+			restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
+					(Restaurant.getPrice() >= price.get(0))).filter(Restaurant ->
+					(Restaurant.getPrice() <= price.get(price.size()-1))).collect(Collectors.toSet());
 		}
 
 		if (!price.isEmpty()){
-
+			restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
+					(Restaurant.getPrice() >= price.get(0))).filter(Restaurant ->
+					(Restaurant.getPrice() <= price.get(price.size()-1))).collect(Collectors.toSet());
 		}
 
-		return restaurantSet;
+		return (Set<Object>)(Object) restaurantQuerySet;
 	}
 
 	/**

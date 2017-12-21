@@ -1,7 +1,6 @@
 package ca.ece.ubc.cpen221.mp5.Query;
 
 
-import ca.ece.ubc.cpen221.mp5.Location;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -16,7 +15,7 @@ public class MP5Query {
 
     private String queryString;
     private List<String> categories;
-    private List<Location> locations;
+    private List<String> locations;
     private List<String> names;
     private List<Integer> rating;
     private List<Integer> price;
@@ -43,14 +42,12 @@ public class MP5Query {
         TokenStream tokens = new CommonTokenStream(lexer);
         MP5QueryParser parser = new MP5QueryParser(tokens);
 
-        try {
+
             ParseTree tree = parser.query();
             ParseTreeWalker walker = new ParseTreeWalker();
             MP5QueryParserListener listener = new MP5QueryListenerGenerateList(this.categories, this.locations, this.names, this.rating, this.price);
             walker.walk(listener, tree);
-        } catch (RecognitionException re){
-            throw re;
-        }
+
 
 
     }
@@ -60,7 +57,7 @@ public class MP5Query {
         return categories;
     }
 
-    public List<Location> getLocations() {
+    public List<String> getLocations() {
         return locations;
     }
 

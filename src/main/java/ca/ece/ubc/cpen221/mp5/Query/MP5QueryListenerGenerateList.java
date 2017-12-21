@@ -1,6 +1,5 @@
 package ca.ece.ubc.cpen221.mp5.Query;
 
-import ca.ece.ubc.cpen221.mp5.Location;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.HashSet;
@@ -13,12 +12,12 @@ import java.util.Set;
 public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
 
     private List<String> categories;
-    private List<Location> locations;
+    private List<String> locations;
     private List<String> names;
     private List<Integer> rating;
     private List<Integer> price;
 
-    public MP5QueryListenerGenerateList(List<String> categories, List<Location> locations, List<String> names, List<Integer> rating, List<Integer> price) {
+    public MP5QueryListenerGenerateList(List<String> categories, List<String> locations, List<String> names, List<Integer> rating, List<Integer> price) {
         this.categories = categories;
         this.locations = locations;
         this.names = names;
@@ -35,11 +34,9 @@ public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
     @Override
     public void exitIn(MP5QueryParser.InContext ctx) {
         TerminalNode token = ctx.STR();
-        Location l = new Location();
         Set<String> neighborhoods = new HashSet<>();
         neighborhoods.add(token.getText());
-        l.setNeighbourhoods(neighborhoods);
-        this.locations.add(l);
+        this.locations.add(neighborhoods.toString());
     }
 
     @Override
@@ -54,6 +51,7 @@ public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
         MP5QueryParser.IneqContext ineq = ctx.ineq();
         String cond = ineq.getText();
         int price = Integer.parseInt(token.getText());
+
 
 
         int maxPrice = 5;
@@ -75,7 +73,10 @@ public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
             for (int i = maxPrice; maxPrice >= price; i--){
                 this.price.add(i);
             }
+        } else {
+            throw ctx.exception;
         }
+
 
     }
 
@@ -106,6 +107,7 @@ public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
                 this.rating.add(i);
             }
         }
+
 
     }
 }
