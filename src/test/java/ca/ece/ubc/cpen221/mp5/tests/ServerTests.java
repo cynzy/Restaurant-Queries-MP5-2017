@@ -233,8 +233,7 @@ public class ServerTests {
 	@Test
 	public void testQuery2() throws IOException, InterruptedException {
 		String request1 = "QUERY price <= 2 && name(Restaurant)";
-		String request2 = "QUERY rating < 4 && price = 2";
-		String request3 = "QUERY price > 2 && in(UC Campus Area)";
+		String request2 = "QUERY price = 2 && in(UC Campus Area)";
 
 		YelpDB database = new YelpDB("data/restaurants.json", "data/users.json", "data/reviews.json");
 
@@ -250,7 +249,6 @@ public class ServerTests {
 
 		YelpDBClient client1 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
 		YelpDBClient client2 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client3 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
 
 		Thread client1Thread = new Thread(() -> {
 			try {
@@ -266,29 +264,18 @@ public class ServerTests {
 				e.printStackTrace();
 			}
 		});
-		Thread client3Thread = new Thread(() -> {
-			try {
-				client3.sendRequest(request3);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
 
 		client1Thread.start();
 		client2Thread.start();
-		client3Thread.start();
 
 		client1Thread.join();
 		client2Thread.join();
-		client3Thread.join();
 
 		String reply1 = client1.getReply();
 		String reply2 = client2.getReply();
-		String reply3 = client3.getReply();
 
 		client1.close();
 		client2.close();
-		client3.close();
 
 
 	}
