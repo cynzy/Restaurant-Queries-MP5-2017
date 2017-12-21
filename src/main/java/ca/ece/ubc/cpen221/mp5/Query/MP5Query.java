@@ -12,8 +12,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Cynzy on 2017-11-24.
+ *
+ * MP5Query - represents the given query structure of MP5
+ *
+ * Representation Invariants:
+ *
+ * - queryString is formatted according to the grammar given
+ *
+ * - at least one token cannot be empty; at least one of the lists in this class has at least one element
+ *
+ * - each element of rating and price must be distinct and has to be 0 <= element <= 5
+ *
+ * Abstraction Function:
+ *
+ * - categories represent the categories of the restaurants the client is looking for
+ *
+ * - locations represent the neighborhoods the restaurants resides the client is looking for
+ *
+ * - names represent the restaurants that contain the names the client is looking for
+ *
+ * - rating represent the rating of the restaurants the client is looking for
+ *
+ * - pricing represent the pricing of the restaurants the client is looking for
+ *
  */
+
 public class MP5Query {
 
     private String queryString;
