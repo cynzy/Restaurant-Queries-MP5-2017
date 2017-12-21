@@ -1,5 +1,7 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import ca.ece.ubc.cpen221.mp5.Query.MP5Query;
+
 import javax.json.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -157,7 +159,36 @@ public class YelpDB implements Database {
 	 */
 	@Override
 	public Set<Object> getMatches(String queryString) {
-		return null;
+		MP5Query query = new MP5Query(queryString);
+
+		List<String> categories = query.getCategories();
+		List<Location> locations = query.getLocations();
+		List<String> names = query.getNames();
+		List<Integer> rating = query.getRating();
+		List<Integer> price = query.getPrice();
+		Set<Object> restaurantSet = new HashSet<>();
+
+		if (!categories.isEmpty()){
+
+		}
+
+		if (!locations.isEmpty()){
+
+		}
+
+		if (!names.isEmpty()){
+
+		}
+
+		if (!rating.isEmpty()){
+
+		}
+
+		if (!price.isEmpty()){
+
+		}
+
+		return restaurantSet;
 	}
 
 	/**

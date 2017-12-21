@@ -2,19 +2,12 @@ package ca.ece.ubc.cpen221.mp5.Query;
 
 
 import ca.ece.ubc.cpen221.mp5.Location;
-import ca.ece.ubc.cpen221.mp5.Restaurant;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Cynzy on 2017-11-24.
@@ -27,48 +20,41 @@ public class MP5Query {
     private List<String> names;
     private List<Integer> rating;
     private List<Integer> price;
-    private Set<Restaurant> restaurantsSet;
 
 
-    public MP5Query(String queryString) throws IOException {
+    public MP5Query(String queryString) throws RecognitionException {
         this.queryString = queryString;
         this.categories = new ArrayList<>();
         this.locations = new ArrayList<>();
         this.names = new ArrayList<>();
         this.rating = new ArrayList<>();
         this.price = new ArrayList<>();
-        this.restaurantsSet = new HashSet<>();
 
         setLists();
-        findRestaurants();
     }
 
     //modifies categories, locations, names, rating, price
     //by passing the reference to MP5QueryListenerGenerateList
-    private void setLists() throws IOException {
+    private void setLists() throws RecognitionException {
 
         CharStream stream = new ANTLRInputStream(queryString);
         MP5QueryLexer lexer = new MP5QueryLexer(stream);
+        lexer.removeErrorListener(ConsoleErrorListener.INSTANCE);
         TokenStream tokens = new CommonTokenStream(lexer);
         MP5QueryParser parser = new MP5QueryParser(tokens);
 
-        ParseTree tree = parser.query();
-        System.out.println(tree.toStringTree(parser));
-        ParseTreeWalker walker = new ParseTreeWalker();
-        MP5QueryParserListener listener = new MP5QueryListenerGenerateList(this.categories,this.locations,this.names,this.rating,this.price);
-        walker.walk(listener, tree);
+        try {
+            ParseTree tree = parser.query();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            MP5QueryParserListener listener = new MP5QueryListenerGenerateList(this.categories, this.locations, this.names, this.rating, this.price);
+            walker.walk(listener, tree);
+        } catch (RecognitionException re){
+            throw re;
+        }
+
 
     }
 
-    //modifies list of restaurants by searching through the database
-    //with given query requests
-    private void findRestaurants() {
-
-    }
-
-    public Set<Restaurant> getRestaurantsSet() {
-        return restaurantsSet;
-    }
 
     public List<String> getCategories() {
         return categories;

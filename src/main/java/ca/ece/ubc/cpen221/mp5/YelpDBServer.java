@@ -1,22 +1,11 @@
 package ca.ece.ubc.cpen221.mp5;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import javax.json.*;
+import javax.json.stream.JsonParsingException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.stream.Collectors;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
-import javax.json.stream.JsonParsingException;
 
 /**
  * YelpDBServerServer - a server that processes simple requests and queries for
@@ -198,9 +187,14 @@ public class YelpDBServer {
 				}
 
 				else if (request.equals("QUERY")) {
-					
+
 					try {
-						
+						String output = getQuery(line);
+						System.err.println("reply: " + output);
+						out.println(output);
+						if (output.length() == 0) {
+							System.err.println("reply: ERR: NO_MATCH");
+						}
 					} catch ( NullPointerException e) {
 						System.err.println("reply: ERR: INVALID_QUERY");
 						out.print("ERR: INVALID_QUERY\n");
@@ -450,6 +444,20 @@ public class YelpDBServer {
 		this.database.addReview(yelpReview);
 
 		return review.toString();
+	}
+
+	/*
+	 * Helper method to handle(). If the request is QUERY, handle() calls
+	 * this method. Returns a list of restaurants that matches the query.
+	 *
+	 * @param line the input request from the user
+	 *
+	 * @return list of restaurants in Json format
+	 *
+	 */
+	private String getQuery(String line) {
+
+		return null;
 	}
 
 	/**
