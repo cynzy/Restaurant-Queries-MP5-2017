@@ -43,7 +43,7 @@ public class MP5Query {
     private List<String> categories;
     private List<String> locations;
     private List<String> names;
-    private List<Integer> rating;
+    private List<Double> rating;
     private List<Integer> price;
 
 
@@ -88,7 +88,7 @@ public class MP5Query {
         return names;
     }
 
-    public List<Integer> getRating() {
+    public List<Double> getRating() {
         return rating;
     }
 

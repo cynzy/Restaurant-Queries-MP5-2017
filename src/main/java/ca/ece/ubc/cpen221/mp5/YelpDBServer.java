@@ -195,16 +195,10 @@ public class YelpDBServer {
 				else if (request.equals("QUERY")) {
 
 					try {
-						ByteArrayOutputStream consoleOut = new ByteArrayOutputStream();
-						System.setErr(new PrintStream(consoleOut));
 						String output = getQuery(database.getMatches(line.substring(line.indexOf(' '))));
 
 						System.err.println("reply: " + output);
 						out.println(output);
-
-						if (consoleOut.toString().length() > 0 ){
-							throw new InvalidQueryException();
-						}
 
 						if (output.length() == 0) {
 							System.err.println("reply: ERR: NO_MATCH");
@@ -219,9 +213,6 @@ public class YelpDBServer {
 					} catch (NoSuchRestaurantException e) {
 						System.err.println("reply: ERR: NO_MATCH");
 						out.print("ERR: NO_MATCH\n");
-					} catch (InvalidQueryException e) {
-						System.err.println("reply: ERR: INVALID_QUERY");
-						out.print("ERR: INVALID_QUERY\n");
 					}
 
 				}
@@ -498,7 +489,7 @@ public class YelpDBServer {
 	 * @return list of restaurants in Json format
 	 *
 	 */
-	private String getQuery(Set<Object> restaurants) throws NoSuchRestaurantException, InvalidQueryException {
+	private String getQuery(Set<Object> restaurants) throws NoSuchRestaurantException {
 
 		if (restaurants.isEmpty()) {
 			throw new NoSuchRestaurantException();

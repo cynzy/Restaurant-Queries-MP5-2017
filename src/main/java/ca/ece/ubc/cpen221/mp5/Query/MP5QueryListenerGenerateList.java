@@ -35,10 +35,10 @@ public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
     private List<String> categories;
     private List<String> locations;
     private List<String> names;
-    private List<Integer> rating;
+    private List<Double> rating;
     private List<Integer> price;
 
-    public MP5QueryListenerGenerateList(List<String> categories, List<String> locations, List<String> names, List<Integer> rating, List<Integer> price) {
+    public MP5QueryListenerGenerateList(List<String> categories, List<String> locations, List<String> names, List<Double> rating, List<Integer> price) {
         this.categories = categories;
         this.locations = locations;
         this.names = names;
@@ -105,27 +105,24 @@ public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
         TerminalNode token = ctx.NUM();
         MP5QueryParser.IneqContext ineq = ctx.ineq();
         String cond = ineq.getText();
-        int rating = Integer.parseInt(token.getText());
+        double rating = Double.parseDouble(token.getText());
 
         int maxRating = 5;
         if (cond.equals("<")){
-            for (int i = 1; i < maxRating; i++){
-                this.rating.add(i);
-            }
+            this.rating.add(0.0);
+            this.rating.add(rating - 0.01);
         } else if (cond.equals("<=")){
-            for (int i = 1; i <= maxRating; i++){
-                this.rating.add(i);
-            }
+            this.rating.add(0.0);
+            this.rating.add(rating - 0.0);
         } else if (cond.equals("=")){
-            this.price.add(rating);
+            this.rating.add(rating-0.01);
+            this.rating.add(rating+0.01);
         } else if (cond.equals(">")){
-            for (int i = maxRating; maxRating > rating; i--){
-                this.rating.add(i);
-            }
+            this.rating.add(rating - 0.0);
+            this.rating.add(5.0);
         } else if (cond.equals(">=")){
-            for (int i = maxRating; maxRating >= rating; i--){
-                this.rating.add(i);
-            }
+            this.rating.add(rating -0.01);
+            this.rating.add(5.0);
         }
 
 

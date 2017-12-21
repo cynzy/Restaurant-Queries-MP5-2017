@@ -165,7 +165,7 @@ public class YelpDB implements Database {
 			List<String> categories = query.getCategories();
 			List<String> locations = query.getLocations();
 			List<String> names = query.getNames();
-			List<Integer> rating = query.getRating();
+			List<Double> rating = query.getRating();
 			List<Integer> price = query.getPrice();
 			Set<Restaurant> restaurantQuerySet = this.restaurantSet;
 
@@ -195,8 +195,8 @@ public class YelpDB implements Database {
 
 			if (!rating.isEmpty()) {
 				restaurantQuerySet = restaurantQuerySet.stream()
-						.filter(Restaurant -> (Restaurant.getPrice() >= price.get(0)))
-						.filter(Restaurant -> (Restaurant.getPrice() <= price.get(price.size() - 1)))
+						.filter(Restaurant -> (Restaurant.getPrice() >= rating.get(0)))
+						.filter(Restaurant -> (Restaurant.getPrice() <= rating.get(rating.size() - 1)))
 						.collect(Collectors.toSet());
 			}
 

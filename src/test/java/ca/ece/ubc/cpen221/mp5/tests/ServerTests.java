@@ -158,7 +158,6 @@ public class ServerTests {
 		String request1 = "QUERY category(Chinese)";
 		String request2 = "QUERY category(Chinese) && price <= 3";
 		String request3 = "QUERY category(Chinese) && price <= 3 && rating > 2";
-		String request4 = "QUERY in(Downtown Berkeley) && category(Persian/Iranian) && price = 4 && rating < 4";
 		
 		YelpDB database = new YelpDB("data/restaurants.json", "data/users.json", "data/reviews.json");
 
@@ -175,7 +174,6 @@ public class ServerTests {
 		YelpDBClient client1 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
 		YelpDBClient client2 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
 		YelpDBClient client3 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client4 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
 		
 		Thread client1Thread = new Thread(() -> {
 			try {
@@ -198,33 +196,22 @@ public class ServerTests {
 				e.printStackTrace();
 			}
 		});
-		Thread client4Thread = new Thread(() -> {
-			try {
-				client4.sendRequest(request4);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
 
 		client1Thread.start();
 		client2Thread.start();
 		client3Thread.start();
-		client4Thread.start();
 
 		client1Thread.join();
 		client2Thread.join();
 		client3Thread.join();
-		client4Thread.join();
 
 		String reply1 = client1.getReply();
 		String reply2 = client2.getReply();
 		String reply3 = client3.getReply();
-		String reply4 = client4.getReply();
-		
+
 		client1.close();
 		client2.close();
 		client3.close();
-		client4.close();
 
 
 	}
