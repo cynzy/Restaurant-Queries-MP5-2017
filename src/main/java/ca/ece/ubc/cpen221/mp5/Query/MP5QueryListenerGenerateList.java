@@ -7,7 +7,28 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Cynzy on 2017-11-25.
+ * MP5QueryListenerGenerateList - serves as a listener to parse the content of each node
+ *
+ * - listener walks into every exit node of Category, In, Name, Price, Rating
+ *
+ * Representation Invariants:
+ *
+ * - at least one token cannot be empty; at least one of the lists in this class has at least one element
+ *
+ * - each element of rating and price must be distinct and has to be 0 <= element <= 5
+ *
+ * Abstraction Function:
+ *
+ * - categories represent the categories of the restaurants the client is looking for
+ *
+ * - locations represent the neighborhoods the restaurants resides the client is looking for
+ *
+ * - names represent the restaurants that contain the names the client is looking for
+ *
+ * - rating represent the rating of the restaurants the client is looking for
+ *
+ * - pricing represent the pricing of the restaurants the client is looking for
+ *
  */
 public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
 
