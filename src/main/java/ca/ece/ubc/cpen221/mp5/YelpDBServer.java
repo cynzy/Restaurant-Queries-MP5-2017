@@ -195,7 +195,7 @@ public class YelpDBServer {
 				else if (request.equals("QUERY")) {
 
 					try {
-						String output = getQuery(database.getMatches(line));
+						String output = getQuery(database.getMatches(line.substring(line.indexOf(' '))));
 
 						ByteArrayOutputStream consoleOut = new ByteArrayOutputStream();
 						System.setErr(new PrintStream(consoleOut));
