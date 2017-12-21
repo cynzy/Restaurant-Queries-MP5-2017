@@ -198,6 +198,16 @@ public class YelpDBServer {
 				}
 
 				else if (request.equals("QUERY")) {
+					
+					try {
+						
+					} catch ( NullPointerException e) {
+						System.err.println("reply: ERR: INVALID_QUERY");
+						out.print("ERR: INVALID_QUERY\n");
+					} catch (StringIndexOutOfBoundsException  e) {
+						System.err.println("reply: ERR: INVALID_QUERY");
+						out.print("ERR: INVALID_QUERY\n");
+					}
 
 				}
 
