@@ -1,21 +1,15 @@
 package ca.ece.ubc.cpen221.mp5.tests;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.io.StringReader;
+import ca.ece.ubc.cpen221.mp5.*;
+import org.junit.Test;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import java.io.IOException;
+import java.io.StringReader;
 
-import org.junit.Test;
-
-import ca.ece.ubc.cpen221.mp5.Restaurant;
-import ca.ece.ubc.cpen221.mp5.YelpDB;
-import ca.ece.ubc.cpen221.mp5.YelpDBClient;
-import ca.ece.ubc.cpen221.mp5.YelpDBServer;
-import ca.ece.ubc.cpen221.mp5.YelpUser;
+import static org.junit.Assert.*;
 
 public class ServerTests {
 
@@ -406,7 +400,7 @@ public class ServerTests {
 	
 	@Test
 	public void testQuery1() throws IOException, InterruptedException {
-		String request1 = "QUERY in(Terminal Ave) && category(Chinese";
+		String request1 = "QUERY in(UC Campus Area) && category(Chinese)";
 		String request2 = "QUERY in(Telegraph Ave) && category(Food)";
 		String request3 = "QUERY in(UC Campus Area)";
 		

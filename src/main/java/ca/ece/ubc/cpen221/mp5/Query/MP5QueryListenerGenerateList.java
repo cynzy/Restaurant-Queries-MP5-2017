@@ -36,7 +36,7 @@ public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
         TerminalNode token = ctx.STR();
         Set<String> neighborhoods = new HashSet<>();
         neighborhoods.add(token.getText());
-        this.locations.add(neighborhoods.toString());
+        this.locations.addAll(neighborhoods);
     }
 
     @Override
@@ -51,7 +51,6 @@ public class MP5QueryListenerGenerateList extends MP5QueryParserBaseListener {
         MP5QueryParser.IneqContext ineq = ctx.ineq();
         String cond = ineq.getText();
         int price = Integer.parseInt(token.getText());
-
 
 
         int maxPrice = 5;
