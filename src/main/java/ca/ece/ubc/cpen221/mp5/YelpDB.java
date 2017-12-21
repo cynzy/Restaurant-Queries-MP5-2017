@@ -168,41 +168,45 @@ public class YelpDB implements Database {
 		List<Integer> price = query.getPrice();
 		Set<Restaurant> restaurantQuerySet = this.restaurantSet;
 
-		if (!categories.isEmpty()){
+		if (!categories.isEmpty()) {
 			for (String category : categories) {
-				restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
-						Restaurant.getCategories().contains(category)).collect(Collectors.toSet());
+				restaurantQuerySet = restaurantQuerySet.stream()
+						.filter(Restaurant -> Restaurant.getCategories().contains(category))
+						.collect(Collectors.toSet());
 			}
 		}
 
-		if (!locations.isEmpty()){
+		if (!locations.isEmpty()) {
 			for (String location : locations) {
-				restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
-						Restaurant.getLocation().getNeighbourhoods().contains(location)).collect(Collectors.toSet());
+				restaurantQuerySet = restaurantQuerySet.stream()
+						.filter(Restaurant -> Restaurant.getLocation().getNeighbourhoods().contains(location))
+						.collect(Collectors.toSet());
 			}
 
 		}
 
-		if (!names.isEmpty()){
+		if (!names.isEmpty()) {
 			for (String name : names) {
-				restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
-						Restaurant.getName().contains(name)).collect(Collectors.toSet());
+				restaurantQuerySet = restaurantQuerySet.stream()
+						.filter(Restaurant -> Restaurant.getName().contains(name)).collect(Collectors.toSet());
 			}
 		}
 
-		if (!rating.isEmpty()){
-			restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
-					(Restaurant.getPrice() >= price.get(0))).filter(Restaurant ->
-					(Restaurant.getPrice() <= price.get(price.size()-1))).collect(Collectors.toSet());
+		if (!rating.isEmpty()) {
+			restaurantQuerySet = restaurantQuerySet.stream()
+					.filter(Restaurant -> (Restaurant.getPrice() >= price.get(0)))
+					.filter(Restaurant -> (Restaurant.getPrice() <= price.get(price.size() - 1)))
+					.collect(Collectors.toSet());
 		}
 
-		if (!price.isEmpty()){
-			restaurantQuerySet = restaurantQuerySet.stream().filter(Restaurant ->
-					(Restaurant.getPrice() >= price.get(0))).filter(Restaurant ->
-					(Restaurant.getPrice() <= price.get(price.size()-1))).collect(Collectors.toSet());
+		if (!price.isEmpty()) {
+			restaurantQuerySet = restaurantQuerySet.stream()
+					.filter(Restaurant -> (Restaurant.getPrice() >= price.get(0)))
+					.filter(Restaurant -> (Restaurant.getPrice() <= price.get(price.size() - 1)))
+					.collect(Collectors.toSet());
 		}
 
-		return (Set<Object>)(Object) restaurantQuerySet;
+		return (Set<Object>) (Object) restaurantQuerySet;
 	}
 
 	/**
@@ -217,6 +221,8 @@ public class YelpDB implements Database {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
 		List<Coordinates> coordinatesList = new ArrayList<Coordinates>();
+
+		// creates centroids arbitrarily
 		coordinatesList.addAll(restaurantSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toSet()));
 
@@ -225,19 +231,26 @@ public class YelpDB implements Database {
 			clusterSet.add(new Cluster(coordinates.getlongitude(), coordinates.getlatitude()));
 		}
 
+		// reassigns the clusters
 		reAssignClusters(clusterSet, clusteringMap);
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
+
+		// loops through the process of assigning businesses to the closest cluster and
+		// adjusting their centroids until all businesses are not closer to a different
+		// centroid than they are to their own
 		do {
 
 			for (Cluster c : clusterSet) {
 				c.adjustCentroid();
 			}
 			reAssignClusters(clusterSet, clusteringMap);
+			// check how many clusters did not adjust
 			nonFinishedClustersList = clusterSet.stream().map(cluster -> cluster.isFinished())
 					.filter(isFinished -> false).collect(Collectors.toList());
 
 		} while (!nonFinishedClustersList.isEmpty());
 
+		// assigns clusters to a list of sets
 		List<Set<Business>> clusterList = new ArrayList<Set<Business>>();
 		for (Cluster c : clusterSet) {
 			clusterList.add(c.getBusinessSet());
@@ -258,6 +271,8 @@ public class YelpDB implements Database {
 		Map<Restaurant, Cluster> clusteringMap = new HashMap<Restaurant, Cluster>();
 		Set<Cluster> clusterSet = new HashSet<Cluster>();
 		List<Coordinates> coordinatesList = new ArrayList<Coordinates>();
+
+		// assigns centroids arbitrarily
 		coordinatesList.addAll(restaurantSet.stream().map(business -> business.getLocation())
 				.map(location -> location.getCoordinates()).collect(Collectors.toSet()));
 
@@ -269,6 +284,10 @@ public class YelpDB implements Database {
 		reAssignClusters(clusterSet, clusteringMap);
 
 		List<Boolean> nonFinishedClustersList = new ArrayList<Boolean>();
+
+		// loops through the process of assigning businesses to the closest cluster and
+		// adjusting their centroids until all businesses are not closer to a different
+		// centroid than they are to their own
 		do {
 			for (Cluster c : clusterSet) {
 				c.adjustCentroid();
@@ -312,8 +331,10 @@ public class YelpDB implements Database {
 	 */
 	private void reAssignClusters(Set<Cluster> clusterSet, Map<Restaurant, Cluster> clusteringMap) {
 
+		//loops through all restaurants
 		for (Restaurant b : this.restaurantSet) {
 			double minDistance = Integer.MAX_VALUE;
+			//loops through all clusters and assigns a restaurant to its closest cluster
 			Cluster closestCluster = new Cluster(0, 0);
 			for (Cluster c : clusterSet) {
 				double currentDistance = b.getLocation().getCoordinates().getDistance(c.getCentroid());
@@ -322,6 +343,8 @@ public class YelpDB implements Database {
 					minDistance = currentDistance;
 				}
 			}
+			
+			//checks if the restaurant has not yet been assigned to a cluster
 			if (!clusteringMap.containsKey(b)) {
 				clusteringMap.put(b, closestCluster);
 				closestCluster.addBusiness(b);
@@ -352,9 +375,11 @@ public class YelpDB implements Database {
 			idMap.put(b.getBusinessID(), b);
 		}
 
+		//finds a list of reviews by the specified user
 		List<Review> reviewsByUser = this.reviewSet.stream().filter(review -> review.getUserID().equals(user))
 				.collect(Collectors.toList());
 
+		// finds a list of prices of the restaurants reviewed by the user
 		List<Double> priceList = reviewsByUser.stream().map(review -> review.getBusinessID())
 				.map(businessID -> idMap.get(businessID)).map(business -> (double) business.getPrice())
 				.collect(Collectors.toList());
@@ -363,6 +388,7 @@ public class YelpDB implements Database {
 
 		double meanPrice = sumPrice / priceList.size();
 
+		// finds a list of all ratings by the user
 		List<Double> ratingList = this.reviewSet.stream().filter(review -> review.getUserID().equals(user))
 				.map(review -> (double) review.getStars()).collect(Collectors.toList());
 
@@ -370,6 +396,7 @@ public class YelpDB implements Database {
 
 		double meanRating = sumRating / ratingList.size();
 
+		//statistical analysis variables
 		double s_xx = priceList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanPrice, 2));
 
 		double s_yy = ratingList.stream().reduce(0.0, (x, y) -> x + Math.pow(y - meanRating, 2));
@@ -478,7 +505,7 @@ public class YelpDB implements Database {
 				(x, y) -> y);
 		Restaurant restaurant = this.restaurantSet.stream()
 				.filter(r -> r.getBusinessID().equals(review.getBusinessID())).reduce(null, (x, y) -> y);
-		
+
 		user.adjustRating(review.getStars());
 		restaurant.adjustRating(review.getStars());
 

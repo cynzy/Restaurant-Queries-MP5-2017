@@ -120,12 +120,16 @@ public class YelpDBServer {
 				System.err.println("request: " + line);
 
 				String request = new String();
+				// checks if the request is formatted like a request
 				try {
 					request = line.substring(0, line.indexOf(' '));
 				} catch (StringIndexOutOfBoundsException e) {
 					System.err.println("reply: ERR: ILLEGAL_REQUEST");
 					out.print("ERR: ILLEGAL_REQUEST\n");
 				}
+
+				// multiple if blocks to check for which request it is and call the proper
+				// helper method
 				if (request.equals("GETRESTAURANT")) {
 
 					try {
@@ -156,7 +160,7 @@ public class YelpDBServer {
 				else if (request.equals("ADDRESTAURANT")) {
 
 					try {
-						String output = addRestaurant(line.substring(line.indexOf(" ")+1));
+						String output = addRestaurant(line.substring(line.indexOf(" ") + 1));
 						System.err.println("reply: " + output);
 						out.println(output);
 					} catch (JsonParsingException e) {
@@ -197,10 +201,10 @@ public class YelpDBServer {
 						if (output.length() == 0) {
 							System.err.println("reply: ERR: NO_MATCH");
 						}
-					} catch ( NullPointerException e) {
+					} catch (NullPointerException e) {
 						System.err.println("reply: ERR: INVALID_QUERY");
 						out.print("ERR: INVALID_QUERY\n");
-					} catch (StringIndexOutOfBoundsException  e) {
+					} catch (StringIndexOutOfBoundsException e) {
 						System.err.println("reply: ERR: INVALID_QUERY");
 						out.print("ERR: INVALID_QUERY\n");
 					} catch (NoSuchRestaurantException e) {
@@ -242,16 +246,19 @@ public class YelpDBServer {
 			businessID = businessID + (int) Math.random() * 10;
 		}
 
-		JsonReader jsonReader = Json.createReader(new StringReader(line.substring(line.indexOf(' ') +1, line.length())));
+		// converts the input to JsonObject
+		JsonReader jsonReader = Json
+				.createReader(new StringReader(line.substring(line.indexOf(' ') + 1, line.length())));
 		JsonObject restaurantInputJson = jsonReader.readObject();
 
+		// builds the JsonObject for the restaurant
 		JsonObjectBuilder j;
 		j = javax.json.Json.createObjectBuilder();
 
 		j.add("open", true);
 		j.add("url", restaurantInputJson.getString("url"));
 		j.add("longitude", restaurantInputJson.getJsonNumber("longitude"));
-		
+
 		JsonArrayBuilder array = Json.createArrayBuilder();
 		for (JsonValue s : restaurantInputJson.get("neighborhoods").asJsonArray()) {
 			array.add(s);
@@ -260,12 +267,12 @@ public class YelpDBServer {
 		j.add("neighborhoods", array.build());
 		j.add("business_id", businessID);
 		j.add("name", restaurantInputJson.getString("name"));
-		
+
 		JsonArrayBuilder array2 = Json.createArrayBuilder();
 		for (JsonValue s : restaurantInputJson.get("categories").asJsonArray()) {
 			array.add(s);
 		}
-		
+
 		j.add("categories", array2.build());
 		j.add("state", restaurantInputJson.getString("state"));
 		j.add("type", "business");
@@ -274,16 +281,17 @@ public class YelpDBServer {
 		j.add("full_address", restaurantInputJson.getString("full_address"));
 		j.add("review_count", 0);
 		j.add("photo_url", restaurantInputJson.getString("photo_url"));
-		
+
 		JsonArrayBuilder array3 = Json.createArrayBuilder();
 		for (JsonValue s : restaurantInputJson.get("schools").asJsonArray()) {
 			array.add(s);
 		}
-		
+
 		j.add("schools", array3.build());
 		j.add("latitude", restaurantInputJson.getJsonNumber("latitude"));
 		j.add("price", restaurantInputJson.getInt("price"));
 
+		// builds the JsonObject, creates the restaurant, and adds it to the database
 		JsonObject business = j.build();
 		Restaurant restaurant = new Restaurant(business);
 		this.database.addRestaurant(restaurant);
@@ -303,14 +311,18 @@ public class YelpDBServer {
 	 * 
 	 */
 	private String getRestaurant(String line) throws NoSuchRestaurantException {
+
 		String businessID = line.substring(line.indexOf(' ') + 1, line.length());
+		//finds the restaurant that matches this business id
 		Business restaurant = this.database.getBusinessSet().stream()
 				.filter(business -> business.getBusinessID().equals(businessID)).reduce(null, (x, y) -> y);
 
+		//if not such restaurant is in the database, throw a NoSuchRestaurantException
 		if (restaurant == null) {
 			throw new NoSuchRestaurantException();
 		}
 
+		//build the Json representation of the requested restaurant
 		JsonObjectBuilder j;
 
 		j = javax.json.Json.createObjectBuilder();
@@ -365,18 +377,23 @@ public class YelpDBServer {
 	 * 
 	 */
 	private String addUser(String line) {
+
+		//converts user input to JsonObject
 		JsonReader jsonReader = Json
 				.createReader(new StringReader(line.substring(line.indexOf(' ') + 1, line.length())));
 		JsonObject userInputJson = jsonReader.readObject();
 
+		//assigns a random user id
 		String userID = "";
 		for (int i = 0; i < 10; i++) {
 			userID = userID + (int) Math.random() * 10;
 		}
-
+		
+		//initializes votes to 0
 		JsonObject votes = javax.json.Json.createObjectBuilder().add("cool", 0).add("useful", 0).add("funny", 0)
 				.build();
 
+		//builds the JsonObject with the information for this user
 		JsonObjectBuilder j;
 		j = javax.json.Json.createObjectBuilder();
 
@@ -387,7 +404,8 @@ public class YelpDBServer {
 		j.add("user_id", userID);
 		j.add("name", userInputJson.getString("name"));
 		j.add("average_stars", 0);
-
+		
+		//builds the JsonObject, constructs a user, and adds it to the database
 		JsonObject user = j.build();
 		YelpUser yelpUser = new YelpUser(user);
 		this.database.addUser(yelpUser);
@@ -408,29 +426,36 @@ public class YelpDBServer {
 	 * 
 	 */
 	private String addReview(String line) throws NoSuchRestaurantException, NoSuchUserException {
+		
+		//converts user input to JsonObject
 		JsonReader jsonReader = Json
 				.createReader(new StringReader(line.substring(line.indexOf(' ') + 1, line.length())));
 		JsonObject reviewInputJson = jsonReader.readObject();
-		
-		if (this.database.getBusinessSet().stream().filter(b -> b.getBusinessID().equals(reviewInputJson.getString("business_id")))
+
+		//checks if user-inputed business id exists in this database. If not, throws a NoSuchRestaurantException
+		if (this.database.getBusinessSet().stream()
+				.filter(b -> b.getBusinessID().equals(reviewInputJson.getString("business_id")))
 				.collect(Collectors.toList()).isEmpty()) {
 			throw new NoSuchRestaurantException();
 		}
 
+		//checks if user-inputed user id exists in this database. If not, throws a NoSuchUserException
 		if (this.database.getUserSet().stream().filter(u -> u.getUserID().equals(reviewInputJson.getString("user_id")))
 				.collect(Collectors.toList()).isEmpty()) {
 			throw new NoSuchUserException();
 		}
 
-		
+		//generates a random review id
 		String reviewID = "";
 		for (int i = 0; i < 10; i++) {
 			reviewID = reviewID + (int) Math.random() * 10;
 		}
 
+		//initializes votes to 0
 		JsonObject votes = javax.json.Json.createObjectBuilder().add("cool", 0).add("useful", 0).add("funny", 0)
 				.build();
 
+		//constructs a JsonObject containing the information for this review
 		JsonObjectBuilder j;
 		j = javax.json.Json.createObjectBuilder();
 
@@ -443,6 +468,7 @@ public class YelpDBServer {
 		j.add("user_id", reviewInputJson.getString("user_id"));
 		j.add("date", reviewInputJson.get("date"));
 
+		//builds the JsonObject, creates a review, and adds it to the database
 		JsonObject review = j.build();
 		YelpReview yelpReview = new YelpReview(review);
 
@@ -452,15 +478,15 @@ public class YelpDBServer {
 	}
 
 	/*
-	 * Helper method to handle(). If the request is QUERY, handle() calls
-	 * this method. Returns a list of restaurants that matches the query.
+	 * Helper method to handle(). If the request is QUERY, handle() calls this
+	 * method. Returns a list of restaurants that matches the query.
 	 *
 	 * @param line the input request from the user
 	 *
 	 * @return list of restaurants in Json format
 	 *
 	 */
-	private String getQuery(Set<Object> restaurants) throws NoSuchRestaurantException{
+	private String getQuery(Set<Object> restaurants) throws NoSuchRestaurantException {
 
 		if (restaurants.isEmpty()) {
 			throw new NoSuchRestaurantException();
