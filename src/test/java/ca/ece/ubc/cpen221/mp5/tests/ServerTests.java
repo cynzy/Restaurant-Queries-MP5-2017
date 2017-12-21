@@ -160,18 +160,11 @@ public class ServerTests {
 	}
 
 	@Test
-	public void testErrorHandling() throws IOException, InterruptedException {
+	public void testErrorHandling1() throws IOException, InterruptedException {
 		String request1 = "rip";
 		String request2 = "ADDUSER rip";
 		String request3 = "ADDUSER {\"average_rating\": 3}";
-		String request4 = "GETRESTAURANT rip";
-		String request5 = "ADDRESTAURANT rip";
-		String request6 = "ADDRESTAURANT {\"name\": \"rip\"}";
-		String request7 = "ADDREVIEW rip";
-		String request8 = "ADDREVIEW {\"text\": \"rip\"}";
-		String request9 = "ADDREVIEW {\"type\": \"review\", \"business_id\": \"1CBs84C-a-cuA3vncXVSAw\", \"votes\": {\"cool\": 0, \"useful\": 0, \"funny\": 0}, \"review_id\": \"0a-pCW4guXIlWNpVeBHChg\", \"text\": \"The pizza is terrible, but if you need a place to watch a game or just down some pitchers, this place works.\\n\\nOh, and the pasta is even worse than the pizza.\", \"stars\": 2, \"user_id\": \"rip\", \"date\": \"2006-07-26\"}\r\n";
-		String request10 = "ADDREVIEW {\"type\": \"review\", \"business_id\": \"rip\", \"votes\": {\"cool\": 0, \"useful\": 0, \"funny\": 0}, \"review_id\": \"0a-pCW4guXIlWNpVeBHChg\", \"text\": \"The pizza is terrible, but if you need a place to watch a game or just down some pitchers, this place works.\\n\\nOh, and the pasta is even worse than the pizza.\", \"stars\": 2, \"user_id\": \"90wm_01FAIqhcgV_mPON9Q\", \"date\": \"2006-07-26\"}\r\n";
-		String request11 = "ADDYELPUSER {\"name\": \"Dvir H.\"";
+		
 		YelpDB database = new YelpDB("data/restaurants.json", "data/users.json", "data/reviews.json");
 
 		final YelpDBServer server = new YelpDBServer(YelpDBServer.YELPDB_PORT, database);
@@ -187,15 +180,7 @@ public class ServerTests {
 		YelpDBClient client1 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
 		YelpDBClient client2 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
 		YelpDBClient client3 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client4 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client5 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client6 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client7 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client8 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client9 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client10 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-		YelpDBClient client11 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
-
+		
 		Thread client1Thread = new Thread(() -> {
 			try {
 				client1.sendRequest(request1);
@@ -217,6 +202,51 @@ public class ServerTests {
 				e.printStackTrace();
 			}
 		});
+
+		client1Thread.start();
+		client2Thread.start();
+		client3Thread.start();
+
+		client1Thread.join();
+		client2Thread.join();
+		client3Thread.join();
+
+		String reply1 = client1.getReply();
+		String reply2 = client2.getReply();
+		String reply3 = client3.getReply();
+		
+		client1.close();
+		client2.close();
+		client3.close();
+
+		assertTrue(reply1.equals("ERR: ILLEGAL_REQUEST\n"));
+		assertTrue(reply2.equals("ERR: INVALID_USER_STRING\\n"));
+		assertTrue(reply3.equals("ERR: INVALID_USER_STRING\\n"));
+
+	}
+	
+	@Test
+	public void testErrorHandling2() throws IOException, InterruptedException {
+		
+		String request4 = "GETRESTAURANT rip";
+		String request5 = "ADDRESTAURANT rip";
+		String request6 = "ADDRESTAURANT {\"name\": \"rip\"}";
+		YelpDB database = new YelpDB("data/restaurants.json", "data/users.json", "data/reviews.json");
+
+		final YelpDBServer server = new YelpDBServer(YelpDBServer.YELPDB_PORT, database);
+		Thread serverThread = new Thread(() -> {
+			try {
+				server.serve();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		serverThread.start();
+		
+		YelpDBClient client4 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		YelpDBClient client5 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		YelpDBClient client6 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		
 		Thread client4Thread = new Thread(() -> {
 			try {
 				client4.sendRequest(request4);
@@ -238,6 +268,49 @@ public class ServerTests {
 				e.printStackTrace();
 			}
 		});
+		
+		client4Thread.start();
+		client5Thread.start();
+		client6Thread.start();
+		
+		client4Thread.join();
+		client5Thread.join();
+		client6Thread.join();
+		
+		String reply4 = client4.getReply();
+		String reply5 = client5.getReply();
+		String reply6 = client6.getReply();
+		
+		client4.close();
+		client5.close();
+		client6.close();
+		
+		assertTrue(reply4.equals("ERR: NO_SUCH_RESTAURANT\\n"));
+		assertTrue(reply5.equals("ERR: INVALID_RESTAURANT_STRING\\n"));
+		assertTrue(reply6.equals("ERR: INVALID_RESTAURANT_STRING\\n"));
+	}
+	
+	@Test
+	public void testErrorHandling3() throws IOException, InterruptedException {
+		String request7 = "ADDREVIEW rip";
+		String request8 = "ADDREVIEW {\"text\": \"rip\"}";
+		String request9 = "ADDREVIEW {\"type\": \"review\", \"business_id\": \"1CBs84C-a-cuA3vncXVSAw\", \"votes\": {\"cool\": 0, \"useful\": 0, \"funny\": 0}, \"review_id\": \"0a-pCW4guXIlWNpVeBHChg\", \"text\": \"The pizza is terrible, but if you need a place to watch a game or just down some pitchers, this place works.\\n\\nOh, and the pasta is even worse than the pizza.\", \"stars\": 2, \"user_id\": \"rip\", \"date\": \"2006-07-26\"}\r\n";
+		YelpDB database = new YelpDB("data/restaurants.json", "data/users.json", "data/reviews.json");
+		
+		final YelpDBServer server = new YelpDBServer(YelpDBServer.YELPDB_PORT, database);
+		Thread serverThread = new Thread(() -> {
+			try {
+				server.serve();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		serverThread.start();
+
+		YelpDBClient client7 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		YelpDBClient client8 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		YelpDBClient client9 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		
 		Thread client7Thread = new Thread(() -> {
 			try {
 				client7.sendRequest(request7);
@@ -259,6 +332,47 @@ public class ServerTests {
 				e.printStackTrace();
 			}
 		});
+		
+		client7Thread.start();
+		client8Thread.start();
+		client9Thread.start();
+		
+		client7Thread.join();
+		client8Thread.join();
+		client9Thread.join();
+		
+		String reply7 = client7.getReply();
+		String reply8 = client8.getReply();
+		String reply9 = client9.getReply();
+
+		client7.close();
+		client8.close();
+		client9.close();
+		
+		assertTrue(reply7.equals("ERR: INVALID_REVIEW_STRING\\n"));
+		assertTrue(reply8.equals("ERR: INVALID_REVIEW_STRING\\n"));
+		assertTrue(reply9.equals("ERR: NO_SUCH_USER\n"));
+	}
+	
+	@Test
+	public void testErrorHandling4() throws IOException, InterruptedException {
+		String request10 = "ADDREVIEW {\"type\": \"review\", \"business_id\": \"rip\", \"votes\": {\"cool\": 0, \"useful\": 0, \"funny\": 0}, \"review_id\": \"0a-pCW4guXIlWNpVeBHChg\", \"text\": \"The pizza is terrible, but if you need a place to watch a game or just down some pitchers, this place works.\\n\\nOh, and the pasta is even worse than the pizza.\", \"stars\": 2, \"user_id\": \"90wm_01FAIqhcgV_mPON9Q\", \"date\": \"2006-07-26\"}\r\n";
+		String request11 = "ADDYELPUSER {\"name\": \"Dvir H.\"";
+		YelpDB database = new YelpDB("data/restaurants.json", "data/users.json", "data/reviews.json");
+
+		final YelpDBServer server = new YelpDBServer(YelpDBServer.YELPDB_PORT, database);
+		Thread serverThread = new Thread(() -> {
+			try {
+				server.serve();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		serverThread.start();
+		
+		YelpDBClient client10 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+		YelpDBClient client11 = new YelpDBClient("localhost", YelpDBServer.YELPDB_PORT);
+
 		Thread client10Thread = new Thread(() -> {
 			try {
 				client10.sendRequest(request10);
@@ -273,66 +387,20 @@ public class ServerTests {
 				e.printStackTrace();
 			}
 		});
-
-		client1Thread.start();
-		client2Thread.start();
-		client3Thread.start();
-		client4Thread.start();
-		client5Thread.start();
-		client6Thread.start();
-		client7Thread.start();
-		client8Thread.start();
-		client9Thread.start();
+		
 		client10Thread.start();
 		client11Thread.start();
-
-		client1Thread.join();
-		client2Thread.join();
-		client3Thread.join();
-		client4Thread.join();
-		client5Thread.join();
-		client6Thread.join();
-		client7Thread.join();
-		client8Thread.join();
-		client9Thread.join();
+		
 		client10Thread.join();
 		client11Thread.join();
-
-		String reply1 = client1.getReply();
-		String reply2 = client2.getReply();
-		String reply3 = client3.getReply();
-		String reply4 = client4.getReply();
-		String reply5 = client5.getReply();
-		String reply6 = client6.getReply();
-		String reply7 = client7.getReply();
-		String reply8 = client8.getReply();
-		String reply9 = client9.getReply();
+		
 		String reply10 = client10.getReply();
 		String reply11 = client11.getReply();
-
-		client1.close();
-		client2.close();
-		client3.close();
-		client4.close();
-		client5.close();
-		client6.close();
-		client7.close();
-		client8.close();
-		client9.close();
+		
 		client10.close();
 		client11.close();
-
-		assertTrue(reply1.equals("ERR: ILLEGAL_REQUEST\n"));
-		assertTrue(reply2.equals("ERR: INVALID_USER_STRING\\n"));
-		assertTrue(reply3.equals("ERR: INVALID_USER_STRING\\n"));
-		assertTrue(reply4.equals("ERR: NO_SUCH_RESTAURANT\\n"));
-		assertTrue(reply5.equals("ERR: INVALID_RESTAURANT_STRING\\n"));
-		assertTrue(reply6.equals("ERR: INVALID_RESTAURANT_STRING\\n"));
-		assertTrue(reply7.equals("ERR: INVALID_REVIEW_STRING\\n"));
-		assertTrue(reply8.equals("ERR: INVALID_REVIEW_STRING\\n"));
-		assertTrue(reply9.equals("ERR: NO_SUCH_USER\n"));
+		
 		assertTrue(reply10.equals("ERR: NO_SUCH_RESTAURANT\\n"));
 		assertTrue(reply11.equals("ERR: ILLEGAL_REQUEST\n"));
-
 	}
 }
