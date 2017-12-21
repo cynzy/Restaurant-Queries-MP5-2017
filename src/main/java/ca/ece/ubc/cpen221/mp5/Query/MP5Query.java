@@ -1,7 +1,10 @@
 package ca.ece.ubc.cpen221.mp5.Query;
 
 
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -21,7 +24,7 @@ public class MP5Query {
     private List<Integer> price;
 
 
-    public MP5Query(String queryString) throws RecognitionException {
+    public MP5Query(String queryString)  {
         this.queryString = queryString;
         this.categories = new ArrayList<>();
         this.locations = new ArrayList<>();
@@ -34,20 +37,17 @@ public class MP5Query {
 
     //modifies categories, locations, names, rating, price
     //by passing the reference to MP5QueryListenerGenerateList
-    private void setLists() throws RecognitionException {
+    private void setLists() {
 
         CharStream stream = new ANTLRInputStream(queryString);
         MP5QueryLexer lexer = new MP5QueryLexer(stream);
-        lexer.removeErrorListener(ConsoleErrorListener.INSTANCE);
         TokenStream tokens = new CommonTokenStream(lexer);
         MP5QueryParser parser = new MP5QueryParser(tokens);
 
-
-            ParseTree tree = parser.query();
-            ParseTreeWalker walker = new ParseTreeWalker();
-            MP5QueryParserListener listener = new MP5QueryListenerGenerateList(this.categories, this.locations, this.names, this.rating, this.price);
-            walker.walk(listener, tree);
-
+        ParseTree tree = parser.query();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        MP5QueryParserListener listener = new MP5QueryListenerGenerateList(this.categories, this.locations, this.names, this.rating, this.price);
+        walker.walk(listener, tree);
 
 
     }
