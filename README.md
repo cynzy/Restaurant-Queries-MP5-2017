@@ -10,14 +10,6 @@ This machine problem is designed to allow you to explore multiple aspects of sof
 
 In addition to these aspects, the problem also touches upon rudimentary methods for statistical inference and learning.
 
-**Read this document carefully before you start.**
-
-### Logistics
-
-+ You should complete this assignment in pairs.
-+ The submission deadline is December 1, 11:59pm Vancouver time.
-+ To get your Github repositories set up, using [this link](https://classroom.github.com/g/DIS5KaZf).
-
 ### Background
 
 For this machine problem, you will work with an excerpt from the [Yelp Academic Dataset](https://www.yelp.com/academic_dataset). Specifically, you will work with data (in [JSON](https://en.wikipedia.org/wiki/JSON) format) on restaurants, and this data includes information about some restaurants, reviews of the restaurants, and user information (for those contributing reviews).
